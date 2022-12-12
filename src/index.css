@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* required for toolbar customisation */
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    border: 3px solid #f6f7ed;
+    background: #000000;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #f6f7ed;
+    border-radius: 100vh;
+    border: 3px solid #f6f7ed;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+}
+
+@font-face {
+  font-family: "Marfa";
+  src: url("./assets/font/ABCMarfa-Light.woff") format("woff"),
+    url("./assets/font/ABCMarfa-Medium.woff") format("woff"),
+    url("./assets/font/ABCMarfa-Regular.woff") format("woff"),
+    url("./assets/font/ABCMarfa-RegularItalic.woff") format("woff"),
+    url("./assets/font/ABCMarfa-Semibold.woff") format("woff"),
+    url("./assets/font/ABCMarfa-Thin.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Arizona";
+  src: url("./assets/font/ABCArizonaSerif-Light.woff") format("woff"),
+    url("./assets/font/ABCArizonaSerif-Thin.woff") format("woff");
+}
+
+:root {
+  --primaryDark: black;
+  --primaryLight: rgb(200, 200, 200);
+  --secondaryLight: rgb(203, 255, 255);
+  --font-san-serif: "Marfa", "san-serif";
+  --font-serif: "Arizona", "serif";
+  --legend-fill: linear-gradient(
+    red 0%,
+    orange 25%,
+    yellow 50%,
+    green 75%,
+    blue 100%
+  );
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--primaryDark);
+  color: var(--primaryLight);
+  font-family: var(--font-san-serif);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+p {
+  font-family: var(--font-serif);
+  color: var(--primaryDark);
+}
