@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/metromaps/static/css/main.b0dab4e1.css",
+    "main.js": "/metromaps/static/js/main.7a163e01.js",
+    "static/media/map1.png": "/metromaps/static/media/map1.6812be3298f071bbcdd4.png",
+    "static/media/Logo-PRF.png": "/metromaps/static/media/Logo-PRF.37db7e74544a22aa0436.png",
+    "static/media/branching.png": "/metromaps/static/media/branching.0c924232056adf903b0f.png",
+    "static/media/ABCArizonaSerif-Light.woff": "/metromaps/static/media/ABCArizonaSerif-Light.c69cd3883e7097e898ee.woff",
+    "static/media/ABCArizonaSerif-Thin.woff": "/metromaps/static/media/ABCArizonaSerif-Thin.143a5a0dc78367e77425.woff",
+    "static/media/ABCMarfa-Semibold.woff": "/metromaps/static/media/ABCMarfa-Semibold.2f5b602c46b73f60eb4c.woff",
+    "static/media/ABCMarfa-Medium.woff": "/metromaps/static/media/ABCMarfa-Medium.32d28f907c0fcb23293a.woff",
+    "static/media/ABCMarfa-RegularItalic.woff": "/metromaps/static/media/ABCMarfa-RegularItalic.6322c654424c17edd630.woff",
+    "static/media/articles.png": "/metromaps/static/media/articles.849ba438b4adea61a833.png",
+    "static/media/ABCMarfa-Light.woff": "/metromaps/static/media/ABCMarfa-Light.d8e7732c25ba0aebff90.woff",
+    "static/media/ABCMarfa-Regular.woff": "/metromaps/static/media/ABCMarfa-Regular.31132af78ebb35b794b7.woff",
+    "static/media/ABCMarfa-Thin.woff": "/metromaps/static/media/ABCMarfa-Thin.d8d510304fefe147815d.woff",
+    "static/media/qrCode.svg": "/metromaps/static/media/qrCode.baf893983b3ce199afac7cf07c1efd1d.svg",
+    "static/media/legend.png": "/metromaps/static/media/legend.d8e1c2152f3f8f9c428f.png",
+    "static/media/connection.png": "/metromaps/static/media/connection.a861c91744a058c8d25d.png",
+    "static/media/NeighbourArrow.svg": "/metromaps/static/media/NeighbourArrow.fe3da2ebf7eb6b27b41fb76680bf6bda.svg",
+    "static/media/BackArrow.svg": "/metromaps/static/media/BackArrow.91e9a5b8a7f19bdf5eec51fd6873e6c8.svg",
+    "index.html": "/metromaps/index.html",
+    "main.b0dab4e1.css.map": "/metromaps/static/css/main.b0dab4e1.css.map",
+    "main.7a163e01.js.map": "/metromaps/static/js/main.7a163e01.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b0dab4e1.css",
+    "static/js/main.7a163e01.js"
+  ]
+}

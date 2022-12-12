@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 306 302" xmlns="http://www.w3.org/2000/svg">
+  <defs></defs>
+  <ellipse style="stroke: none; fill: rgb(255, 255, 255); paint-order: fill;" cx="153.295" cy="151.528" rx="90.303" ry="90.303"></ellipse>
+  <ellipse style="stroke: rgb(0, 0, 0);" cx="153.847" cy="152.08" rx="79.407" ry="79.407"></ellipse>
+  <path d="M 156.064 194.305 L 113.471 151.712 L 156.064 109.12 L 161.653 114.711 L 128.645 147.72 L 198.655 147.72 L 198.655 155.706 L 128.645 155.706 L 161.653 188.715 L 156.064 194.305 Z" style="fill: rgb(255, 255, 255);" transform="matrix(-1, 0, 0, -1, 312.125999, 303.424995)"></path>
+</svg>
