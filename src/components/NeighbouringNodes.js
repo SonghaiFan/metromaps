@@ -38,7 +38,7 @@ export default function NeighbouringNodes({
   return (
     <motion.div>
       <motion.div
-        className="absolute flex flex-col justify-center items-center"
+        className="absolute flex flex-col justify-center items-center pointer-events-none"
         style={{ x: 0, width: renderWidth, height: screenHeight }}
       >
         {left.map((node) => {
@@ -60,7 +60,7 @@ export default function NeighbouringNodes({
         })}
       </motion.div>
       <motion.div
-        className="absolute flex flex-col justify-center items-center"
+        className="absolute flex flex-col justify-center items-center pointer-events-none"
         style={{
           x: zoomedInArticleWidth + renderWidth,
           width: renderWidth,

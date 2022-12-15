@@ -106,7 +106,9 @@ export default function MetroMap({
 
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
 
-  const openSideDrawer = () => {
+  const openSideDrawer = (event) => {
+    console.log(event.target.style.backgroundColor);
+    event.target.style.backgroundColor = "red";
     setSideDrawerOpen(true);
   };
 
@@ -392,6 +394,9 @@ export default function MetroMap({
             {/* link labels */}
             <motion.div className="absolute">
               {metroLineData.map((data) => {
+                // console.log("data", data);
+                // console.log("Object.entries(data)", Object.entries(data));
+                // console.log("Object.entries(data)[0]", Object.entries(data)[0]);
                 const [lineId, { labels }] = Object.entries(data)[0];
 
                 return (
@@ -407,7 +412,9 @@ export default function MetroMap({
                         <MetroLineLabel
                           key={`${lineId}-${index}`}
                           data={label}
-                          onMetroLineLabelClick={openSideDrawer}
+                          onMetroLineLabelClick={(event) =>
+                            openSideDrawer(event)
+                          }
                         />
                       );
                     })}
@@ -445,6 +452,7 @@ export default function MetroMap({
                 )}
                 animate={clickedNode === nodeId ? "clicked" : "default"}
                 key={nodeId}
+                id={nodeId}
               >
                 <MetroStop
                   data={nodes[nodeId]}
@@ -465,12 +473,6 @@ export default function MetroMap({
                   }
                   onArticleStackLabelClick={openSideDrawer}
                   onNeighbourNodeLabelClick={openSideDrawer}
-                  onModalClicked={
-                    // onZoomOutButtonClick
-                    () => {
-                      console.log("modal clicked");
-                    }
-                  }
                 />
               </motion.div>
             );
@@ -659,13 +661,16 @@ export default function MetroMap({
 
               <input
                 type="range"
-                class="w-full h-3 bg-gray-70 rounded-lg appearance-none cursor-pointer range-lg bg-gradient-to-r from-[#48a49e] to-[#fce554]"
+                class="w-full h-3 bg-gray-70 rounded-lg appearance-none cursor-pointer range-lg bg-gradient-to-r from-[#585d91] via-[#48a49e] to-[#fce554]"
                 min="1"
                 max="5"
                 step="1"
                 list="tickmarks"
                 onChange={(event) => {
                   console.log(event.target.value);
+                  // setLinesShown(event.target.value);
+                  // updateMetroMapLineShown(event.target.value);
+                  // handleLineFiltering(event.target.value);
                 }}
               />
               <datalist id="tickmarks" class="felex flex-col ">

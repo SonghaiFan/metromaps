@@ -138,7 +138,7 @@ export default function Menu({
       type: ACTION_TYPES.FULL_MAP_VIEW,
       payload: { map: mapId, mode: FOCUS_MODE.FULL_VIEW },
     });
-    console.log("focusState", focusState);
+    // console.log("focusState", focusState);
   };
 
   const articleAnimationDelayRef = useRef();

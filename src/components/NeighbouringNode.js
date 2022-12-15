@@ -28,14 +28,16 @@ export default function NeighbouringNode({
   return (
     <motion.div className="w-full h-full flex flex-col justify-center items-center ">
       <motion.div
-        style={{ backgroundColor: data.colour }}
-        className="text-black rounded-md px-2 text-2xl "
+        style={{
+          backgroundColor: "white", //data.colour
+        }}
+        className="text-black rounded-md px-2 text-2xl hover:font-bold pointer-events-auto"
         onClick={onNeighbourNodeLabelClick}
       >
         {content}
       </motion.div>
       <motion.button
-        className="w-20"
+        className="w-20 pointer-events-auto"
         onClick={onClick}
         animate={{ rotate: angleBetweenTwoLinesDegree }}
       >

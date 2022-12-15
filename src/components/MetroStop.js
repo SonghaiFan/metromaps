@@ -24,7 +24,6 @@ export default function MetroStop({
   onNeighbouringNodeClick,
   onArticleStackAnimationComplete,
   onArticleStackLabelClick,
-  onModalClicked,
   onNeighbourNodeLabelClick,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
@@ -64,7 +63,10 @@ export default function MetroStop({
         <>
           <ArticleStack
             articles={articles}
-            colour={data.colour}
+            colour={
+              "white"
+              //data.colour
+            }
             onClick={onClick}
             clicked={clicked}
             clickedArticleContainerHeight={CLICKED_ARTICLE_CONTAINER_HEIGHT}
@@ -95,17 +97,18 @@ export default function MetroStop({
             ? clicked
               ? "rgba(0, 0, 0, 0.9)"
               : "rgba(0, 0, 0, 0)"
-            : data.colour,
+            : "white", //data.colour
         }}
         className={`w-full h-full text-black truncate flex justify-center -z-40 ${
           clicked || isMapFocused ? "" : "items-center"
         } rounded-md`}
-        onClick={onModalClicked}
       >
         {/* node number label */}
         {isMapFocused && !clicked && (
           <motion.div
-            style={{ backgroundColor: data.colour }}
+            style={{
+              backgroundColor: "white", // data.colour
+            }}
             animate={{
               width: METROSTOP_CIRCLE_SIZE,
               height: METROSTOP_CIRCLE_SIZE,
@@ -126,8 +129,10 @@ export default function MetroStop({
               screenHeight,
               CLICKED_ARTICLE_CONTAINER_HEIGHT
             )}
-            style={{ backgroundColor: data.colour }}
-            className={`truncate text-black hover:scale-110  ${
+            style={{
+              backgroundColor: "white", //data.colour
+            }}
+            className={`truncate text-black hover:font-bold  ${
               isMapFocused
                 ? `absolute rounded-md px-2  ${
                     clicked ? "text-4xl" : "text-sm"
