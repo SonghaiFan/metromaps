@@ -8,6 +8,7 @@ export default function NeighbouringNode({
   onClick,
   currentNode,
   position,
+  onNeighbourNodeLabelClick,
 }) {
   const content = data.node_words.length > 0 ? data.node_words[0] : "";
 
@@ -25,11 +26,11 @@ export default function NeighbouringNode({
     (position === NEIGHBOURING_NODE_POSITION.LEFT ? 180 : 0);
 
   return (
-    <motion.div className="w-full h-full flex flex-col justify-center items-center">
+    <motion.div className="w-full h-full flex flex-col justify-center items-center ">
       <motion.div
         style={{ backgroundColor: data.colour }}
-        className="text-black rounded-md px-2 text-2xl"
-        onClick={onClick}
+        className="text-black rounded-md px-2 text-2xl "
+        onClick={onNeighbourNodeLabelClick}
       >
         {content}
       </motion.div>

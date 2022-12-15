@@ -16,6 +16,7 @@ export default function NeighbouringNodes({
   screenHeight,
   zoomedInArticleWidth,
   onClick,
+  onNeighbourNodeLabelClick,
 }) {
   const renderWidth = (screenWidth - zoomedInArticleWidth) / 2;
 
@@ -52,6 +53,7 @@ export default function NeighbouringNodes({
                 onClick={onClick(node.id)}
                 currentNode={currentNode}
                 position={NEIGHBOURING_NODE_POSITION.LEFT}
+                onNeighbourNodeLabelClick={onNeighbourNodeLabelClick}
               />
             </motion.div>
           );
@@ -77,6 +79,7 @@ export default function NeighbouringNodes({
                 onClick={onClick(node.id)}
                 currentNode={currentNode}
                 position={NEIGHBOURING_NODE_POSITION.RIGHT}
+                onNeighbourNodeLabelClick={onNeighbourNodeLabelClick}
               />
             </motion.div>
           );

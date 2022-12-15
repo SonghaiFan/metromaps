@@ -5,7 +5,7 @@ import { useFirstMountState } from "react-use";
 
 const LINK_LABEL_HEIGHT = 20;
 
-export default function MetroLineLabel({ data }) {
+export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
   const isFirstMount = useFirstMountState();
 
   const { label, colour, points } = data;
@@ -31,7 +31,7 @@ export default function MetroLineLabel({ data }) {
 
   return (
     <motion.div
-      className="absolute flex justify-center items-center"
+      className="absolute flex justify-center items-center pointer-events-none"
       initial={{
         x: Math.min(x0, x1),
         y: Math.min(y0, y1), // if y1 is smaller than y0 (lines going upwards) may cause bugs without Math.min
@@ -55,7 +55,8 @@ export default function MetroLineLabel({ data }) {
     >
       <motion.div
         style={{ backgroundColor: colour, height: LINK_LABEL_HEIGHT }} // 20 from line height of text-sm
-        className="text-black text-sm rounded-md px-2 z-50"
+        className="text-black text-sm rounded-md px-1 hover:scale-110  pointer-events-auto"
+        onClick={onMetroLineLabelClick}
       >
         {label}
       </motion.div>

@@ -23,6 +23,9 @@ export default function MetroStop({
   clicked,
   onNeighbouringNodeClick,
   onArticleStackAnimationComplete,
+  onArticleStackLabelClick,
+  onModalClicked,
+  onNeighbourNodeLabelClick,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   const content = data.node_words.length > 0 ? data.node_words[0] : "";
@@ -54,6 +57,7 @@ export default function MetroStop({
           screenHeight={screenHeight}
           zoomedInArticleWidth={ZOOMED_IN_ARTICLE_WIDTH}
           onClick={onNeighbouringNodeClick}
+          onNeighbourNodeLabelClick={onNeighbourNodeLabelClick}
         />
       )}
       {isMapFocused && (
@@ -89,14 +93,16 @@ export default function MetroStop({
         style={{
           backgroundColor: isMapFocused
             ? clicked
-              ? "rgba(0, 0, 0, 0.8)"
+              ? "rgba(0, 0, 0, 0.9)"
               : "rgba(0, 0, 0, 0)"
             : data.colour,
         }}
-        className={`w-full h-full text-black truncate flex justify-center ${
+        className={`w-full h-full text-black truncate flex justify-center -z-40 ${
           clicked || isMapFocused ? "" : "items-center"
         } rounded-md`}
+        onClick={onModalClicked}
       >
+        {/* node number label */}
         {isMapFocused && !clicked && (
           <motion.div
             style={{ backgroundColor: data.colour }}
@@ -121,13 +127,15 @@ export default function MetroStop({
               CLICKED_ARTICLE_CONTAINER_HEIGHT
             )}
             style={{ backgroundColor: data.colour }}
-            className={`truncate text-sm text-black ${
+            className={`truncate text-black hover:scale-110  ${
               isMapFocused
-                ? `absolute rounded-md px-2 ${clicked ? "text-4xl" : "text-sm"}`
+                ? `absolute rounded-md px-2  ${
+                    clicked ? "text-4xl" : "text-sm"
+                  }`
                 : ""
             }`}
             animate={clicked ? "clicked" : "default"}
-            onClick={onClick}
+            onClick={isMapFocused ? onArticleStackLabelClick : undefined}
           >
             {content}
           </motion.div>

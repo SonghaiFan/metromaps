@@ -22,7 +22,7 @@ const articleVariantsFactory = (
         (INNER_PADDING + zoomedInArticleHeight) *
         (totalArticles - articleIndex - 1),
       transition: {
-        delay: (totalArticles - articleIndex + 1) / 25,
+        delay: (totalArticles - articleIndex + 1) / 500,
         ease: "easeOut",
       },
     },
@@ -32,7 +32,7 @@ const articleVariantsFactory = (
       x: totalArticles - articleIndex - 1,
       y: articleIndex - totalArticles + 1,
       transition: {
-        delay: (totalArticles - articleIndex + 1) / 25,
+        delay: (totalArticles - articleIndex + 1) / 500,
         ease: "easeOut",
       },
     },

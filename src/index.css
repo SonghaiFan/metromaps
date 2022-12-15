@@ -76,6 +76,8 @@ body {
   background-color: var(--primaryDark);
   color: var(--primaryLight);
   font-family: var(--font-san-serif);
+  /* Hide scroll bar */
+  overflow: hidden;
 }
 
 code {
@@ -86,4 +88,15 @@ code {
 p {
   font-family: var(--font-serif);
   color: var(--primaryDark);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transform: translateY(-20%);
 }

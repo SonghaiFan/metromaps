@@ -268,6 +268,7 @@ export default function MetroMap({
   useEffect(() => {
     if (zoomOutButtonClicked) {
       onZoomOutButtonClick();
+      console.log("zoom out button clicked");
     }
     // onZoomOutButtonClick will never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -295,6 +296,7 @@ export default function MetroMap({
 
     // if the user clicks the node directly (not the neighbouring node button)
     setClickedNode(nodeId);
+    console.log("clicked node directly", nodeId);
   };
 
   const onZoomOutButtonClick = () => {
@@ -307,7 +309,7 @@ export default function MetroMap({
   return (
     <motion.div>
       <motion.div
-        className="absolute w-full h-full"
+        className="absolute w-full h-full cursor-pointer"
         onClick={onFocusButtonClick}
       >
         {/* landing page lines */}
@@ -405,6 +407,7 @@ export default function MetroMap({
                         <MetroLineLabel
                           key={`${lineId}-${index}`}
                           data={label}
+                          onMetroLineLabelClick={openSideDrawer}
                         />
                       );
                     })}
@@ -459,6 +462,14 @@ export default function MetroMap({
                   }}
                   onArticleStackAnimationComplete={
                     onArticleStackAnimationComplete
+                  }
+                  onArticleStackLabelClick={openSideDrawer}
+                  onNeighbourNodeLabelClick={openSideDrawer}
+                  onModalClicked={
+                    // onZoomOutButtonClick
+                    () => {
+                      console.log("modal clicked");
+                    }
                   }
                 />
               </motion.div>
@@ -538,7 +549,10 @@ export default function MetroMap({
                       onNeighbouringNodeClick={(neighbourId) => {
                         return handleMetroStopClick(neighbourId);
                       }}
-                      onArticleStackAnimationComplete={() => {}} // do not pass in onArticleStackAnimationComplete. otherwise, it will assign 2 additional setTimeout (executed after the animation for the source and target node is completed)
+                      onArticleStackAnimationComplete={() => {}}
+                      // do not pass in onArticleStackAnimationComplete.
+                      // otherwise, it will assign 2 additional setTimeout
+                      // (executed after the animation for the source and target node is completed)
                     />
                   </motion.div>
                 );
@@ -614,7 +628,7 @@ export default function MetroMap({
             screenHeight={screenHeight}
             paddingY={paddingY}
           >
-            <motion.div className="text-2xl">
+            {/* <motion.div className="text-2xl">
               Show{" "}
               <motion.select
                 value={linesShown}
@@ -636,6 +650,45 @@ export default function MetroMap({
                   })}
               </motion.select>{" "}
               lines
+            </motion.div> */}
+            <motion.div className="text-2xl">
+              {/* range slider with five step, label is very high, high, moderate, weak, very weak */}
+              <motion.div className="text-2xl">
+                Please rate the degree of relevance
+              </motion.div>
+
+              <input
+                type="range"
+                class="w-full h-3 bg-gray-70 rounded-lg appearance-none cursor-pointer range-lg bg-gradient-to-r from-[#48a49e] to-[#fce554]"
+                min="1"
+                max="5"
+                step="1"
+                list="tickmarks"
+                onChange={(event) => {
+                  console.log(event.target.value);
+                }}
+              />
+              <datalist id="tickmarks" class="felex flex-col ">
+                <option value="1">Very high</option>
+                <option value="2">High</option>
+                <option value="3">Moderate</option>
+                <option value="4">Weak</option>
+                <option value="5">Very weak</option>
+              </datalist>
+              <div class="w-full flex justify-between text-xs px-2">
+                <span>|</span>
+                <span>|</span>
+                <span>|</span>
+                <span>|</span>
+                <span>|</span>
+              </div>
+              <div class="w-full flex justify-between text-xs px-2">
+                <span>Very weak</span>
+                <span>Weak</span>
+                <span>Moderate</span>
+                <span>High</span>
+                <span>Very high</span>
+              </div>
             </motion.div>
           </SideDrawer>
         </>
