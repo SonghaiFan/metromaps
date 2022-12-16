@@ -20,7 +20,7 @@ export default function ArticleStack({
   onAnimationComplete,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
-  console.log(data);
+  // console.log(data);
 
   return (
     <motion.div
@@ -48,10 +48,10 @@ export default function ArticleStack({
           .map((article, articleIndex, array) => {
             return (
               <motion.div
-                // id={`article-${data.id}`}
                 key={article.id}
-                className={`absolute rounded-md`}
+                className={`article-${data.id} absolute rounded-md `}
                 style={{
+                  border: "1px solid white",
                   backgroundColor: "white",
                 }}
                 variants={articleVariantsFactory(

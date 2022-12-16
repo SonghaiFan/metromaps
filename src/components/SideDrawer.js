@@ -58,6 +58,8 @@ export const SideDrawer = ({
               onChange={(event) => {
                 console.log("in the drawer: ", whoOpenSideDrawer);
 
+                const newColour = cutomerInterpolation(event.target.value);
+
                 const idData = whoOpenSideDrawer.id.split("-");
 
                 if (idData[0] === "plabel") {
@@ -67,10 +69,29 @@ export const SideDrawer = ({
                   );
                   // query the dom element with id `path-${start}-${end}`
                   const path = document.getElementById(`path-${start}-${end}`);
-                  path.style.stroke = cutomerInterpolation(event.target.value);
+                  path.style.stroke = newColour;
+
+                  whoOpenSideDrawer.style.backgroundColor = newColour;
+                }
+
+                if (idData[0] === "nwlabel") {
+                  const [type, nodeid] = idData;
+                  console.log(`this is a node word label at ${nodeid}`);
 
                   whoOpenSideDrawer.style.backgroundColor =
                     cutomerInterpolation(event.target.value);
+
+                  const nodeNumberLabel = document.getElementById(
+                    `nnlabel-${nodeid}`
+                  );
+                  nodeNumberLabel.style.backgroundColor = newColour;
+
+                  const nodeArticles = document.getElementsByClassName(
+                    `article-${nodeid}`
+                  );
+                  for (const article of nodeArticles) {
+                    article.style.backgroundColor = newColour;
+                  }
                 }
 
                 // setLinesShown(event.target.value);
