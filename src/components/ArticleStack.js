@@ -6,6 +6,7 @@ import { useWindowSize } from "react-use";
 import { TOP_PADDING, INNER_PADDING } from "../utilities/articleStackUtilities";
 
 export default function ArticleStack({
+  data,
   articles,
   colour,
   onClick,
@@ -19,6 +20,7 @@ export default function ArticleStack({
   onAnimationComplete,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
+  console.log(data);
 
   return (
     <motion.div
@@ -46,14 +48,11 @@ export default function ArticleStack({
           .map((article, articleIndex, array) => {
             return (
               <motion.div
+                // id={`article-${data.id}`}
                 key={article.id}
                 className={`absolute rounded-md`}
                 style={{
-                  backgroundColor: clicked
-                    ? "white"
-                    : (array.length - articleIndex) % 2 === 0
-                    ? "white"
-                    : colour,
+                  backgroundColor: "white",
                 }}
                 variants={articleVariantsFactory(
                   array.length,

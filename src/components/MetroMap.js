@@ -36,6 +36,7 @@ export default function MetroMap({
   subtitle,
   zoomOutButtonClicked,
 }) {
+  // console.log(data);
   const [filteredData, setFilteredData] = useState(data);
 
   const topics = useMemo(
@@ -106,9 +107,12 @@ export default function MetroMap({
 
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
 
-  const openSideDrawer = (event) => {
-    console.log(event.target.style.backgroundColor);
-    event.target.style.backgroundColor = "red";
+  const [whoOpenSideDrawer, setWhoOpenSideDrawer] = useState();
+
+  const openSideDrawer = (who) => {
+    console.log("whoOpenSideDrawer", whoOpenSideDrawer);
+    console.log("who", who);
+    setWhoOpenSideDrawer(who);
     setSideDrawerOpen(true);
   };
 
@@ -166,6 +170,7 @@ export default function MetroMap({
     const labels = endPointToEndPointCoordinates.map((coordinates) => {
       const endingEndPoint = coordinates[coordinates.length - 1];
       return {
+        id: "plabel-" + endingEndPoint.source + "-" + endingEndPoint.target,
         label: endingEndPoint.edgeLabel || null,
         colour: endingEndPoint.edgeLabel
           ? endingEndPoint.edgeColour || line.colour
@@ -177,6 +182,7 @@ export default function MetroMap({
     const paths = endPointToEndPointCoordinates.map((coordinates) => {
       const endingEndPoint = coordinates[coordinates.length - 1];
       return {
+        id: "path-" + endingEndPoint.source + "-" + endingEndPoint.target,
         path: coordinates,
         colour: endingEndPoint.edgeColour || line.colour,
       };
@@ -266,6 +272,8 @@ export default function MetroMap({
       });
     }
   }, [previousClickedNode, clickedNodeBuffer, metroLineData, lines]);
+
+  // console.log(metroLineData);
 
   useEffect(() => {
     if (zoomOutButtonClicked) {
@@ -394,7 +402,6 @@ export default function MetroMap({
             {/* link labels */}
             <motion.div className="absolute">
               {metroLineData.map((data) => {
-                // console.log("data", data);
                 // console.log("Object.entries(data)", Object.entries(data));
                 // console.log("Object.entries(data)[0]", Object.entries(data)[0]);
                 const [lineId, { labels }] = Object.entries(data)[0];
@@ -412,9 +419,12 @@ export default function MetroMap({
                         <MetroLineLabel
                           key={`${lineId}-${index}`}
                           data={label}
-                          onMetroLineLabelClick={(event) =>
-                            openSideDrawer(event)
-                          }
+                          onMetroLineLabelClick={(event) => {
+                            console.log(
+                              `metro line: ${lineId}-${index} label: ${label.label} clicked`
+                            );
+                            openSideDrawer(event.target);
+                          }}
                         />
                       );
                     })}
@@ -516,6 +526,7 @@ export default function MetroMap({
                 const articles = nodes[nodeId].articles.map((articleId) => {
                   return filteredData.articles[articleId];
                 });
+                console.log("articles", articles);
 
                 return (
                   <motion.div
@@ -608,95 +619,30 @@ export default function MetroMap({
         <BackArrow className="bg-transparent w-20" />
       </NavigationButton>
       {isMapFocused && (
-        <>
-          <motion.button
-            className="absolute right-0 flex justify-center items-center text-4xl"
-            animate={{
-              width: margin.x * screenWidth,
-              height:
-                paddingY -
-                METROSTOP_BOTTOM_PADDING -
-                MAX_ARTICLES -
-                TIME_AXIS_PADDING,
-            }}
-            onClick={openSideDrawer}
-          >
-            <MdMenu />
-          </motion.button>
-          <SideDrawer
-            isVisible={sideDrawerOpen}
-            close={closeSideDrawer}
-            screenWidth={screenWidth}
-            screenHeight={screenHeight}
-            paddingY={paddingY}
-          >
-            {/* <motion.div className="text-2xl">
-              Show{" "}
-              <motion.select
-                value={linesShown}
-                className="text-black "
-                onChange={(event) => {
-                  setLinesShown(event.target.value);
-                  updateMetroMapLineShown(event.target.value);
-                  handleLineFiltering(event.target.value);
-                }}
-              >
-                {Array(topics.length - 1)
-                  .fill()
-                  .map((_, i) => {
-                    return (
-                      <motion.option key={i} value={i + 2}>
-                        {i === topics.length - 2 ? "All" : `${i + 2}`}
-                      </motion.option>
-                    );
-                  })}
-              </motion.select>{" "}
-              lines
-            </motion.div> */}
-            <motion.div className="text-2xl">
-              {/* range slider with five step, label is very high, high, moderate, weak, very weak */}
-              <motion.div className="text-2xl">
-                Please rate the degree of relevance
-              </motion.div>
-
-              <input
-                type="range"
-                class="w-full h-3 bg-gray-70 rounded-lg appearance-none cursor-pointer range-lg bg-gradient-to-r from-[#585d91] via-[#48a49e] to-[#fce554]"
-                min="1"
-                max="5"
-                step="1"
-                list="tickmarks"
-                onChange={(event) => {
-                  console.log(event.target.value);
-                  // setLinesShown(event.target.value);
-                  // updateMetroMapLineShown(event.target.value);
-                  // handleLineFiltering(event.target.value);
-                }}
-              />
-              <datalist id="tickmarks" class="felex flex-col ">
-                <option value="1">Very high</option>
-                <option value="2">High</option>
-                <option value="3">Moderate</option>
-                <option value="4">Weak</option>
-                <option value="5">Very weak</option>
-              </datalist>
-              <div class="w-full flex justify-between text-xs px-2">
-                <span>|</span>
-                <span>|</span>
-                <span>|</span>
-                <span>|</span>
-                <span>|</span>
-              </div>
-              <div class="w-full flex justify-between text-xs px-2">
-                <span>Very weak</span>
-                <span>Weak</span>
-                <span>Moderate</span>
-                <span>High</span>
-                <span>Very high</span>
-              </div>
-            </motion.div>
-          </SideDrawer>
-        </>
+        // <>
+        //   <motion.button
+        //     className="absolute right-0 flex justify-center items-center text-4xl"
+        //     animate={{
+        //       width: margin.x * screenWidth,
+        //       height:
+        //         paddingY -
+        //         METROSTOP_BOTTOM_PADDING -
+        //         MAX_ARTICLES -
+        //         TIME_AXIS_PADDING,
+        //     }}
+        //     onClick={openSideDrawer}
+        //   >
+        //     <MdMenu />
+        //   </motion.button>
+        <SideDrawer
+          isVisible={sideDrawerOpen}
+          close={closeSideDrawer}
+          screenWidth={screenWidth}
+          screenHeight={screenHeight}
+          paddingY={paddingY}
+          whoOpenSideDrawer={whoOpenSideDrawer}
+        ></SideDrawer>
+        // </>
       )}
     </motion.div>
   );

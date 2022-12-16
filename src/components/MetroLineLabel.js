@@ -8,7 +8,7 @@ const LINK_LABEL_HEIGHT = 20;
 export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
   const isFirstMount = useFirstMountState();
 
-  const { label, colour, points } = data;
+  const { id, label, colour, points } = data;
 
   const [{ x0, y0 }, { x1, y1 }] = points.map((coordinate, index) => {
     const keyX = `x${index}`;
@@ -54,11 +54,12 @@ export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
       }}
     >
       <motion.div
+        id={id}
         style={{
           backgroundColor: "white", // colour
           height: LINK_LABEL_HEIGHT, // 20 from line height of text-sm
         }}
-        className="text-black text-sm rounded-md px-1 hover:font-bold  pointer-events-auto"
+        className="metro-line-label text-black text-sm rounded-md px-1 hover:font-bold  pointer-events-auto"
         onClick={onMetroLineLabelClick}
       >
         {label}

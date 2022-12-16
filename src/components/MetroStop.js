@@ -62,6 +62,7 @@ export default function MetroStop({
       {isMapFocused && (
         <>
           <ArticleStack
+            data={data}
             articles={articles}
             colour={
               "white"
@@ -106,6 +107,7 @@ export default function MetroStop({
         {/* node number label */}
         {isMapFocused && !clicked && (
           <motion.div
+            id={`nnlabel-${data.id}`}
             style={{
               backgroundColor: "white", // data.colour
             }}
@@ -123,6 +125,7 @@ export default function MetroStop({
         {/* node words label */}
         {shouldRenderContent && (
           <motion.div
+            id={`nwlabel-${data.id}`}
             variants={nodeWordsVariantsFactory(
               isMapFocused,
               height,
@@ -140,7 +143,9 @@ export default function MetroStop({
                 : ""
             }`}
             animate={clicked ? "clicked" : "default"}
-            onClick={isMapFocused ? onArticleStackLabelClick : undefined}
+            onClick={(event) =>
+              isMapFocused ? onArticleStackLabelClick(event.target) : undefined
+            }
           >
             {content}
           </motion.div>

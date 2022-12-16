@@ -49,9 +49,7 @@ export default function MetroLine({ data, strokeWidth, reversed }) {
         return (
           <motion.g key={index}>
             <motion.path
-              id={
-                "metroLine-" + path.path[0].source + "-" + path.path[0].target
-              }
+              id={path.id}
               fill="transparent"
               d={drawPath(path.path)}
               stroke={
