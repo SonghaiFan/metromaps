@@ -54,12 +54,13 @@ export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
       }}
     >
       <motion.div
+        myclass="metro-line-label"
         id={id}
         style={{
-          backgroundColor: "white", // colour
+          backgroundColor: colour, // "white"
           height: LINK_LABEL_HEIGHT, // 20 from line height of text-sm
         }}
-        className="metro-line-label text-black text-sm rounded-md px-1 hover:font-bold  pointer-events-auto"
+        className="text-black text-sm rounded-md px-1 hover:font-bold  pointer-events-auto"
         onClick={onMetroLineLabelClick}
       >
         {label}

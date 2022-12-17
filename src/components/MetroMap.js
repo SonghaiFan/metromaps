@@ -16,6 +16,10 @@ import { MAX_ARTICLES } from "../utilities/calculateMetroMapLayout";
 import { TIME_AXIS_PADDING } from "./TimeAxis";
 import { SideDrawer } from "./SideDrawer";
 
+import { interpolateRgb } from "d3-interpolate";
+
+const cutomerInterpolation = interpolateRgb("#48a49e", "#fce554");
+
 const TOP_FULL_PAGE_PADDING = 20;
 
 export default function MetroMap({
@@ -110,8 +114,8 @@ export default function MetroMap({
   const [whoOpenSideDrawer, setWhoOpenSideDrawer] = useState();
 
   const openSideDrawer = (who) => {
-    console.log("whoOpenSideDrawer", whoOpenSideDrawer);
-    console.log("who", who);
+    // console.log("whoOpenSideDrawer", whoOpenSideDrawer);
+    // console.log("who", who);
     setWhoOpenSideDrawer(who);
     setSideDrawerOpen(true);
   };
@@ -139,6 +143,20 @@ export default function MetroMap({
       calculateMetroMapLayout(screenWidth, screenHeight, filteredData, margin),
     [screenWidth, screenHeight, filteredData]
   );
+
+  const [customNodes, setCustomeNodes] = useState(nodes);
+
+  const handleCustomNodes = (nodeId, newColour) => {
+    console.log("nodeId", nodeId);
+    console.log("newColour", newColour);
+    console.log("nodes", nodes);
+
+    setCustomeNodes(() => {
+      const updatedNodes = Object.assign({}, nodes);
+      updatedNodes[nodeId].colour = newColour;
+      return updatedNodes;
+    });
+  };
 
   const paddingX = isMapFocused
     ? fullPageXPadding - NODE_WIDTH / 2
@@ -170,7 +188,7 @@ export default function MetroMap({
     const labels = endPointToEndPointCoordinates.map((coordinates) => {
       const endingEndPoint = coordinates[coordinates.length - 1];
       return {
-        id: "plabel-" + endingEndPoint.source + "-" + endingEndPoint.target,
+        id: endingEndPoint.source + "-" + endingEndPoint.target,
         label: endingEndPoint.edgeLabel || null,
         colour: endingEndPoint.edgeLabel
           ? endingEndPoint.edgeColour || line.colour
@@ -182,7 +200,7 @@ export default function MetroMap({
     const paths = endPointToEndPointCoordinates.map((coordinates) => {
       const endingEndPoint = coordinates[coordinates.length - 1];
       return {
-        id: "path-" + endingEndPoint.source + "-" + endingEndPoint.target,
+        id: endingEndPoint.source + "-" + endingEndPoint.target,
         path: coordinates,
         colour: endingEndPoint.edgeColour || line.colour,
       };
@@ -191,6 +209,8 @@ export default function MetroMap({
     return [paths, labels];
   };
 
+  // const [custoLines, setCustomLines] = useState(lines);
+
   const metroLineData = useMemo(
     () =>
       Object.keys(lines).map((lineId) => {
@@ -198,10 +218,36 @@ export default function MetroMap({
 
         const [paths, labels] = generatePaths(activeLines[lineId]);
 
-        return { [lineId]: { paths, labels } };
+        const lineData = { [lineId]: { paths, labels } };
+
+        return lineData;
       }),
     [lines, landingLines, isMapFocused]
   );
+
+  const customMetroLineData = metroLineData;
+
+  // const [customMetroLineData, setCustomMetroLineData] = useState(metroLineData);
+
+  // const handleCustomMetroLineData = (pathId, newColour) => {
+  //   setCustomMetroLineData(() => {
+  //     const updatedMetroLineData = Array.from(metroLineData);
+
+  //     for (const line of updatedMetroLineData) {
+  //       const lineIds = Object.keys(line);
+  //       lineIds.forEach((key) => {
+  //         line[lineIds].paths.forEach((path) => {
+  //           path.id === pathId && (path.colour = newColour);
+  //         });
+  //         line[lineIds].labels.forEach((label) => {
+  //           label.id === pathId && (label.colour = newColour);
+  //         });
+  //       });
+  //     }
+
+  //     return updatedMetroLineData;
+  //   });
+  // };
 
   const titleRef = useRef();
   const [titleAnimation, setTitleAnimation] = useState({});
@@ -247,7 +293,7 @@ export default function MetroMap({
         );
       });
 
-      const { paths } = metroLineData.find(
+      const { paths } = customMetroLineData.find(
         (line) => Object.keys(line)[0] === foundLineId
       )[foundLineId];
 
@@ -271,7 +317,7 @@ export default function MetroMap({
         reversed: foundLinkDataReversed.length > 0,
       });
     }
-  }, [previousClickedNode, clickedNodeBuffer, metroLineData, lines]);
+  }, [previousClickedNode, clickedNodeBuffer, customMetroLineData, lines]);
 
   // console.log(metroLineData);
 
@@ -331,7 +377,7 @@ export default function MetroMap({
             width={isMapFocused ? screenWidth : width}
             height={isMapFocused ? screenHeight : height}
           >
-            {metroLineData.map((data) => {
+            {customMetroLineData.map((data) => {
               const [lineId, { paths }] = Object.entries(data)[0];
 
               return (
@@ -378,7 +424,7 @@ export default function MetroMap({
               width={isMapFocused ? screenWidth : width}
               height={isMapFocused ? screenHeight : height}
             >
-              {metroLineData.map((data) => {
+              {customMetroLineData.map((data) => {
                 const [lineId, { paths }] = Object.entries(data)[0];
 
                 return (
@@ -401,7 +447,7 @@ export default function MetroMap({
 
             {/* link labels */}
             <motion.div className="absolute">
-              {metroLineData.map((data) => {
+              {customMetroLineData.map((data) => {
                 // console.log("Object.entries(data)", Object.entries(data));
                 // console.log("Object.entries(data)[0]", Object.entries(data)[0]);
                 const [lineId, { labels }] = Object.entries(data)[0];
@@ -436,10 +482,10 @@ export default function MetroMap({
         )}
 
         <motion.div>
-          {Object.keys(nodes).map((nodeId) => {
+          {Object.keys(customNodes).map((nodeId) => {
             const { x: landingX, y: landingY } = landingNodes[nodeId];
 
-            const articles = nodes[nodeId].articles.map((articleId) => {
+            const articles = customNodes[nodeId].articles.map((articleId) => {
               return filteredData.articles[articleId];
             });
 
@@ -450,7 +496,7 @@ export default function MetroMap({
                   screenWidth,
                   screenHeight,
                   isMapFocused,
-                  nodes[nodeId],
+                  customNodes[nodeId],
                   landingX,
                   landingY,
                   LANDING_WIDTH,
@@ -465,7 +511,7 @@ export default function MetroMap({
                 id={nodeId}
               >
                 <MetroStop
-                  data={nodes[nodeId]}
+                  data={customNodes[nodeId]}
                   articles={articles}
                   isMapFocused={isMapFocused}
                   shouldRenderContent={true}
@@ -523,9 +569,11 @@ export default function MetroMap({
               {[previousClickedNode, clickedNodeBuffer].map((nodeId) => {
                 const { x: landingX, y: landingY } = landingNodes[nodeId];
 
-                const articles = nodes[nodeId].articles.map((articleId) => {
-                  return filteredData.articles[articleId];
-                });
+                const articles = customNodes[nodeId].articles.map(
+                  (articleId) => {
+                    return filteredData.articles[articleId];
+                  }
+                );
                 console.log("articles", articles);
 
                 return (
@@ -535,7 +583,7 @@ export default function MetroMap({
                       screenWidth,
                       screenHeight,
                       isMapFocused,
-                      nodes[nodeId],
+                      customNodes[nodeId],
                       landingX,
                       landingY,
                       LANDING_WIDTH,
@@ -549,7 +597,7 @@ export default function MetroMap({
                     key={nodeId}
                   >
                     <MetroStop
-                      data={nodes[nodeId]}
+                      data={customNodes[nodeId]}
                       articles={articles}
                       isMapFocused={isMapFocused}
                       shouldRenderContent={true}
@@ -619,30 +667,73 @@ export default function MetroMap({
         <BackArrow className="bg-transparent w-20" />
       </NavigationButton>
       {isMapFocused && (
-        // <>
-        //   <motion.button
-        //     className="absolute right-0 flex justify-center items-center text-4xl"
-        //     animate={{
-        //       width: margin.x * screenWidth,
-        //       height:
-        //         paddingY -
-        //         METROSTOP_BOTTOM_PADDING -
-        //         MAX_ARTICLES -
-        //         TIME_AXIS_PADDING,
-        //     }}
-        //     onClick={openSideDrawer}
-        //   >
-        //     <MdMenu />
-        //   </motion.button>
         <SideDrawer
           isVisible={sideDrawerOpen}
           close={closeSideDrawer}
           screenWidth={screenWidth}
           screenHeight={screenHeight}
           paddingY={paddingY}
-          whoOpenSideDrawer={whoOpenSideDrawer}
-        ></SideDrawer>
-        // </>
+        >
+          <motion.div className="text-2xl">
+            {/* range slider with five step, label is very high, high, moderate, weak, very weak */}
+            <motion.div className="text-2xl">
+              Please rate the degree of relevance
+            </motion.div>
+            <motion.input
+              type="range"
+              className="w-full h-3 bg-gray-70 rounded-lg appearance-none cursor-pointer range-lg bg-gradient-to-r from-[#585d91] via-[#48a49e] to-[#fce554]"
+              min="0"
+              max="1"
+              step="0.25"
+              list="tickmarks"
+              onChange={(event) => {
+                console.log("in the drawer: ", whoOpenSideDrawer);
+
+                const newColour = cutomerInterpolation(event.target.value);
+
+                const type = whoOpenSideDrawer.dataset.type;
+                console.log("type", type);
+                const whoId = whoOpenSideDrawer.id;
+                console.log("whoId", whoId);
+
+                if (type === "metro-line-label") {
+                  console.log(`this is a metro line label at ${whoId}`);
+                  // handleCustomMetroLineData(whoId, newColour);
+                }
+
+                if (type === "node-words-label") {
+                  console.log(`this is a node word label at ${whoId}`);
+                  handleCustomNodes(whoId, newColour);
+                }
+
+                // setLinesShown(event.target.value);
+                // updateMetroMapLineShown(event.target.value);
+                // handleLineFiltering(event.target.value);
+              }}
+            />
+            <motion.datalist id="tickmarks" className="felex flex-col ">
+              <option>Very high</option>
+              <option>High</option>
+              <option>Moderate</option>
+              <option>Weak</option>
+              <option>Very weak</option>
+            </motion.datalist>
+            <motion.div className="w-full flex justify-between text-xs px-2">
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+              <span>|</span>
+            </motion.div>
+            <motion.div className="w-full flex justify-between text-xs px-2">
+              <span>Very weak</span>
+              <span>Weak</span>
+              <span>Moderate</span>
+              <span>High</span>
+              <span>Very high</span>
+            </motion.div>
+          </motion.div>
+        </SideDrawer>
       )}
     </motion.div>
   );

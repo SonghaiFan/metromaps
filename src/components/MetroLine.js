@@ -53,8 +53,8 @@ export default function MetroLine({ data, strokeWidth, reversed }) {
               fill="transparent"
               d={drawPath(path.path)}
               stroke={
-                "white"
-                //path.colour
+                // "white"
+                path.colour
               }
               strokeWidth={strokeWidth || METROLINE_WIDTH}
               variants={metroLineVariantFactory}

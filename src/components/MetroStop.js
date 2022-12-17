@@ -65,8 +65,8 @@ export default function MetroStop({
             data={data}
             articles={articles}
             colour={
-              "white"
-              //data.colour
+              // "white"
+              data.colour
             }
             onClick={onClick}
             clicked={clicked}
@@ -98,7 +98,7 @@ export default function MetroStop({
             ? clicked
               ? "rgba(0, 0, 0, 0.9)"
               : "rgba(0, 0, 0, 0)"
-            : "white", //data.colour
+            : data.colour, //"white"
         }}
         className={`w-full h-full text-black truncate flex justify-center -z-40 ${
           clicked || isMapFocused ? "" : "items-center"
@@ -107,9 +107,10 @@ export default function MetroStop({
         {/* node number label */}
         {isMapFocused && !clicked && (
           <motion.div
-            id={`nnlabel-${data.id}`}
+            data-type="node-number-label"
+            id={data.id}
             style={{
-              backgroundColor: "white", // data.colour
+              backgroundColor: data.colour, //"white"
             }}
             animate={{
               width: METROSTOP_CIRCLE_SIZE,
@@ -125,7 +126,8 @@ export default function MetroStop({
         {/* node words label */}
         {shouldRenderContent && (
           <motion.div
-            id={`nwlabel-${data.id}`}
+            data-type="node-words-label"
+            id={data.id}
             variants={nodeWordsVariantsFactory(
               isMapFocused,
               height,
@@ -133,7 +135,9 @@ export default function MetroStop({
               CLICKED_ARTICLE_CONTAINER_HEIGHT
             )}
             style={{
-              backgroundColor: "white", //data.colour
+              backgroundColor:
+                // "white",
+                data.colour,
             }}
             className={`truncate text-black hover:font-bold  ${
               isMapFocused

@@ -29,7 +29,7 @@ export default function NeighbouringNode({
     <motion.div className="w-full h-full flex flex-col justify-center items-center ">
       <motion.div
         style={{
-          backgroundColor: "white", //data.colour
+          backgroundColor: data.colour, //"white"
         }}
         className="text-black rounded-md px-2 text-2xl hover:font-bold pointer-events-auto"
         onClick={onNeighbourNodeLabelClick}

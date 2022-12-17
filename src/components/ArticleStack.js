@@ -51,8 +51,12 @@ export default function ArticleStack({
                 key={article.id}
                 className={`article-${data.id} absolute rounded-md `}
                 style={{
-                  border: "1px solid white",
-                  backgroundColor: "white",
+                  // border: "1px solid white",
+                  backgroundColor: clicked
+                    ? "white"
+                    : (array.length - articleIndex) % 2 === 0
+                    ? "white"
+                    : colour,
                 }}
                 variants={articleVariantsFactory(
                   array.length,
