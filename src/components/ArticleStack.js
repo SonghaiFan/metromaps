@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import { motion } from "framer-motion";
 import Article from "./Article";
 import { articleVariantsFactory } from "../utilities/articleStackUtilities";
 import { useWindowSize } from "react-use";
 import { TOP_PADDING, INNER_PADDING } from "../utilities/articleStackUtilities";
+import mixpanel from 'mixpanel-browser';
+
+function getTimestampInSeconds () {
+  return Math.floor(Date.now() / 1000)
+}
 
 export default function ArticleStack({
   data,
@@ -21,9 +26,23 @@ export default function ArticleStack({
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   // console.log(data);
-
+  let [lastObservedTime, setLastObservedTime] = useState(null)
   return (
     <motion.div
+      onScroll={()=> {
+        let currentTime = getTimestampInSeconds()
+        if (lastObservedTime === null) {
+          setLastObservedTime(currentTime)
+          console.log("I am being scrolled")
+          mixpanel.track("Article Scroll")
+        } else if (currentTime - lastObservedTime > 1) {
+          console.log("I am being scrolled")
+          setLastObservedTime(currentTime)
+          mixpanel.track("Article Scroll")
+        } else {
+
+        }
+      }}
       className={`${
         clicked
           ? `absolute top-0 left-0 w-full h-full overflow-y-scroll ${

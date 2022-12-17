@@ -15,6 +15,7 @@ import { METROSTOP_BOTTOM_PADDING } from "../utilities/metroMapUtilities";
 import { MAX_ARTICLES } from "../utilities/calculateMetroMapLayout";
 import { TIME_AXIS_PADDING } from "./TimeAxis";
 import { SideDrawer } from "./SideDrawer";
+import mixpanel from 'mixpanel-browser';
 
 import { interpolateRgb } from "d3-interpolate";
 
@@ -353,6 +354,7 @@ export default function MetroMap({
     // if the user clicks the node directly (not the neighbouring node button)
     setClickedNode(nodeId);
     console.log("clicked node directly", nodeId);
+    mixpanel.track(`Clicked node`, {node:  nodeId})
   };
 
   const onZoomOutButtonClick = () => {
