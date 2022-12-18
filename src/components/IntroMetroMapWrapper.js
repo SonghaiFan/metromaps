@@ -73,9 +73,8 @@ export default function IntroMetroMapWrapper({
         <div className="text-white text-base mt-[3%] ">
           Tap here to progress through the user guide
         </div>
-        <div className="flex w-[600px]">
+        <div className="flex">
           <div className="mt-[1%] flex">{res}</div>
-          <img src={logo} className=" ml-[8%] flex mr-auto" alt="Monash University"/>
         </div>
       </div>
     );

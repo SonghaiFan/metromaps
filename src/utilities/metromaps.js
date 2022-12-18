@@ -13,15 +13,15 @@ import voiceView from "../data/21_09_2022_1663742238_voice.json";
 
 // Give name, title, (description?) here after importing
 const METROMAPS = [
-  // {
-  //   url: "intro",
-  //   title: "Quick Start Guide",
-  //   data: introPage,
-  //   description:
-  //     "If you are new to using this tool, we suggest you make a start here. Discover what issues are being discussed in Australian news right now, which disadvantage issues are more common than others, and which ones co-occur.",
-  //   subtitle: "The power of a ‘living platform’",
-  //   hint: "Get tips on how to use this App and how we understand and discuss equity, opportunity, and disadvantage in 2022.",
-  // },
+  {
+    url: "intro",
+    title: "Quick Start Guide",
+    data: introPage,
+    description:
+      "If you are new to using this tool, we suggest you make a start here. Discover what issues are being discussed in Australian news right now, which disadvantage issues are more common than others, and which ones co-occur.",
+    subtitle: "The power of a ‘living platform’",
+    hint: "Get tips on how to use this App and how we understand and discuss equity, opportunity, and disadvantage in 2022.",
+  },
   {
     url: "all",
     title: "All News",
@@ -31,68 +31,68 @@ const METROMAPS = [
     subtitle: "Building a better Australia?",
     hint: "Good policy demands open debate and inclusiveness. What communities and issues are we forgetting?",
   },
-  // {
-  //   url: "all-1",
-  //   title: "All News (One Month Cycle)",
-  //   data: noFilterView1,
-  //   description:
-  //     "Criminal case. In 2019, the police officer who killed an Aboriginal teenager even if the threat was low, was found not guilty of murder after 6 weeks of trial. Was systemic racism a factor in the incident? And what does it mean for the future Aboriginal community – Police relationships? Follow the discussions. (Feb - March 2022). Check the metro map. #normalisedexpressionofracism #murdertrial #aboriginal ",
-  // },
-  // {
-  //   url: "all-2",
-  //   title: "All News (Two month Cycle)",
-  //   data: noFilterView2,
-  //   description:
-  //     "What are the solutions to the Australian Housing Crisis, considering the rise of residential property prices through 2021, and the unaffordability of rental properties for minimum wage workers? Co-buying with the government? Social housing tax bill? Low deposit scheme? Follow the discussions. (Feb – April 2022). Check the metro map. #homeownership #propertyprices #landvalue #socialhousing #homelessness #financialstress #housingpolicy",
-  // },
-  // {
-  //   url: "gov-assist-family-finance-work",
-  //   title: "Government Assistance, Family relations, Finance, Work",
-  //   data: govView,
-  //   description:
-  //     "The news focused on affordable housing, the number of deaths we are willing to accept in the ‘living with covid strategy’, the performance of Australian students compared to international benchmarks, and how to get fair wages for all while the costs of living increase.",
-  //   subtitle: "Economic welfare and social wellbeing",
-  //   hint: "Improving the wellbeing of people and families in Australia demands well-thought strategies.",
-  // },
-  // {
-  //   url: "voice-segregation-prejudice-discrimination-human-rights",
-  //   title: "Voice, Segregation, Prejudice and discrimination, Human rights",
-  //   data: voiceView,
-  //   description:
-  //     "News focused on religious discrimination laws, protecting gay students and men from perpetrators, improving the Australian police force and denormalising violence of any form, and the impact of the staying-at-home trend on people’s well-being and the after-covid recovery. ",
-  //   subtitle: "The advantage of autonomy ",
-  //   hint: "Let's build an Australia beyond discriminations, where we exercise our human rights.",
-  // },
-  // {
-  //   url: "election",
-  //   title: "Election",
-  //   data: electionView,
-  //   description: "",
-  // },
-  // {
-  //   url: "ukr-rus-war",
-  //   title: "Ukraine-Russia War",
-  //   data: ukrRus,
-  //   description: "",
-  // },
-  // {
-  //   url: "domestic-violence",
-  //   title: "Domestic Violence (all)",
-  //   data: domesticViolence,
-  //   description: "",
-  // },
-  // {
-  //   url: "domestic-violence-pre-2014",
-  //   title: "Domestic Violence (pre-2014)",
-  //   data: domesticViolencePre2014,
-  //   description: "",
-  // },
-  // {
-  //   url: "domestic-violence-post-2014",
-  //   title: "Domestic Violence (post-2014)",
-  //   data: domesticViolencePost2014,
-  //   description: "",
-  // },
+  {
+    url: "gov-assist-family-finance-work",
+    title: "Government Assistance, Family relations, Finance, Work",
+    data: govView,
+    description:
+      "The news focused on affordable housing, the number of deaths we are willing to accept in the ‘living with covid strategy’, the performance of Australian students compared to international benchmarks, and how to get fair wages for all while the costs of living increase.",
+    subtitle: "Economic welfare and social wellbeing",
+    hint: "Improving the wellbeing of people and families in Australia demands well-thought strategies.",
+  },
+  {
+    url: "all-1",
+    title: "All News (One Month Cycle)",
+    data: noFilterView1,
+    description:
+      "Criminal case. In 2019, the police officer who killed an Aboriginal teenager even if the threat was low, was found not guilty of murder after 6 weeks of trial. Was systemic racism a factor in the incident? And what does it mean for the future Aboriginal community – Police relationships? Follow the discussions. (Feb - March 2022). Check the metro map. #normalisedexpressionofracism #murdertrial #aboriginal ",
+  },
+  {
+    url: "all-2",
+    title: "All News (Two month Cycle)",
+    data: noFilterView2,
+    description:
+      "What are the solutions to the Australian Housing Crisis, considering the rise of residential property prices through 2021, and the unaffordability of rental properties for minimum wage workers? Co-buying with the government? Social housing tax bill? Low deposit scheme? Follow the discussions. (Feb – April 2022). Check the metro map. #homeownership #propertyprices #landvalue #socialhousing #homelessness #financialstress #housingpolicy",
+  },
+  {
+    url: "voice-segregation-prejudice-discrimination-human-rights",
+    title: "Voice, Segregation, Prejudice and discrimination, Human rights",
+    data: voiceView,
+    description:
+      "News focused on religious discrimination laws, protecting gay students and men from perpetrators, improving the Australian police force and denormalising violence of any form, and the impact of the staying-at-home trend on people’s well-being and the after-covid recovery. ",
+    subtitle: "The advantage of autonomy ",
+    hint: "Let's build an Australia beyond discriminations, where we exercise our human rights.",
+  },
+  {
+    url: "election",
+    title: "Election",
+    data: electionView,
+    description: "",
+  },
+  {
+    url: "ukr-rus-war",
+    title: "Ukraine-Russia War",
+    data: ukrRus,
+    description: "",
+  },
+  {
+    url: "domestic-violence",
+    title: "Domestic Violence (all)",
+    data: domesticViolence,
+    description: "",
+  },
+  {
+    url: "domestic-violence-pre-2014",
+    title: "Domestic Violence (pre-2014)",
+    data: domesticViolencePre2014,
+    description: "",
+  },
+  {
+    url: "domestic-violence-post-2014",
+    title: "Domestic Violence (post-2014)",
+    data: domesticViolencePost2014,
+    description: "",
+  },
 ];
 
 export default METROMAPS;

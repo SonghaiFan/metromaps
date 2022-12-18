@@ -19,7 +19,8 @@ import prfLogo from "../img/Logo-PRF.png";
 import { ReactComponent as QRCode } from "../img/qrCode.svg";
 import { MdClose } from "react-icons/md";
 
-const METROMAPS_PER_PAGE = 3;
+const METROMAPS_PER_PAGE = 1;
+const HEADER_HEIGHT = 80;
 
 const PAGE_DIRECTION = {
   RIGHT: 1,
@@ -34,15 +35,36 @@ export default function Menu({
   height: screenHeight,
   introMetroMapUrl,
 }) {
+  const metroMapWidth = (screenWidth / 2) * (1 - margin.x);
+  const metroMapHeight = (screenHeight / 2) * (1 - margin.y);
+
+  const flexMetroMapWidth = Math.min(
+    (screenWidth / METROMAPS_PER_PAGE) * (1 - margin.x),
+    metroMapWidth
+  );
+  const flexMetroMapHeight = screenHeight / 2;
+
+  const legendWidth = screenWidth / 3;
+
+  const metroMapsX = (screenWidth - flexMetroMapWidth * METROMAPS_PER_PAGE) / 2;
+  const metroMapsY = (screenHeight - HEADER_HEIGHT - metroMapHeight) / 2;
+
+  const fullViewLegendX = (screenWidth - legendWidth) / 2;
+  const fullViewLegendY = 8;
+
+  const noFullViewLegendX = (screenWidth - legendWidth) / 2;
+  const noFullViewLegendY = metroMapsY - 15;
+
   const metromapsDetails = useMemo(() => {
     return metromaps.reduce((accumulatedDimensions, metromap, index) => {
       return {
         ...accumulatedDimensions,
         [metromap.url]: {
-          width: screenWidth / 3,
-          height: screenHeight / 3,
-          xPosition: (index % METROMAPS_PER_PAGE) * (screenWidth / 3),
-          yPosition: screenHeight / 5,
+          width: flexMetroMapWidth,
+          height: flexMetroMapHeight,
+          xPosition:
+            (index % METROMAPS_PER_PAGE) * flexMetroMapWidth + metroMapsX,
+          yPosition: metroMapsY,
           /* copy data so that d3sankey does not mutate original data*/
           data: loadData(JSON.parse(JSON.stringify(metromap.data))),
           title: metromap.title,
@@ -50,7 +72,13 @@ export default function Menu({
         },
       };
     }, {});
-  }, [metromaps, screenWidth, screenHeight]);
+  }, [
+    metromaps,
+    flexMetroMapWidth,
+    flexMetroMapHeight,
+    metroMapsX,
+    metroMapsY,
+  ]);
 
   const [pageState, setPageState] = useState({
     current: 1,
@@ -232,19 +260,22 @@ export default function Menu({
     );
   };
 
-  const [showQRCode, setShowQRCode] = useState(false);
+  // const [showQRCode, setShowQRCode] = useState(false);
 
   return (
     <div>
       <motion.div>
         {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
           <>
-            <motion.div className="absolute top-0 left-0 mx-8 my-5">
+            <motion.div
+              className="absolute top-0 left-0 mx-8 my-5 "
+              style={{ height: HEADER_HEIGHT }}
+            >
               <motion.div
-                className="font-bold text-2xl"
+                className="font-bold text-4xl"
                 style={{ color: "#48a49e" }}
               >
-                Australia's Discourse Explorer
+                Australia's Discourse Explorer - User Study
               </motion.div>
               <motion.div
                 className="italic text-xl line-clamp-1 font-medium"
@@ -255,17 +286,17 @@ export default function Menu({
             </motion.div>
             <motion.div
               className="absolute top-0 right-0 flex justify-end items-center my-5"
-              style={{ width: screenWidth / 3, height: 80 }}
+              style={{ width: screenWidth / 2, height: HEADER_HEIGHT }}
             >
               <motion.img
                 src={monashLogo}
                 alt="Monash University Logo"
-                style={{ height: 65 }}
+                style={{ height: HEADER_HEIGHT, paddingTop: 10 }}
               />
               <motion.img
                 src={prfLogo}
                 alt="PRF Logo"
-                style={{ height: 80 }}
+                style={{ height: HEADER_HEIGHT }}
                 className="mx-5"
               />
             </motion.div>
@@ -300,7 +331,7 @@ export default function Menu({
           )
         }
         initial={{
-          x: screenWidth / 2 - screenWidth / 6,
+          x: 0,
           y: 0,
           width: 0,
           height: 0,
@@ -308,13 +339,13 @@ export default function Menu({
         animate={{
           x:
             focusState.mode === FOCUS_MODE.FULL_VIEW
-              ? screenWidth - screenWidth / 3 - screenWidth * margin.x
-              : screenWidth / 3,
+              ? fullViewLegendX
+              : noFullViewLegendX,
           y:
             focusState.mode === FOCUS_MODE.FULL_VIEW
-              ? 8
-              : screenHeight / 5 - 15,
-          width: screenWidth / 3,
+              ? fullViewLegendY
+              : noFullViewLegendY,
+          width: legendWidth,
           height: 30,
         }}
       />
@@ -331,7 +362,7 @@ export default function Menu({
         <>
           <motion.div
             className="absolute left-0 bottom-0 mx-8 my-3 text-[9px]"
-            style={{ maxWidth: screenWidth / 3, maxHeight: 56 }}
+            style={{ maxWidth: flexMetroMapWidth, maxHeight: 56 }}
           >
             <motion.div className="underline">Data sources</motion.div>
             <motion.ul className="list-disc pl-5">
@@ -345,7 +376,7 @@ export default function Menu({
               </motion.li>
             </motion.ul>
           </motion.div>
-          <motion.div
+          {/* <motion.div
             className="absolute right-0 bottom-0 mx-8 my-3 p-2 flex items-center border-2 rounded-md justify-center"
             whileHover={{ backgroundColor: "white", color: "black" }}
             onClick={() => setShowQRCode(true)}
@@ -362,10 +393,10 @@ export default function Menu({
               <motion.div
                 className="absolute w-screen h-screen z-50 flex justify-center items-center"
                 style={{
-                  width: screenWidth / 3,
-                  height: screenHeight / 3,
-                  x: screenWidth / 3,
-                  y: screenHeight / 3,
+                  width: flexScreenWidth,
+                  height: flexScreenHeight,
+                  x: flexScreenWidth,
+                  y: flexScreenHeight,
                 }}
               >
                 <QRCode />
@@ -377,7 +408,7 @@ export default function Menu({
                 <MdClose />
               </motion.button>
             </>
-          )}
+          )} */}
         </>
       )}
     </div>
