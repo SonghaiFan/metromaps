@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export default function Article({ article, metroStopClicked }) {
   return (
-    <motion.div className="absolute bg-inherit w-full h-full rounded-md">
+    <motion.div className="absolute bg-inherit w-full h-full rounded-md ">
       <motion.div
         style={{
           fontFamily: "var(--font-serif)",

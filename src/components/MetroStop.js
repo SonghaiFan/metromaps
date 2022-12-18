@@ -36,7 +36,7 @@ export default function MetroStop({
     (screenWidth / 13) * (clicked ? 1 : ARTICLE_SIZE_MULTIPLIER);
   const ZOOMED_IN_ARTICLE_HEIGHT = 3 * ARTICLE_HEIGHT;
   const ZOOMED_IN_ARTICLE_WIDTH = 8 * ARTICLE_WIDTH;
-  const ARTICLE_LIMIT = 4;
+  const ARTICLE_LIMIT = 4.7;
   const CLICKED_ARTICLE_CONTAINER_HEIGHT =
     ZOOMED_IN_ARTICLE_HEIGHT * ARTICLE_LIMIT +
     INNER_PADDING * (ARTICLE_LIMIT - 1);
@@ -84,7 +84,7 @@ export default function MetroStop({
                 fontFamily: "var(--font-serif)",
                 color: "var(--primaryDark)",
               }}
-              className={"absolute text-sm m-1 line-clamp-2 font-bold "}
+              className={"absolute text-sm m-1 line-clamp-2 font-bold"}
               onClick={onClick}
             >
               {title}
@@ -139,7 +139,7 @@ export default function MetroStop({
                 // "white",
                 data.colour,
             }}
-            className={`truncate text-black hover:font-bold  ${
+            className={`truncate text-black hover:font-bold cursor-pointer  ${
               isMapFocused
                 ? `absolute rounded-md px-2  ${
                     clicked ? "text-4xl" : "text-sm"

@@ -26,7 +26,7 @@ export default function ArticleStack({
     <motion.div
       className={`${
         clicked
-          ? `absolute top-0 left-0 w-full h-full overflow-y-scroll ${
+          ? `absolute top-0 left-0 w-full h-full overflow-y-scroll cursor-zoom-in${
               articles.length > articleLimit ? "scrollbar" : "scrollbar-none"
             }`
           : ""
@@ -49,7 +49,7 @@ export default function ArticleStack({
             return (
               <motion.div
                 key={article.id}
-                className={`article-${data.id} absolute rounded-md `}
+                className={`article-${data.id} absolute rounded-md`}
                 style={{
                   // border: "1px solid white",
                   backgroundColor: clicked

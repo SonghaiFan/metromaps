@@ -13,15 +13,15 @@ import voiceView from "../data/21_09_2022_1663742238_voice.json";
 
 // Give name, title, (description?) here after importing
 const METROMAPS = [
-  {
-    url: "intro",
-    title: "Quick Start Guide",
-    data: introPage,
-    description:
-      "If you are new to using this tool, we suggest you make a start here. Discover what issues are being discussed in Australian news right now, which disadvantage issues are more common than others, and which ones co-occur.",
-    subtitle: "The power of a ‘living platform’",
-    hint: "Get tips on how to use this App and how we understand and discuss equity, opportunity, and disadvantage in 2022.",
-  },
+  // {
+  //   url: "intro",
+  //   title: "Quick Start Guide",
+  //   data: introPage,
+  //   description:
+  //     "If you are new to using this tool, we suggest you make a start here. Discover what issues are being discussed in Australian news right now, which disadvantage issues are more common than others, and which ones co-occur.",
+  //   subtitle: "The power of a ‘living platform’",
+  //   hint: "Get tips on how to use this App and how we understand and discuss equity, opportunity, and disadvantage in 2022.",
+  // },
   {
     url: "all",
     title: "All News",

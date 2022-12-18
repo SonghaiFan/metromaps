@@ -7,7 +7,14 @@ import { TIME_AXIS_PADDING } from "./TimeAxis";
 import { MdClose } from "react-icons/md";
 import { interpolateRgb } from "d3-interpolate";
 
-const cutomerInterpolation = interpolateRgb("#48a49e", "#fce554");
+const colours = ["#585d91", "#48a49e", "#fce554"];
+
+const cutomerInterpolation = (Weight) => {
+  const ind = Weight * (colours.length - 1);
+  const colour1 = colours[Math.floor(ind)];
+  const colour2 = colours[Math.ceil(ind)];
+  return interpolateRgb(colour1, colour2)(ind - Math.floor(ind));
+};
 
 export const SideDrawer = ({
   isVisible,

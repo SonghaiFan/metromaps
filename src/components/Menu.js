@@ -12,12 +12,18 @@ import NavigationButton from "./NavigationButton";
 import IntroMetroMapWrapper from "./IntroMetroMapWrapper";
 import MetroMapLegend from "./MetroMapLegend";
 import SelectorButton from "./SelectorButton";
-import { ReactComponent as BackArrow } from "../assets/BackArrow.svg";
+import {
+  AiOutlineFullscreenExit,
+  AiOutlineCaretLeft,
+  AiOutlineCaretRight,
+} from "react-icons/ai";
 import { margin } from "../utilities/util";
 import monashLogo from "../img/logo_monash_black.6bfe21bb.png";
 import prfLogo from "../img/Logo-PRF.png";
 import { ReactComponent as QRCode } from "../img/qrCode.svg";
 import { MdClose } from "react-icons/md";
+import Timer from "./Timer";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 const METROMAPS_PER_PAGE = 1;
 const HEADER_HEIGHT = 80;
@@ -33,7 +39,7 @@ export default function Menu({
   metromaps,
   width: screenWidth,
   height: screenHeight,
-  introMetroMapUrl,
+  setStart,
 }) {
   const metroMapWidth = (screenWidth / 2) * (1 - margin.x);
   const metroMapHeight = (screenHeight / 2) * (1 - margin.y);
@@ -144,7 +150,7 @@ export default function Menu({
   };
 
   const initialFocusState = {
-    map: introMetroMapUrl,
+    map: null,
     mode: null,
   };
 
@@ -166,7 +172,7 @@ export default function Menu({
       type: ACTION_TYPES.FULL_MAP_VIEW,
       payload: { map: mapId, mode: FOCUS_MODE.FULL_VIEW },
     });
-    // console.log("focusState", focusState);
+    console.log("focusState", focusState);
   };
 
   const articleAnimationDelayRef = useRef();
@@ -195,16 +201,16 @@ export default function Menu({
     dispatch({ type: ACTION_TYPES.LANDING_PAGE_VIEW });
   };
 
-  const [metroMapLineShown, setMetroMapLineShown] = useState({});
+  // const [metroMapLineShown, setMetroMapLineShown] = useState({});
 
-  const updateMetroMapLineShown = (metroMapId) => (lineShown) => {
-    setMetroMapLineShown((previousMetroMapLineShown) => {
-      return {
-        ...previousMetroMapLineShown,
-        [metroMapId]: lineShown,
-      };
-    });
-  };
+  // const updateMetroMapLineShown = (metroMapId) => (lineShown) => {
+  //   setMetroMapLineShown((previousMetroMapLineShown) => {
+  //     return {
+  //       ...previousMetroMapLineShown,
+  //       [metroMapId]: lineShown,
+  //     };
+  //   });
+  // };
 
   const renderMetroMap = (metromap) => {
     return (
@@ -238,32 +244,38 @@ export default function Menu({
           hint={metromap.hint}
           updateArticleAnimationDelayRef={updateArticleAnimationDelayRef}
           clearArticleAnimationDelayRef={clearArticleAnimationDelayRef}
-          metroLineShown={metroMapLineShown[metromap.url]}
-          updateMetroMapLineShown={updateMetroMapLineShown(metromap.url)}
+          // metroLineShown={metroMapLineShown[metromap.url]}
+          // updateMetroMapLineShown={updateMetroMapLineShown(metromap.url)}
           zoomOutButtonClicked={zoomOutButtonClicked}
         />
       </motion.div>
     );
   };
 
-  const renderIntroMetroMap = (metromap) => {
-    return (
-      <IntroMetroMapWrapper
-        isMapFocused={
-          focusState.map === metromap.url &&
-          focusState.mode === FOCUS_MODE.FULL_VIEW
-        }
-        renderMap={() => renderMetroMap(metromap)}
-        metromap={metromap}
-        key={metromap.url}
-      />
-    );
+  // const [showQRCode, setShowQRCode] = useState(false);
+
+  const nextPageState = (oldPageState) => {
+    return {
+      ...oldPageState,
+      current: Math.min(oldPageState.total, oldPageState.current + 1),
+      direction: PAGE_DIRECTION.RIGHT,
+    };
   };
 
-  // const [showQRCode, setShowQRCode] = useState(false);
+  const previousPageState = (oldPageState) => {
+    return {
+      ...oldPageState,
+      current: Math.max(1, oldPageState.current - 1),
+      direction: PAGE_DIRECTION.LEFT,
+    };
+  };
 
   return (
     <div>
+      <Timer
+        setPageState={() => setPageState(nextPageState(pageState))}
+        resetZoom={onZoomOutButtonClick}
+      />
       <motion.div>
         {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
           <>
@@ -316,20 +328,12 @@ export default function Menu({
                   focusState.map === metromap.url) ||
                 focusState.mode !== FOCUS_MODE.FULL_VIEW
             )
-            .map((metromap) =>
-              metromap.url === "intro"
-                ? renderIntroMetroMap(metromap)
-                : renderMetroMap(metromap)
-            )}
+            .map((metromap) => renderMetroMap(metromap))}
         </AnimatePresence>
       </motion.div>
+
       <MetroMapLegend
-        isDisplayed={
-          !(
-            focusState.mode === FOCUS_MODE.FULL_VIEW &&
-            focusState.map === introMetroMapUrl
-          )
-        }
+        isDisplayed={!(focusState.mode === FOCUS_MODE.FULL_VIEW)}
         initial={{
           x: 0,
           y: 0,
@@ -351,12 +355,36 @@ export default function Menu({
       />
       <NavigationButton
         onClick={onZoomOutButtonClick}
-        className={`left-0 top-[90%]`}
+        className={`right-[1%] top-[3%]`}
         isVisible={focusState.mode === FOCUS_MODE.FULL_VIEW}
       >
-        {/* z-0 so that this button won't be shown when an article is on focus (see MetroMap.js' NavigationButton) */}
-        <BackArrow className="bg-transparent w-20 z-0" />
+        <AiOutlineFullscreenExit size={40} />
       </NavigationButton>
+      <NavigationButton
+        onClick={() => setStart(false)}
+        className={`left-[2%] top-[50%]`}
+        isVisible={focusState.mode === null}
+      >
+        Back to Intro
+        <FaArrowAltCircleLeft size={40} />
+      </NavigationButton>
+
+      {/* Navigation Button between each session */}
+      <NavigationButton
+        onClick={() => setPageState(nextPageState(pageState))}
+        className={`right-[25%] top-[90%] z-20`}
+        isVisible={focusState.mode === null}
+      >
+        <AiOutlineCaretRight size={60} />
+      </NavigationButton>
+      <NavigationButton
+        onClick={() => setPageState(previousPageState(pageState))}
+        className={`left-[25%] top-[90%] z-20`}
+        isVisible={focusState.mode === null}
+      >
+        <AiOutlineCaretLeft size={60} />
+      </NavigationButton>
+
       {!(focusState.mode === FOCUS_MODE.FULL_VIEW) && renderSelectors()}
       {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
         <>
@@ -376,39 +404,6 @@ export default function Menu({
               </motion.li>
             </motion.ul>
           </motion.div>
-          {/* <motion.div
-            className="absolute right-0 bottom-0 mx-8 my-3 p-2 flex items-center border-2 rounded-md justify-center"
-            whileHover={{ backgroundColor: "white", color: "black" }}
-            onClick={() => setShowQRCode(true)}
-          >
-            <motion.div>FIND OUT MORE</motion.div>
-          </motion.div>
-          {showQRCode && (
-            <>
-              <motion.div
-                className="absolute w-screen h-screen z-50"
-                style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
-                onClick={() => setShowQRCode(false)}
-              />
-              <motion.div
-                className="absolute w-screen h-screen z-50 flex justify-center items-center"
-                style={{
-                  width: flexScreenWidth,
-                  height: flexScreenHeight,
-                  x: flexScreenWidth,
-                  y: flexScreenHeight,
-                }}
-              >
-                <QRCode />
-              </motion.div>
-              <motion.button
-                className="absolute top-0 right-0 flex justify-center items-center text-4xl z-50 p-5"
-                onClick={() => setShowQRCode(false)}
-              >
-                <MdClose />
-              </motion.button>
-            </>
-          )} */}
         </>
       )}
     </div>

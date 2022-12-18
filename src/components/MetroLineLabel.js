@@ -60,7 +60,7 @@ export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
           backgroundColor: colour, // "white"
           height: LINK_LABEL_HEIGHT, // 20 from line height of text-sm
         }}
-        className="text-black text-sm rounded-md px-1 hover:font-bold  pointer-events-auto"
+        className="text-black text-sm rounded-md px-1 hover:font-bold cursor-pointer pointer-events-auto"
         onClick={onMetroLineLabelClick}
       >
         {label}

@@ -5,7 +5,7 @@ import { margin } from "../utilities/util";
 import { motion } from "framer-motion";
 import { metroStopVariantsFactory } from "../utilities/metroMapUtilities";
 import NavigationButton from "./NavigationButton";
-import { ReactComponent as BackArrow } from "../assets/BackArrow.svg";
+import { AiOutlineFullscreenExit } from "react-icons/ai";
 import MetroMapDescription from "./MetroMapDescription";
 import MetroLine from "./MetroLine";
 import MetroLineLabel from "./MetroLineLabel";
@@ -370,7 +370,9 @@ export default function MetroMap({
   return (
     <motion.div>
       <motion.div
-        className="absolute w-full h-full cursor-pointer"
+        className={`absolute w-full h-full ${
+          isMapFocused ? "cursor-default" : "cursor-zoom-in"
+        }`}
         onClick={onFocusButtonClick}
       >
         {/* landing page lines */}
@@ -665,12 +667,12 @@ export default function MetroMap({
 
       <NavigationButton
         onClick={onZoomOutButtonClick}
-        // z-10 so that this will be shown on top of the NavigationButton of Menu.js when an article is on focus (see Menu.js)
-        className={`left-0 top-[90%] z-50`}
+        className={`right-[1%] top-[3%] z-50`}
         isVisible={clickedNode !== null || clickedNodeBuffer !== null}
       >
-        <BackArrow className="bg-transparent w-20" />
+        <AiOutlineFullscreenExit size={40} />
       </NavigationButton>
+
       {isMapFocused && (
         <SideDrawer
           isVisible={sideDrawerOpen}

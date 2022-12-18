@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TOTAL_SLIDES, PAGES } from "../utilities/introPageConfig";
-
+import NavigationButton from "./NavigationButton";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 import SelectorButton from "./SelectorButton";
 import {
   FirstPage,
@@ -19,11 +20,7 @@ import connection from "../img/connection.png";
 import branching from "../img/branching.png";
 import articles from "../img/articles.png";
 
-export default function IntroMetroMapWrapper({
-  renderMap,
-  isMapFocused,
-  metromap,
-}) {
+export default function IntroMetroMapWrapper({ setStart }) {
   const [paginationState, setPaginationState] = useState({
     current: 1,
     total: TOTAL_SLIDES,
@@ -36,7 +33,7 @@ export default function IntroMetroMapWrapper({
         current: 1,
       };
     });
-  }, [isMapFocused]);
+  }, []);
 
   const onSelectorButtonClick = (n) => {
     setSelectedButton(n);
@@ -166,20 +163,27 @@ export default function IntroMetroMapWrapper({
     }
   };
 
-  const renderIntroPage = () => {
-    const page = selectPage();
+  const page = selectPage();
 
-    return (
+  return (
+    <>
       <div className="h-[100vh] w-[100vw] flex overflow-hidden absolute top-0 left-0">
         <div className="w-1/2 m-[3%]">{page.left}</div>
-
-        <div className="w-2/5 m-[3%] pr-[6%]">
+        <div className="w-2/5 m-[3%] pr-[10%]">
           <div>{page.right}</div>
           <div>{renderSelectors()}</div>
+          {selectedButton === TOTAL_SLIDES && (
+            <NavigationButton
+              onClick={() => setStart(true)}
+              className={`right-[2%] top-[50%]`}
+              isVisible={true}
+            >
+              Start
+              <FaArrowAltCircleRight size={40} />
+            </NavigationButton>
+          )}
         </div>
       </div>
-    );
-  };
-
-  return isMapFocused ? <>{renderIntroPage()}</> : <>{renderMap()}</>;
+    </>
+  );
 }
