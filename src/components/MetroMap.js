@@ -153,7 +153,16 @@ export default function MetroMap({
 
     setCustomeNodes(() => {
       const updatedNodes = Object.assign({}, nodes);
-      updatedNodes[nodeId].colour = newColour;
+      updatedNodes[nodeId] && (updatedNodes[nodeId].colour = newColour);
+
+      for (let eachNode in updatedNodes) {
+        const conNodes = updatedNodes[eachNode].connectedNodes;
+        console.log(conNodes);
+
+        conNodes.forEach((node) => {
+          node.id === nodeId && (node.colour = newColour);
+        });
+      }
       return updatedNodes;
     });
   };
@@ -209,12 +218,13 @@ export default function MetroMap({
     return [paths, labels];
   };
 
-  // const [custoLines, setCustomLines] = useState(lines);
+  const [customLines, setCustomLines] = useState(lines);
+  const [customLandingLines, setCustomLandingLines] = useState(landingLines);
 
   const metroLineData = useMemo(
     () =>
-      Object.keys(lines).map((lineId) => {
-        const activeLines = isMapFocused ? lines : landingLines;
+      Object.keys(customLines).map((lineId) => {
+        const activeLines = isMapFocused ? customLines : customLandingLines;
 
         const [paths, labels] = generatePaths(activeLines[lineId]);
 
@@ -222,32 +232,35 @@ export default function MetroMap({
 
         return lineData;
       }),
-    [lines, landingLines, isMapFocused]
+    [customLines, customLandingLines, isMapFocused]
   );
 
   const customMetroLineData = metroLineData;
 
-  // const [customMetroLineData, setCustomMetroLineData] = useState(metroLineData);
+  const addCutomLineColor = (data, pathId, newColour) => {
+    const updatedData = Object.assign({}, data);
 
-  // const handleCustomMetroLineData = (pathId, newColour) => {
-  //   setCustomMetroLineData(() => {
-  //     const updatedMetroLineData = Array.from(metroLineData);
+    const [pathStartId, pathEndId] = pathId.split("-");
 
-  //     for (const line of updatedMetroLineData) {
-  //       const lineIds = Object.keys(line);
-  //       lineIds.forEach((key) => {
-  //         line[lineIds].paths.forEach((path) => {
-  //           path.id === pathId && (path.colour = newColour);
-  //         });
-  //         line[lineIds].labels.forEach((label) => {
-  //           label.id === pathId && (label.colour = newColour);
-  //         });
-  //       });
-  //     }
+    console.log(pathStartId);
 
-  //     return updatedMetroLineData;
-  //   });
-  // };
+    for (let lineId in updatedData) {
+      const linePathCoords = updatedData[lineId].pathCoords;
+
+      linePathCoords.forEach((coords) => {
+        coords.source === pathStartId &&
+          coords.target === pathEndId &&
+          (coords.edgeColour = newColour);
+      });
+    }
+    return updatedData;
+  };
+
+  const handleCustomLines = (pathId, newColour) => {
+    setCustomLines(addCutomLineColor(lines, pathId, newColour));
+
+    setCustomLandingLines(addCutomLineColor(landingLines, pathId, newColour));
+  };
 
   const titleRef = useRef();
   const [titleAnimation, setTitleAnimation] = useState({});
@@ -698,10 +711,13 @@ export default function MetroMap({
 
                 if (type === "metro-line-label") {
                   console.log(`this is a metro line label at ${whoId}`);
-                  // handleCustomMetroLineData(whoId, newColour);
+                  handleCustomLines(whoId, newColour);
                 }
 
-                if (type === "node-words-label") {
+                if (
+                  type === "node-words-label" ||
+                  type === "neighbour-node-label"
+                ) {
                   console.log(`this is a node word label at ${whoId}`);
                   handleCustomNodes(whoId, newColour);
                 }

@@ -10,6 +10,7 @@ export default function NeighbouringNode({
   position,
   onNeighbourNodeLabelClick,
 }) {
+  console.log("data", data);
   const content = data.node_words.length > 0 ? data.node_words[0] : "";
 
   const { x: x0, y: y0 } = currentNode;
@@ -28,11 +29,13 @@ export default function NeighbouringNode({
   return (
     <motion.div className="w-full h-full flex flex-col justify-center items-center ">
       <motion.div
+        data-type="neighbour-node-label"
+        id={data.id}
         style={{
           backgroundColor: data.colour, //"white"
         }}
         className="text-black rounded-md px-2 text-2xl hover:font-bold pointer-events-auto"
-        onClick={onNeighbourNodeLabelClick}
+        onClick={(event) => onNeighbourNodeLabelClick(event.target)}
       >
         {content}
       </motion.div>

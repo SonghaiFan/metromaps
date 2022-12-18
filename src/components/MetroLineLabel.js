@@ -54,7 +54,7 @@ export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
       }}
     >
       <motion.div
-        myclass="metro-line-label"
+        data-type="metro-line-label"
         id={id}
         style={{
           backgroundColor: colour, // "white"
