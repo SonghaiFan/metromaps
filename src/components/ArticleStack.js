@@ -55,7 +55,7 @@ export default function ArticleStack({
                   backgroundColor: clicked
                     ? "white"
                     : (array.length - articleIndex) % 2 === 0
-                    ? "white"
+                    ? "grey"
                     : colour,
                 }}
                 variants={articleVariantsFactory(

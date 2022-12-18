@@ -22,8 +22,9 @@ export const SideDrawer = ({
   const drawerWidth = screenWidth;
   const drawerHeight = screenHeight / 4;
   // check if whoOpenSideDrawer dom element is on top half of the screen
-  const isOnTopHalf =
-    whoOpenSideDrawer.getBoundingClientRect().top < screenHeight / 2;
+  const isOnTopHalf = whoOpenSideDrawer
+    ? whoOpenSideDrawer.getBoundingClientRect().top < screenHeight / 2
+    : false;
 
   return (
     <AnimatePresence>
