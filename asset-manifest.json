@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/metromaps/static/css/main.8c07ddd2.css",
-    "main.js": "/metromaps/static/js/main.d0aa0c3c.js",
+    "main.css": "/metromaps/static/css/main.bb47172d.css",
+    "main.js": "/metromaps/static/js/main.638b3c80.js",
     "static/media/map1.png": "/metromaps/static/media/map1.6812be3298f071bbcdd4.png",
     "static/media/Logo-PRF.png": "/metromaps/static/media/Logo-PRF.37db7e74544a22aa0436.png",
     "static/media/branching.png": "/metromaps/static/media/branching.0c924232056adf903b0f.png",
@@ -18,13 +18,12 @@
     "static/media/legend.png": "/metromaps/static/media/legend.d8e1c2152f3f8f9c428f.png",
     "static/media/connection.png": "/metromaps/static/media/connection.a861c91744a058c8d25d.png",
     "static/media/NeighbourArrow.svg": "/metromaps/static/media/NeighbourArrow.fe3da2ebf7eb6b27b41fb76680bf6bda.svg",
-    "static/media/BackArrow.svg": "/metromaps/static/media/BackArrow.91e9a5b8a7f19bdf5eec51fd6873e6c8.svg",
     "index.html": "/metromaps/index.html",
-    "main.8c07ddd2.css.map": "/metromaps/static/css/main.8c07ddd2.css.map",
-    "main.d0aa0c3c.js.map": "/metromaps/static/js/main.d0aa0c3c.js.map"
+    "main.bb47172d.css.map": "/metromaps/static/css/main.bb47172d.css.map",
+    "main.638b3c80.js.map": "/metromaps/static/js/main.638b3c80.js.map"
   },
   "entrypoints": [
-    "static/css/main.8c07ddd2.css",
-    "static/js/main.d0aa0c3c.js"
+    "static/css/main.bb47172d.css",
+    "static/js/main.638b3c80.js"
   ]
 }
