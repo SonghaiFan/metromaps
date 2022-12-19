@@ -10,7 +10,7 @@ export default function NeighbouringNode({
   position,
   onNeighbourNodeLabelClick,
 }) {
-  console.log("data", data);
+  // console.log("data", data);
   const content = data.node_words.length > 0 ? data.node_words[0] : "";
 
   const { x: x0, y: y0 } = currentNode;

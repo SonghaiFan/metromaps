@@ -7,9 +7,9 @@ import {
   metroMapContainerVariantsFactory,
   getAnimateState,
 } from "../utilities/menuUtilities";
+import { METROMAPS_LENGTH, METROMAPS_TIME } from "../utilities/metromaps";
 import { AnimatePresence, motion } from "framer-motion";
 import NavigationButton from "./NavigationButton";
-import IntroMetroMapWrapper from "./IntroMetroMapWrapper";
 import MetroMapLegend from "./MetroMapLegend";
 import SelectorButton from "./SelectorButton";
 import {
@@ -20,19 +20,18 @@ import {
 import { margin } from "../utilities/util";
 import monashLogo from "../img/logo_monash_black.6bfe21bb.png";
 import prfLogo from "../img/Logo-PRF.png";
-import { ReactComponent as QRCode } from "../img/qrCode.svg";
-import { MdClose } from "react-icons/md";
 import Timer from "./Timer";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
-import { gray } from "d3";
 
-const METROMAPS_PER_PAGE = 1;
+const METROMAPS_PER_PAGE = 1; //Do not change this value
 const HEADER_HEIGHT = 80;
 
 const PAGE_DIRECTION = {
   RIGHT: 1,
   LEFT: -1,
 };
+
+const TOTAL_PAGES = Math.ceil(METROMAPS_LENGTH / METROMAPS_PER_PAGE);
 
 export { PAGE_DIRECTION };
 
@@ -90,15 +89,13 @@ export default function Menu({
   const [pageState, setPageState] = useState({
     current: 1,
     hist: [1],
-    total: Math.ceil(metromaps.length / METROMAPS_PER_PAGE),
+    total: TOTAL_PAGES,
     direction: PAGE_DIRECTION.RIGHT,
+    time: METROMAPS_TIME[0],
   });
 
   const renderSelectors = () => {
-    let numbersToRender = Array.from(
-      { length: pageState.total },
-      (_, i) => i + 1
-    );
+    let numbersToRender = Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
 
     return (
       <div className="absolute bottom-10 w-screen ">
@@ -186,28 +183,23 @@ export default function Menu({
 
   const nextPageState = (oldPageState) => {
     return {
+      ...oldPageState,
       current: Math.min(oldPageState.total, oldPageState.current + 1),
-      total: oldPageState.total,
       hist: oldPageState.hist.concat([oldPageState.current]),
       direction: PAGE_DIRECTION.RIGHT,
-    };
-  };
-
-  const timerNextPageState = (oldPageState) => {
-    return {
-      current: Math.min(oldPageState.total, Math.max(...oldPageState.hist) + 1),
-      total: oldPageState.total,
-      hist: oldPageState.hist.concat([oldPageState.current]),
-      direction: PAGE_DIRECTION.RIGHT,
+      time: METROMAPS_TIME[
+        Math.min(oldPageState.total - 1, oldPageState.current)
+      ],
     };
   };
 
   const previousPageState = (oldPageState) => {
     return {
+      ...oldPageState,
       current: Math.max(1, oldPageState.current - 1),
-      total: oldPageState.total,
       hist: oldPageState.hist.concat([oldPageState.current]),
       direction: PAGE_DIRECTION.LEFT,
+      time: METROMAPS_TIME[Math.max(0, oldPageState.current - 2)],
     };
   };
 
@@ -232,9 +224,10 @@ export default function Menu({
           width={metromapsDetails[metromap.url].width}
           height={metromapsDetails[metromap.url].height}
           onFocusButtonClick={
-            pageState.current >= Math.max(...pageState.hist)
-              ? onFocusButtonClick(metromap.url)
-              : null
+            onFocusButtonClick(metromap.url)
+            // pageState.current >= Math.max(...pageState.hist)
+            //   ? onFocusButtonClick(metromap.url)
+            //   : null
           }
           isMapFocused={
             focusState.map === metromap.url &&
@@ -257,16 +250,25 @@ export default function Menu({
 
   // const [showQRCode, setShowQRCode] = useState(false);
 
-  console.log("pageState", pageState);
+  // console.log("pageState", pageState);
 
-  const handleTimerPageStateChange = () => {
-    setPageState(timerNextPageState(pageState));
+  const onBackToLandingPageButtonClick = () => {
+    setStart(false);
+  };
+
+  const onNavigationButtonClick = (direction) => () => {
+    if (direction === PAGE_DIRECTION.RIGHT) {
+      setPageState(nextPageState(pageState));
+    } else {
+      setPageState(previousPageState(pageState));
+    }
   };
 
   return (
     <div>
       <Timer
-        setPageState={handleTimerPageStateChange}
+        pageState={pageState}
+        setPageState={setPageState}
         resetZoom={onZoomOutButtonClick}
         counted={pageState.current < Math.max(...pageState.hist)}
         ended={pageState.current === pageState.total}
@@ -356,7 +358,7 @@ export default function Menu({
         <AiOutlineFullscreenExit size={40} />
       </NavigationButton>
       <NavigationButton
-        onClick={() => setStart(false)}
+        onClick={onBackToLandingPageButtonClick}
         className={`left-[2%] top-[50%]`}
         isVisible={focusState.mode === null}
       >
@@ -366,14 +368,14 @@ export default function Menu({
 
       {/* Navigation Button between each session */}
       <NavigationButton
-        onClick={() => setPageState(nextPageState(pageState))}
+        onClick={onNavigationButtonClick(PAGE_DIRECTION.RIGHT)}
         className={`right-[25%] bottom-10 z-20`}
         isVisible={focusState.mode === null}
       >
         <AiOutlineCaretRight size={60} color={"#b1babf"} />
       </NavigationButton>
       <NavigationButton
-        onClick={() => setPageState(previousPageState(pageState))}
+        onClick={onNavigationButtonClick(PAGE_DIRECTION.LEFT)}
         className={`left-[25%] bottom-10 z-20`}
         isVisible={focusState.mode === null}
       >

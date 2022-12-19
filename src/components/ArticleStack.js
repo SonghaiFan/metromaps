@@ -26,7 +26,7 @@ export default function ArticleStack({
     <motion.div
       className={`${
         clicked
-          ? `absolute top-0 left-0 w-full h-full overflow-y-scroll cursor-zoom-in${
+          ? `absolute top-0 left-0 w-full h-full overflow-y-scroll ${
               articles.length > articleLimit ? "scrollbar" : "scrollbar-none"
             }`
           : ""

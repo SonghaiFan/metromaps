@@ -10,10 +10,6 @@ import MetroMapDescription from "./MetroMapDescription";
 import MetroLine from "./MetroLine";
 import MetroLineLabel from "./MetroLineLabel";
 import TimeAxis from "./TimeAxis";
-import { MdMenu } from "react-icons/md";
-import { METROSTOP_BOTTOM_PADDING } from "../utilities/metroMapUtilities";
-import { MAX_ARTICLES } from "../utilities/calculateMetroMapLayout";
-import { TIME_AXIS_PADDING } from "./TimeAxis";
 import { SideDrawer } from "./SideDrawer";
 
 const TOP_FULL_PAGE_PADDING = 20;

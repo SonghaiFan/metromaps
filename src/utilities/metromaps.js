@@ -30,6 +30,7 @@ const METROMAPS = [
       "The news focused on Australian affairs, the pandemic, and women. People at its center, with questions about the housing & climate crisis, energy affordability, immigration policy, unemployment, democracy, living with COVID-19, and a First Nations Voice in the Constitution.",
     subtitle: "Building a better Australia?",
     hint: "Good policy demands open debate and inclusiveness. What communities and issues are we forgetting?",
+    time: 1,
   },
   {
     url: "gov-assist-family-finance-work",
@@ -39,6 +40,7 @@ const METROMAPS = [
       "The news focused on affordable housing, the number of deaths we are willing to accept in the ‘living with covid strategy’, the performance of Australian students compared to international benchmarks, and how to get fair wages for all while the costs of living increase.",
     subtitle: "Economic welfare and social wellbeing",
     hint: "Improving the wellbeing of people and families in Australia demands well-thought strategies.",
+    time: 2,
   },
   {
     url: "all-1",
@@ -46,6 +48,7 @@ const METROMAPS = [
     data: noFilterView1,
     description:
       "Criminal case. In 2019, the police officer who killed an Aboriginal teenager even if the threat was low, was found not guilty of murder after 6 weeks of trial. Was systemic racism a factor in the incident? And what does it mean for the future Aboriginal community – Police relationships? Follow the discussions. (Feb - March 2022). Check the metro map. #normalisedexpressionofracism #murdertrial #aboriginal ",
+    time: 3,
   },
   {
     url: "all-2",
@@ -53,6 +56,7 @@ const METROMAPS = [
     data: noFilterView2,
     description:
       "What are the solutions to the Australian Housing Crisis, considering the rise of residential property prices through 2021, and the unaffordability of rental properties for minimum wage workers? Co-buying with the government? Social housing tax bill? Low deposit scheme? Follow the discussions. (Feb – April 2022). Check the metro map. #homeownership #propertyprices #landvalue #socialhousing #homelessness #financialstress #housingpolicy",
+    time: 4,
   },
   {
     url: "voice-segregation-prejudice-discrimination-human-rights",
@@ -62,37 +66,49 @@ const METROMAPS = [
       "News focused on religious discrimination laws, protecting gay students and men from perpetrators, improving the Australian police force and denormalising violence of any form, and the impact of the staying-at-home trend on people’s well-being and the after-covid recovery. ",
     subtitle: "The advantage of autonomy ",
     hint: "Let's build an Australia beyond discriminations, where we exercise our human rights.",
+    time: 5,
   },
   {
     url: "election",
     title: "Election",
     data: electionView,
     description: "",
+    time: 6,
   },
   {
     url: "ukr-rus-war",
     title: "Ukraine-Russia War",
     data: ukrRus,
     description: "",
+    time: 7,
   },
   {
     url: "domestic-violence",
     title: "Domestic Violence (all)",
     data: domesticViolence,
     description: "",
+    time: 8,
   },
   {
     url: "domestic-violence-pre-2014",
     title: "Domestic Violence (pre-2014)",
     data: domesticViolencePre2014,
     description: "",
+    time: 9,
   },
   {
     url: "domestic-violence-post-2014",
     title: "Domestic Violence (post-2014)",
     data: domesticViolencePost2014,
     description: "",
+    time: 10,
   },
 ];
+
+const METROMAPS_URLS = METROMAPS.map((m) => m.url);
+const METROMAPS_LENGTH = METROMAPS.length;
+const METROMAPS_TIME = METROMAPS.map((m) => m.time);
+
+export { METROMAPS_URLS, METROMAPS_LENGTH, METROMAPS_TIME };
 
 export default METROMAPS;
