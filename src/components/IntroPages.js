@@ -1,4 +1,41 @@
 import React from "react";
+import monashLogo from "../img/logo_monash_black.png";
+import prfLogo from "../img/Logo-PRF.png";
+
+const PAGESTITLE = [
+  "WELCOME",
+  "FIRST",
+  "ARTICLE",
+  "METROSTOP",
+  "METROLINES",
+  "FINAL",
+];
+
+const TOTAL_SLIDES = PAGESTITLE.length;
+
+const PAGES = PAGESTITLE.reduce((acc, curr, i) => {
+  acc[curr] = i + 1;
+  return acc;
+}, {});
+
+export { TOTAL_SLIDES, PAGES };
+
+export function WelcomePage() {
+  return (
+    <>
+      <div className="text-8xl uppercase font-bold leading-tight max-w-xs text-left ">
+        "Stay informed, stay fair"
+      </div>
+      <div className="text-yellow-400 text-2xl text-left ">
+        - Beware of media bias in public narratives
+      </div>
+      <div className="text-left ">
+        A user study to evaluate the faithness of narrative maps in information
+        visualization.
+      </div>
+    </>
+  );
+}
 
 export function FirstPage() {
   return (

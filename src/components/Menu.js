@@ -19,7 +19,7 @@ import {
 } from "react-icons/ai";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { margin } from "../utilities/util";
-import monashLogo from "../img/logo_monash_black.6bfe21bb.png";
+import monashLogo from "../img/logo_monash_black.png";
 import prfLogo from "../img/Logo-PRF.png";
 import Timer from "./Timer";
 import { FaArrowAltCircleLeft } from "react-icons/fa";

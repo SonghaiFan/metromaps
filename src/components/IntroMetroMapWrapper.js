@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { TOTAL_SLIDES, PAGES } from "../utilities/introPageConfig";
 import NavigationButton from "./NavigationButton";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import SelectorButton from "./SelectorButton";
 import {
+  TOTAL_SLIDES,
+  PAGES,
+  WelcomePage,
   FirstPage,
   ArticlePage,
   MetroStopPage,
@@ -12,13 +14,21 @@ import {
 } from "./IntroPages";
 
 // sample images
-import logo from "../img/logo_monash_black.6bfe21bb.png";
 import mappng from "../img/map1.png";
 import metrostop from "../img/metrostop.png";
 import legend from "../img/legend.png";
 import connection from "../img/connection.png";
 import branching from "../img/branching.png";
 import articles from "../img/articles.png";
+import cover1 from "../img/cover1.png";
+import cover2 from "../img/cover2.png";
+import cover3 from "../img/cover3.png";
+import cover4 from "../img/cover4.png";
+
+const images = [cover1, cover2, cover3, cover4];
+
+const randomIndex = Math.floor(Math.random() * images.length);
+const randomImage = images[randomIndex];
 
 export default function IntroMetroMapWrapper({ setStart }) {
   const [paginationState, setPaginationState] = useState({
@@ -79,6 +89,17 @@ export default function IntroMetroMapWrapper({ setStart }) {
 
   const selectPage = () => {
     switch (paginationState.current) {
+      case PAGES.WELCOME:
+        return {
+          left: (
+            <img
+              className="absolute left-[28%] max-w-[45%] translate-x-[-50%] top-[47%] translate-y-[-50%]"
+              src={randomImage}
+              alt={randomImage}
+            />
+          ),
+          right: <WelcomePage />,
+        };
       case PAGES.FIRST:
         return {
           left: (
