@@ -79,17 +79,17 @@ export const SideDrawer = ({
                 step="0.25"
                 list="tickmarks"
                 onChange={(event) => {
-                  console.log("in the drawer: ", whoOpenSideDrawer);
+                  // console.log("in the drawer: ", whoOpenSideDrawer);
 
                   const newColour = cutomerInterpolation(event.target.value);
 
                   const type = whoOpenSideDrawer.dataset.type;
-                  console.log("type", type);
+                  // console.log("type", type);
                   const whoId = whoOpenSideDrawer.id;
-                  console.log("whoId", whoId);
+                  // console.log("whoId", whoId);
 
                   if (type === "metro-line-label") {
-                    console.log(`this is a metro line label at ${whoId}`);
+                    // console.log(`this is a metro line label at ${whoId}`);
                     handleCustomLines(whoId, newColour);
                   }
 
@@ -97,7 +97,7 @@ export const SideDrawer = ({
                     type === "node-words-label" ||
                     type === "neighbour-node-label"
                   ) {
-                    console.log(`this is a node word label at ${whoId}`);
+                    // console.log(`this is a node word label at ${whoId}`);
                     handleCustomNodes(whoId, newColour);
                   }
 

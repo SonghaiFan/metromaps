@@ -24,6 +24,7 @@ import { ReactComponent as QRCode } from "../img/qrCode.svg";
 import { MdClose } from "react-icons/md";
 import Timer from "./Timer";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
+import { gray } from "d3";
 
 const METROMAPS_PER_PAGE = 1;
 const HEADER_HEIGHT = 80;
@@ -88,58 +89,28 @@ export default function Menu({
 
   const [pageState, setPageState] = useState({
     current: 1,
+    hist: [1],
     total: Math.ceil(metromaps.length / METROMAPS_PER_PAGE),
     direction: PAGE_DIRECTION.RIGHT,
   });
 
   const renderSelectors = () => {
-    let numbersToRender = [];
-    if (pageState.total <= 5) {
-      numbersToRender = Array(pageState.total)
-        .fill(1)
-        .map((value, index) => value + index);
-    } else if (pageState.current >= 5) {
-      numbersToRender =
-        pageState.current + 1 > pageState.total
-          ? [
-              pageState.current - 3,
-              pageState.current - 2,
-              pageState.current - 1,
-              pageState.current,
-            ]
-          : [
-              pageState.current - 3,
-              pageState.current - 2,
-              pageState.current - 1,
-              pageState.current,
-              pageState.current + 1,
-            ];
-    } else {
-      numbersToRender = [1, 2, 3, 4, 5];
-    }
+    let numbersToRender = Array.from(
+      { length: pageState.total },
+      (_, i) => i + 1
+    );
 
     return (
-      <div className="absolute bottom-0 w-screen ">
+      <div className="absolute bottom-10 w-screen ">
         <div className="flex w-[100%] justify-center items-center">
           <div className="m-[1%] flex">
             {numbersToRender.map((pageNumber) => {
               return (
                 <SelectorButton
                   key={pageNumber}
-                  selectorID={pageNumber}
-                  isActive={pageState.current === pageNumber}
-                  onClick={() =>
-                    setPageState((previousPageState) => {
-                      return {
-                        ...previousPageState,
-                        current: pageNumber,
-                        direction:
-                          previousPageState.current < pageNumber
-                            ? PAGE_DIRECTION.RIGHT
-                            : PAGE_DIRECTION.LEFT,
-                      };
-                    })
-                  }
+                  isActive={pageNumber === pageState.current}
+                  isDead={true}
+                  isSmall={true}
                 />
               );
             })}
@@ -172,11 +143,12 @@ export default function Menu({
       type: ACTION_TYPES.FULL_MAP_VIEW,
       payload: { map: mapId, mode: FOCUS_MODE.FULL_VIEW },
     });
-    console.log("focusState", focusState);
+    // console.log("focusState", focusState);
   };
 
   const articleAnimationDelayRef = useRef();
   const [zoomOutButtonClicked, setZoomOutButtonClicked] = useState(false);
+
   useEffect(() => {
     if (focusState.mode === null) {
       setZoomOutButtonClicked(false);
@@ -184,13 +156,13 @@ export default function Menu({
   }, [focusState.mode]);
 
   const updateArticleAnimationDelayRef = (timeoutId) => {
-    console.log("assigning");
+    // console.log("assigning");
     articleAnimationDelayRef.current = timeoutId;
   };
 
   const clearArticleAnimationDelayRef = () => {
     if (articleAnimationDelayRef.current) {
-      console.log("clearing");
+      // console.log("clearing");
       clearTimeout(articleAnimationDelayRef.current);
     }
   };
@@ -212,6 +184,33 @@ export default function Menu({
   //   });
   // };
 
+  const nextPageState = (oldPageState) => {
+    return {
+      current: Math.min(oldPageState.total, oldPageState.current + 1),
+      total: oldPageState.total,
+      hist: oldPageState.hist.concat([oldPageState.current]),
+      direction: PAGE_DIRECTION.RIGHT,
+    };
+  };
+
+  const timerNextPageState = (oldPageState) => {
+    return {
+      current: Math.min(oldPageState.total, Math.max(...oldPageState.hist) + 1),
+      total: oldPageState.total,
+      hist: oldPageState.hist.concat([oldPageState.current]),
+      direction: PAGE_DIRECTION.RIGHT,
+    };
+  };
+
+  const previousPageState = (oldPageState) => {
+    return {
+      current: Math.max(1, oldPageState.current - 1),
+      total: oldPageState.total,
+      hist: oldPageState.hist.concat([oldPageState.current]),
+      direction: PAGE_DIRECTION.LEFT,
+    };
+  };
+
   const renderMetroMap = (metromap) => {
     return (
       <motion.div
@@ -232,7 +231,11 @@ export default function Menu({
           {...metromapsDetails[metromap.url]}
           width={metromapsDetails[metromap.url].width}
           height={metromapsDetails[metromap.url].height}
-          onFocusButtonClick={onFocusButtonClick(metromap.url)}
+          onFocusButtonClick={
+            pageState.current >= Math.max(...pageState.hist)
+              ? onFocusButtonClick(metromap.url)
+              : null
+          }
           isMapFocused={
             focusState.map === metromap.url &&
             focusState.mode === FOCUS_MODE.FULL_VIEW
@@ -254,27 +257,19 @@ export default function Menu({
 
   // const [showQRCode, setShowQRCode] = useState(false);
 
-  const nextPageState = (oldPageState) => {
-    return {
-      ...oldPageState,
-      current: Math.min(oldPageState.total, oldPageState.current + 1),
-      direction: PAGE_DIRECTION.RIGHT,
-    };
-  };
+  console.log("pageState", pageState);
 
-  const previousPageState = (oldPageState) => {
-    return {
-      ...oldPageState,
-      current: Math.max(1, oldPageState.current - 1),
-      direction: PAGE_DIRECTION.LEFT,
-    };
+  const handleTimerPageStateChange = () => {
+    setPageState(timerNextPageState(pageState));
   };
 
   return (
     <div>
       <Timer
-        setPageState={() => setPageState(nextPageState(pageState))}
+        setPageState={handleTimerPageStateChange}
         resetZoom={onZoomOutButtonClick}
+        counted={pageState.current < Math.max(...pageState.hist)}
+        ended={pageState.current === pageState.total}
       />
       <motion.div>
         {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
@@ -372,17 +367,17 @@ export default function Menu({
       {/* Navigation Button between each session */}
       <NavigationButton
         onClick={() => setPageState(nextPageState(pageState))}
-        className={`right-[25%] top-[90%] z-20`}
+        className={`right-[25%] bottom-10 z-20`}
         isVisible={focusState.mode === null}
       >
-        <AiOutlineCaretRight size={60} />
+        <AiOutlineCaretRight size={60} color={"#b1babf"} />
       </NavigationButton>
       <NavigationButton
         onClick={() => setPageState(previousPageState(pageState))}
-        className={`left-[25%] top-[90%] z-20`}
+        className={`left-[25%] bottom-10 z-20`}
         isVisible={focusState.mode === null}
       >
-        <AiOutlineCaretLeft size={60} />
+        <AiOutlineCaretLeft size={60} color={"#556170"} />
       </NavigationButton>
 
       {!(focusState.mode === FOCUS_MODE.FULL_VIEW) && renderSelectors()}

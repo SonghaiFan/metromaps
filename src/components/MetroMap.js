@@ -149,7 +149,7 @@ export default function MetroMap({
 
       for (let eachNode in updatedNodes) {
         const conNodes = updatedNodes[eachNode].connectedNodes;
-        console.log(conNodes);
+        // console.log(conNodes);
 
         conNodes.forEach((node) => {
           node.id === nodeId && (node.colour = newColour);
@@ -234,7 +234,7 @@ export default function MetroMap({
 
     const [pathStartId, pathEndId] = pathId.split("-");
 
-    console.log(pathStartId);
+    // console.log(pathStartId);
 
     for (let lineId in updatedData) {
       const linePathCoords = updatedData[lineId].pathCoords;
@@ -329,7 +329,7 @@ export default function MetroMap({
   useEffect(() => {
     if (zoomOutButtonClicked) {
       onZoomOutButtonClick();
-      console.log("zoom out button clicked");
+      // console.log("zoom out button clicked");
     }
     // onZoomOutButtonClick will never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -357,7 +357,7 @@ export default function MetroMap({
 
     // if the user clicks the node directly (not the neighbouring node button)
     setClickedNode(nodeId);
-    console.log("clicked node directly", nodeId);
+    // console.log("clicked node directly", nodeId);
   };
 
   const onZoomOutButtonClick = () => {

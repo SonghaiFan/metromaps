@@ -10,7 +10,7 @@ export default function App() {
   const { width, height } = useWindowSize();
 
   return (
-    <div>
+    <>
       {start ? (
         <Menu
           metromaps={METROMAPS}
@@ -21,6 +21,6 @@ export default function App() {
       ) : (
         <IntroMetroMapWrapper setStart={setStart} />
       )}
-    </div>
+    </>
   );
 }
