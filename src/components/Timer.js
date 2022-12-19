@@ -33,7 +33,7 @@ export default function Timer({ pageState, isValid, onTimeUp }) {
     return x * x * x;
   }
 
-  console.log(ease(1 - timeLeftPercent));
+  // console.log(ease(1 - timeLeftPercent));
 
   return (
     <AnimatePresence>

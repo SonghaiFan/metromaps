@@ -12,11 +12,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import NavigationButton from "./NavigationButton";
 import MetroMapLegend from "./MetroMapLegend";
 import SelectorButton from "./SelectorButton";
-import {
-  AiOutlineFullscreenExit,
-  AiOutlineCaretLeft,
-  AiOutlineCaretRight,
-} from "react-icons/ai";
+import { AiOutlineFullscreenExit } from "react-icons/ai";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { margin } from "../utilities/util";
 import monashLogo from "../img/logo_monash_black.png";

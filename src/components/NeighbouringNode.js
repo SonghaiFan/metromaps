@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ReactComponent as NeighbourArrow } from "../assets/NeighbourArrow.svg";
+// import { ReactComponent as NeighbourArrow } from "../assets/NeighbourArrow.svg";
+import { BsArrowRightCircle as NeighbourArrow } from "react-icons/bs";
 import { NEIGHBOURING_NODE_POSITION } from "./NeighbouringNodes";
 
 export default function NeighbouringNode({
@@ -34,7 +35,7 @@ export default function NeighbouringNode({
         style={{
           backgroundColor: data.colour, //"white"
         }}
-        className="text-black rounded-md px-2 text-2xl hover:font-bold pointer-events-auto"
+        className="text-black rounded-md px-2 m-5 text-2xl hover:font-bold pointer-events-auto"
         onClick={(event) => onNeighbourNodeLabelClick(event.target)}
       >
         {content}
@@ -44,7 +45,7 @@ export default function NeighbouringNode({
         onClick={onClick}
         animate={{ rotate: angleBetweenTwoLinesDegree }}
       >
-        <NeighbourArrow />
+        <NeighbourArrow size={50} />
       </motion.button>
     </motion.div>
   );

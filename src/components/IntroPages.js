@@ -1,6 +1,4 @@
 import React from "react";
-import monashLogo from "../img/logo_monash_black.png";
-import prfLogo from "../img/Logo-PRF.png";
 
 const PAGESTITLE = [
   "WELCOME",
