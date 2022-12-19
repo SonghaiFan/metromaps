@@ -25,7 +25,7 @@ export default function Timer({
         setTimeLeft(pageState.time);
       }
     }; // clear the interval when the component unmounts
-  }, [pageState, resetZoom, setPageState, timeLeft]); // only re-run the effect if timeLeft changes
+  }, [pageState.time, timeLeft]); // only re-run the effect if timeLeft changes
 
   useEffect(() => {
     setTimeLeft(pageState.time);
@@ -55,23 +55,19 @@ export default function Timer({
 
   return (
     <AnimatePresence>
-      {
-        // !ended && !counted && (
-        <h1>{`totoalTime: ${pageState.time};timeLeft: ${timeLeft}`}</h1>
-        // )
-        // <motion.div className="w-full bg-black rounded-full h-2.5 dark:bg-gray-700">
-        //   <motion.div
-        //     className="bg-white h-2 rounded-full"
-        //     animate={{
-        //       width: `${(timeLeftPercent * 100).toFixed(2)}%`,
-        //       opacity: 1,
-        //       //   timeLeft < TOTAL_TIME * 0.5 ? 1 - timeLeftPercent : 0,
-        //       //   backgroundColor: timeLeftPercent < 0.2 ? "red" : "white",
-        //     }}
-        //     transition={{ duration: 1, ease: "linear" }}
-        //   ></motion.div>
-        // </motion.div>
-      }
+      {!ended && !counted && (
+        <motion.div className="fixed w-full bg-balck rounded-full dark:bg-gray-700">
+          <motion.div
+            className="bg-white text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+            animate={{
+              width: `${(timeLeftPercent * 100).toFixed(2)}%`,
+              opacity: 1 - timeLeftPercent,
+              backgroundColor: timeLeftPercent < 0.2 ? "red" : "white",
+            }}
+            transition={{ duration: 1, ease: "linear" }}
+          ></motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }
