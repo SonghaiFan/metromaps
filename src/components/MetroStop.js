@@ -100,7 +100,7 @@ export default function MetroStop({
               : "rgba(0, 0, 0, 0)"
             : data.colour, //"white"
         }}
-        className={`w-full h-full text-black truncate flex justify-center -z-40 ${
+        className={`w-fll ml-5 h-full text-black truncate flex justify-center -z-40 ${
           clicked || isMapFocused ? "" : "items-center"
         } rounded-md`}
       >

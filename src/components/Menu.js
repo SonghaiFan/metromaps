@@ -17,6 +17,7 @@ import {
   AiOutlineCaretLeft,
   AiOutlineCaretRight,
 } from "react-icons/ai";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 import { margin } from "../utilities/util";
 import monashLogo from "../img/logo_monash_black.6bfe21bb.png";
 import prfLogo from "../img/Logo-PRF.png";
@@ -53,7 +54,7 @@ export default function Menu({
   const legendWidth = screenWidth / 3;
 
   const metroMapsX = (screenWidth - flexMetroMapWidth * METROMAPS_PER_PAGE) / 2;
-  const metroMapsY = (screenHeight - HEADER_HEIGHT - metroMapHeight) / 2;
+  const metroMapsY = (screenHeight - HEADER_HEIGHT * 2.5 - metroMapHeight) / 2;
 
   const fullViewLegendX = (screenWidth - legendWidth) / 2;
   const fullViewLegendY = 8;
@@ -264,18 +265,42 @@ export default function Menu({
     }
   };
 
+  const timerNextPageState = (oldPageState) => {
+    return {
+      ...oldPageState,
+      current: Math.min(oldPageState.total, Math.max(...oldPageState.hist) + 1), // move to next page after the farthest explored page in hist
+      hist: oldPageState.hist.concat([oldPageState.current]),
+      direction: 1,
+      time: METROMAPS_TIME[
+        Math.min(oldPageState.total - 1, Math.max(...oldPageState.hist))
+      ],
+    };
+  };
+
+  const pageStateIsValid =
+    pageState.current != pageState.total &&
+    pageState.current >= Math.max(...pageState.hist);
+
+  const handleTimerUp = () => {
+    focusState.mode = null;
+    if (pageStateIsValid) {
+      setPageState(timerNextPageState(pageState));
+    }
+  };
+
   return (
     <div>
-      <Timer
-        pageState={pageState}
-        setPageState={setPageState}
-        resetZoom={onZoomOutButtonClick}
-        counted={pageState.current < Math.max(...pageState.hist)}
-        ended={pageState.current === pageState.total}
-      />
+      <motion.div className="timer">
+        <Timer
+          pageState={pageState}
+          isValid={pageStateIsValid}
+          onTimeUp={handleTimerUp}
+        />
+      </motion.div>
+
       <motion.div>
         {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
-          <>
+          <motion.div className="header">
             <motion.div
               className="absolute top-0 left-0 mx-8 my-5 "
               style={{ height: HEADER_HEIGHT }}
@@ -309,7 +334,7 @@ export default function Menu({
                 className="mx-5"
               />
             </motion.div>
-          </>
+          </motion.div>
         )}
         <AnimatePresence>
           {metromaps
@@ -329,62 +354,67 @@ export default function Menu({
         </AnimatePresence>
       </motion.div>
 
-      <MetroMapLegend
-        isDisplayed={!(focusState.mode === FOCUS_MODE.FULL_VIEW)}
-        initial={{
-          x: 0,
-          y: 0,
-          width: 0,
-          height: 0,
-        }}
-        animate={{
-          x:
-            focusState.mode === FOCUS_MODE.FULL_VIEW
-              ? fullViewLegendX
-              : noFullViewLegendX,
-          y:
-            focusState.mode === FOCUS_MODE.FULL_VIEW
-              ? fullViewLegendY
-              : noFullViewLegendY,
-          width: legendWidth,
-          height: 30,
-        }}
-      />
-      <NavigationButton
-        onClick={onZoomOutButtonClick}
-        className={`right-[1%] top-[3%]`}
-        isVisible={focusState.mode === FOCUS_MODE.FULL_VIEW}
-      >
-        <AiOutlineFullscreenExit size={40} />
-      </NavigationButton>
-      <NavigationButton
-        onClick={onBackToLandingPageButtonClick}
-        className={`left-[2%] top-[50%]`}
-        isVisible={focusState.mode === null}
-      >
-        Back to Intro
-        <FaArrowAltCircleLeft size={40} />
-      </NavigationButton>
+      <motion.div className="metro-interface">
+        <MetroMapLegend
+          isDisplayed={!(focusState.mode === FOCUS_MODE.FULL_VIEW)}
+          initial={{
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+          }}
+          animate={{
+            x:
+              focusState.mode === FOCUS_MODE.FULL_VIEW
+                ? fullViewLegendX
+                : noFullViewLegendX,
+            y:
+              focusState.mode === FOCUS_MODE.FULL_VIEW
+                ? fullViewLegendY
+                : noFullViewLegendY,
+            width: legendWidth,
+            height: 30,
+          }}
+        />
+        <NavigationButton
+          onClick={onZoomOutButtonClick}
+          className={`right-[1%] top-[3%]`}
+          isVisible={focusState.mode === FOCUS_MODE.FULL_VIEW}
+        >
+          <AiOutlineFullscreenExit size={40} />
+        </NavigationButton>
+        <NavigationButton
+          onClick={onBackToLandingPageButtonClick}
+          className={`left-[5%] top-[50%]`}
+          isVisible={focusState.mode === null && pageState.current === 1}
+        >
+          Back to Intro
+          <FaArrowAltCircleLeft size={40} />
+        </NavigationButton>
 
-      {/* Navigation Button between each session */}
-      <NavigationButton
-        onClick={onNavigationButtonClick(PAGE_DIRECTION.RIGHT)}
-        className={`right-[25%] bottom-10 z-20`}
-        isVisible={focusState.mode === null}
-      >
-        <AiOutlineCaretRight size={60} color={"#b1babf"} />
-      </NavigationButton>
-      <NavigationButton
+        {/* Navigation Button between each session */}
+        <NavigationButton
+          onClick={onNavigationButtonClick(PAGE_DIRECTION.RIGHT)}
+          className={`right-[5%] top-[50%] `}
+          isVisible={
+            focusState.mode === null && pageState.current !== pageState.total
+          }
+        >
+          Next Map
+          <FaArrowAltCircleRight size={40} color={"#b1babf"} />
+        </NavigationButton>
+        {/* <NavigationButton
         onClick={onNavigationButtonClick(PAGE_DIRECTION.LEFT)}
-        className={`left-[25%] bottom-10 z-20`}
+        className={`left-[25%] bottom-10 `}
         isVisible={focusState.mode === null}
       >
         <AiOutlineCaretLeft size={60} color={"#556170"} />
-      </NavigationButton>
+      </NavigationButton> */}
+      </motion.div>
 
       {!(focusState.mode === FOCUS_MODE.FULL_VIEW) && renderSelectors()}
       {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
-        <>
+        <motion.div className="metro-footer">
           <motion.div
             className="absolute left-0 bottom-0 mx-8 my-3 text-[9px]"
             style={{ maxWidth: flexMetroMapWidth, maxHeight: 56 }}
@@ -401,7 +431,7 @@ export default function Menu({
               </motion.li>
             </motion.ul>
           </motion.div>
-        </>
+        </motion.div>
       )}
     </div>
   );

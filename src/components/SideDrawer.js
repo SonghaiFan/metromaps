@@ -47,10 +47,10 @@ export const SideDrawer = ({
           <motion.div
             className={
               isOnTopHalf
-                ? `absolute bottom-0  flex items-center justify-center bg-black z-50`
-                : `absolute top-0 flex items-center justify-center bg-black z-50`
+                ? `absolute bottom-0 right-[25%] flex items-center justify-center bg-black z-50`
+                : `absolute top-0 right-[25%] flex items-center justify-center bg-black z-50`
             }
-            style={{ width: drawerWidth }}
+            style={{ width: drawerWidth / 2 }}
             animate={{ height: drawerHeight }}
             exit={{ height: 0 }}
             transition={{ duration: 0.2 }}
