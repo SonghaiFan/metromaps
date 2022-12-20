@@ -24,7 +24,7 @@ export default function Timer({ pageState, isValid, onTimeUp }) {
   }, [pageState]);
 
   const timeLeftPercent = timeLeft / pageState.time;
-  const timeLeftPercentString = ((1 - timeLeftPercent) * 100).toFixed(0) + "%";
+  // const timeLeftPercentString = ((1 - timeLeftPercent) * 100).toFixed(0) + "%";
   const timeUsedPercentString = ((1 - timeLeftPercent) * 100).toFixed(0) + "%";
 
   function ease(x) {

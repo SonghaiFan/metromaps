@@ -19,7 +19,6 @@ export const SideDrawer = ({
   close,
   screenWidth,
   screenHeight,
-  paddingY,
   whoOpenSideDrawer,
   handleCustomNodes,
   handleCustomLines,

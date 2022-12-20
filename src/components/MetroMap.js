@@ -45,8 +45,6 @@ export default function MetroMap({
     [data]
   );
 
-  const [filteredData, setFilteredData] = useState(data);
-
   const handleLineFiltering = (number) => {
     const filteredTopics = topics.slice(0, number);
     const filteredNodes = data.nodes.filter((node) => {
@@ -77,13 +75,15 @@ export default function MetroMap({
       );
     });
 
-    setFilteredData({
+    return {
       ...data,
       nodes: filteredNodes,
       lines: filteredLines,
       links: filteredLinks,
-    });
+    };
   };
+
+  const [filteredData, setFilteredData] = useState(data);
 
   useEffect(() => {
     if (metroLineShown) {
