@@ -18,7 +18,12 @@ const metroLineVariantFactory = {
   },
 };
 
-export default function MetroLine({ data, strokeWidth, reversed }) {
+export default function MetroLine({
+  data,
+  strokeWidth,
+  reversed,
+  onClickToOpenDrawer,
+}) {
   const drawPath = (coords) => {
     let res = "";
 
@@ -49,17 +54,17 @@ export default function MetroLine({ data, strokeWidth, reversed }) {
         return (
           <motion.g key={index}>
             <motion.path
+              data-type="metro-line-path"
+              className={"hover: cursor-pointer"}
               id={path.id}
               fill="transparent"
               d={drawPath(path.path)}
-              stroke={
-                // "white"
-                path.colour
-              }
+              stroke={path.colour}
               strokeWidth={strokeWidth || METROLINE_WIDTH}
               variants={metroLineVariantFactory}
               initial="hidden"
               animate="default"
+              onClick={onClickToOpenDrawer}
             />
           </motion.g>
         );

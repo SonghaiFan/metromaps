@@ -10,13 +10,13 @@ import {
 import { METROMAPS_LENGTH, METROMAPS_TIME } from "../utilities/metromaps";
 import { AnimatePresence, motion } from "framer-motion";
 import NavigationButton from "./NavigationButton";
-import MetroMapLegend from "./MetroMapLegend";
-import SelectorButton from "./SelectorButton";
-import { AiOutlineFullscreenExit } from "react-icons/ai";
+// import MetroMapLegend from "./MetroMapLegend";
+// import SelectorButton from "./SelectorButton";
+// import { AiOutlineFullscreenExit } from "react-icons/ai";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { margin } from "../utilities/util";
-import monashLogo from "../img/logo_monash_black.png";
-import prfLogo from "../img/Logo-PRF.png";
+// import monashLogo from "../img/logo_monash_black.png";
+// import prfLogo from "../img/Logo-PRF.png";
 import Timer from "./Timer";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import mixpanel from "mixpanel-browser";
@@ -48,16 +48,16 @@ export default function Menu({
   );
   const flexMetroMapHeight = screenHeight / 2;
 
-  const legendWidth = screenWidth / 3;
+  // const legendWidth = screenWidth / 3;
 
   const metroMapsX = (screenWidth - flexMetroMapWidth * METROMAPS_PER_PAGE) / 2;
   const metroMapsY = (screenHeight - HEADER_HEIGHT * 2.5 - metroMapHeight) / 2;
 
-  const fullViewLegendX = (screenWidth - legendWidth) / 2;
-  const fullViewLegendY = 8;
+  // const fullViewLegendX = (screenWidth - legendWidth) / 2;
+  // const fullViewLegendY = 8;
 
-  const noFullViewLegendX = (screenWidth - legendWidth) / 2;
-  const noFullViewLegendY = metroMapsY - 15;
+  // const noFullViewLegendX = (screenWidth - legendWidth) / 2;
+  // const noFullViewLegendY = metroMapsY - 15;
 
   const metromapsDetails = useMemo(() => {
     return metromaps.reduce((accumulatedDimensions, metromap, index) => {
@@ -92,28 +92,28 @@ export default function Menu({
     time: METROMAPS_TIME[0],
   });
 
-  const renderSelectors = () => {
-    let numbersToRender = Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
+  // const renderSelectors = () => {
+  //   let numbersToRender = Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
 
-    return (
-      <div className="absolute bottom-10 w-screen ">
-        <div className="flex w-[100%] justify-center items-center">
-          <div className="m-[1%] flex">
-            {numbersToRender.map((pageNumber) => {
-              return (
-                <SelectorButton
-                  key={pageNumber}
-                  isActive={pageNumber === pageState.current}
-                  isDead={true}
-                  isSmall={true}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    );
-  };
+  //   return (
+  //     <div className="absolute bottom-10 w-screen ">
+  //       <div className="flex w-[100%] justify-center items-center">
+  //         <div className="m-[1%] flex">
+  //           {numbersToRender.map((pageNumber) => {
+  //             return (
+  //               <SelectorButton
+  //                 key={pageNumber}
+  //                 isActive={pageNumber === pageState.current}
+  //                 isDead={true}
+  //                 isSmall={true}
+  //               />
+  //             );
+  //           })}
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   const initialFocusState = {
     map: null,
@@ -233,8 +233,9 @@ export default function Menu({
             //   : null
           }
           isMapFocused={
-            focusState.map === metromap.url &&
-            focusState.mode === FOCUS_MODE.FULL_VIEW
+            true
+            // focusState.map === metromap.url &&
+            // focusState.mode === FOCUS_MODE.FULL_VIEW
           }
           screenHeight={screenHeight}
           screenWidth={screenWidth}
@@ -261,6 +262,8 @@ export default function Menu({
   };
 
   const onNavigationButtonClick = (direction) => () => {
+    // Fake zoomout click to exit the full view
+    onZoomOutButtonClick();
     mixpanel.track("Navigation button clicked");
     if (direction === PAGE_DIRECTION.RIGHT) {
       setPageState(nextPageState(pageState));
@@ -303,7 +306,7 @@ export default function Menu({
       </motion.div>
 
       <motion.div>
-        {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
+        {/* {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
           <motion.div className="header">
             <motion.div
               className="absolute top-0 left-0 mx-8 my-5 "
@@ -339,7 +342,7 @@ export default function Menu({
               />
             </motion.div>
           </motion.div>
-        )}
+        )} */}
         <AnimatePresence>
           {metromaps
             .filter(
@@ -359,7 +362,7 @@ export default function Menu({
       </motion.div>
 
       <motion.div className="metro-interface">
-        <MetroMapLegend
+        {/* <MetroMapLegend
           isDisplayed={!(focusState.mode === FOCUS_MODE.FULL_VIEW)}
           initial={{
             x: 0,
@@ -379,18 +382,21 @@ export default function Menu({
             width: legendWidth,
             height: 30,
           }}
-        />
-        <NavigationButton
+        /> */}
+        {/* <NavigationButton
           onClick={onZoomOutButtonClick}
           className={`right-[1%] top-[3%]`}
           isVisible={focusState.mode === FOCUS_MODE.FULL_VIEW}
         >
           <AiOutlineFullscreenExit size={40} />
-        </NavigationButton>
+        </NavigationButton> */}
         <NavigationButton
           onClick={onBackToLandingPageButtonClick}
-          className={`left-[5%] top-[50%]`}
-          isVisible={focusState.mode === null && pageState.current === 1}
+          className={`left-[2%] top-[50%]`}
+          isVisible={
+            // focusState.mode === null &&
+            pageState.current === 1
+          }
         >
           Back to Intro
           <FaArrowAltCircleLeft size={40} />
@@ -399,9 +405,10 @@ export default function Menu({
         {/* Navigation Button between each session */}
         <NavigationButton
           onClick={onNavigationButtonClick(PAGE_DIRECTION.RIGHT)}
-          className={`right-[5%] top-[50%] `}
+          className={`right-[2%] top-[50%] `}
           isVisible={
-            focusState.mode === null && pageState.current !== pageState.total
+            // focusState.mode === null &&
+            pageState.current !== pageState.total
           }
         >
           Next Map
@@ -416,7 +423,7 @@ export default function Menu({
       </NavigationButton> */}
       </motion.div>
 
-      {!(focusState.mode === FOCUS_MODE.FULL_VIEW) && renderSelectors()}
+      {/* {!(focusState.mode === FOCUS_MODE.FULL_VIEW) && renderSelectors()} */}
       {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
         <motion.div className="metro-footer">
           <motion.div

@@ -133,11 +133,11 @@ const getAverageNodesYPosition = (newNodes, metroMapData) => (lineId) => {
 };
 
 const addColour = (lineWeight) => {
-  // const ind = lineWeight * (colours.length - 1);
-  // const colour1 = colours[Math.floor(ind)];
-  // const colour2 = colours[Math.ceil(ind)];
-  // return d3.interpolateRgb(colour1, colour2)(ind - Math.floor(ind));
-  return "white";
+  const ind = lineWeight * (colours.length - 1);
+  const colour1 = colours[Math.floor(ind)];
+  const colour2 = colours[Math.ceil(ind)];
+  return d3.interpolateRgb(colour1, colour2)(ind - Math.floor(ind));
+  // return "white";
 };
 
 const colourNodes = (nodes, lines, edges, useEdgeWeight) => {

@@ -11,6 +11,7 @@ import MetroLine from "./MetroLine";
 import MetroLineLabel from "./MetroLineLabel";
 import TimeAxis from "./TimeAxis";
 import { SideDrawer } from "./SideDrawer";
+import mixpanel from "mixpanel-browser";
 
 const TOP_FULL_PAGE_PADDING = 20;
 
@@ -27,13 +28,11 @@ export default function MetroMap({
   updateArticleAnimationDelayRef,
   clearArticleAnimationDelayRef,
   metroLineShown,
-  updateMetroMapLineShown,
   hint,
   subtitle,
   zoomOutButtonClicked,
 }) {
   // console.log(data);
-  const [filteredData, setFilteredData] = useState(data);
 
   const topics = useMemo(
     () =>
@@ -46,54 +45,49 @@ export default function MetroMap({
     [data]
   );
 
-  const [linesShown, setLinesShown] = useState(metroLineShown || topics.length);
+  const [filteredData, setFilteredData] = useState(data);
 
   const handleLineFiltering = (number) => {
-    setFilteredData(() => {
-      const filteredTopics = topics.slice(0, number);
-      const filteredNodes = data.nodes.filter((node) => {
-        const topicNumber = node.id.split("_")[1];
-        return filteredTopics.includes(topicNumber);
-      });
-      const filteredLines = data.lines.filter((line) => {
-        const topicNumbers = line.links.reduce(
-          (accumulator, { source, target }) =>
-            accumulator.concat(source.split("_")[1], target.split("_")[1]),
-          []
-        );
-        return topicNumbers.reduce(
-          (accumulator, topicNumber) =>
-            accumulator &&
-            filteredTopics.find((topic) => topic === topicNumber),
-          true
-        );
-      });
+    const filteredTopics = topics.slice(0, number);
+    const filteredNodes = data.nodes.filter((node) => {
+      const topicNumber = node.id.split("_")[1];
+      return filteredTopics.includes(topicNumber);
+    });
+    const filteredLines = data.lines.filter((line) => {
+      const topicNumbers = line.links.reduce(
+        (accumulator, { source, target }) =>
+          accumulator.concat(source.split("_")[1], target.split("_")[1]),
+        []
+      );
+      return topicNumbers.reduce(
+        (accumulator, topicNumber) =>
+          accumulator && filteredTopics.find((topic) => topic === topicNumber),
+        true
+      );
+    });
 
-      const filteredLinks = data.links.filter(({ source, target }) => {
-        // after the first filtering, the data format changes
-        // (previously source was an object, the next iteration, source only contains the node id)
-        return (
-          filteredTopics.includes(
-            (source.id ? source.id : source).split("_")[1]
-          ) &&
-          filteredTopics.includes(
-            (target.id ? target.id : target).split("_")[1]
-          )
-        );
-      });
+    const filteredLinks = data.links.filter(({ source, target }) => {
+      // after the first filtering, the data format changes
+      // (previously source was an object, the next iteration, source only contains the node id)
+      return (
+        filteredTopics.includes(
+          (source.id ? source.id : source).split("_")[1]
+        ) &&
+        filteredTopics.includes((target.id ? target.id : target).split("_")[1])
+      );
+    });
 
-      return {
-        ...data,
-        nodes: filteredNodes,
-        lines: filteredLines,
-        links: filteredLinks,
-      };
+    setFilteredData({
+      ...data,
+      nodes: filteredNodes,
+      lines: filteredLines,
+      links: filteredLinks,
     });
   };
 
   useEffect(() => {
     if (metroLineShown) {
-      handleLineFiltering(metroLineShown);
+      handleLineFiltering(3);
     }
     // disabled warning since we know we only need to run the code once
     // lineShown will be handled locally by each metromap
@@ -325,7 +319,7 @@ export default function MetroMap({
   useEffect(() => {
     if (zoomOutButtonClicked) {
       onZoomOutButtonClick();
-      // console.log("zoom out button clicked");
+      // console.log("zoom out button clicked")
     }
     // onZoomOutButtonClick will never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -343,6 +337,9 @@ export default function MetroMap({
   };
 
   const handleMetroStopClick = (nodeId) => () => {
+    mixpanel.track("MetroStopClick on neighbouring node button", {
+      nodeId: nodeId,
+    });
     // if the user clicks on next/previous neighbouring node button
     if (clickedNode) {
       setClickedNodeBuffer(nodeId);
@@ -353,10 +350,13 @@ export default function MetroMap({
 
     // if the user clicks the node directly (not the neighbouring node button)
     setClickedNode(nodeId);
-    // console.log("clicked node directly", nodeId);
+    mixpanel.track("MetroStopClick on node button directly", {
+      nodeId: nodeId,
+    });
   };
 
   const onZoomOutButtonClick = () => {
+    mixpanel.track("MetroStop ZoomOut button clicked");
     clearArticleAnimationDelayRef();
     setClickedNodeBuffer(null);
     setClickedNode(null);
@@ -442,7 +442,12 @@ export default function MetroMap({
                     }}
                     key={lineId}
                   >
-                    <MetroLine data={paths} />
+                    <MetroLine
+                      data={paths}
+                      onClickToOpenDrawer={(event) => {
+                        openSideDrawer(event.target);
+                      }}
+                    />
                   </motion.g>
                 );
               })}
@@ -469,9 +474,6 @@ export default function MetroMap({
                           key={`${lineId}-${index}`}
                           data={label}
                           onMetroLineLabelClick={(event) => {
-                            console.log(
-                              `metro line: ${lineId}-${index} label: ${label.label} clicked`
-                            );
                             openSideDrawer(event.target);
                           }}
                         />
@@ -530,8 +532,9 @@ export default function MetroMap({
                   onArticleStackAnimationComplete={
                     onArticleStackAnimationComplete
                   }
-                  onArticleStackLabelClick={openSideDrawer}
                   onNeighbourNodeLabelClick={openSideDrawer}
+                  onNodeNumberLabelClick={openSideDrawer}
+                  onNodeWordsLabelClick={openSideDrawer}
                 />
               </motion.div>
             );
@@ -647,7 +650,7 @@ export default function MetroMap({
                 animate={isMapFocused ? {} : titleAnimation}
                 ref={titleRef}
               >
-                {title}
+                {/* {title} */}
               </motion.h2>
             </motion.div>
             <MetroMapDescription
@@ -660,7 +663,6 @@ export default function MetroMap({
           </motion.div>
         </motion.div>
       </motion.div>
-
       <NavigationButton
         onClick={onZoomOutButtonClick}
         className={`right-[1%] top-[3%] z-50`}

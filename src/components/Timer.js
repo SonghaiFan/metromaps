@@ -24,7 +24,8 @@ export default function Timer({ pageState, isValid, onTimeUp }) {
   }, [pageState]);
 
   const timeLeftPercent = timeLeft / pageState.time;
-  const timeLeftPercentString = (timeLeftPercent * 100).toFixed(0) + "%";
+  const timeLeftPercentString = ((1 - timeLeftPercent) * 100).toFixed(0) + "%";
+  const timeUsedPercentString = ((1 - timeLeftPercent) * 100).toFixed(0) + "%";
 
   function ease(x) {
     return x * x * x;
@@ -39,7 +40,7 @@ export default function Timer({ pageState, isValid, onTimeUp }) {
           <motion.div
             className="bg-white break-normal w-2 text-black text-xs font-medium p-0.5 leading-none rounded-b-full"
             animate={{
-              height: timeLeftPercentString,
+              height: timeUsedPercentString,
               opacity: ease(1 - timeLeftPercent),
             }}
             transition={{ duration: 1, ease: "linear" }}

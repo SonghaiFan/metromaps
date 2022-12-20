@@ -44,7 +44,7 @@ export const SideDrawer = ({
     const whoId = whoOpenSideDrawer.id;
     // console.log("whoId", whoId);
 
-    if (type === "metro-line-label") {
+    if (type === "metro-line-label" || type === "metro-line-path") {
       mixpanel.track("Metro line label colour changed", {
         lineID: whoId,
         newColour: newColour,
@@ -53,7 +53,11 @@ export const SideDrawer = ({
       handleCustomLines(whoId, newColour);
     }
 
-    if (type === "node-words-label" || type === "neighbour-node-label") {
+    if (
+      type === "node-words-label" ||
+      type === "node-number-label" ||
+      type === "neighbour-node-label"
+    ) {
       mixpanel.track("Node word label colour changed", {
         nodeID: whoId,
         newColour: newColour,

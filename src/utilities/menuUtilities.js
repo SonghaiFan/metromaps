@@ -45,13 +45,14 @@ const metroMapContainerVariantsFactory = (
 };
 
 const getAnimateState = (focusState, metromap) => {
-  return focusState.map === metromap.url &&
-    focusState.mode === FOCUS_MODE.FULL_VIEW
-    ? "fullView"
-    : focusState.map !== metromap.url &&
-      focusState.mode === FOCUS_MODE.FULL_VIEW
-    ? "hidden"
-    : "entry";
+  return "fullView";
+  // return focusState.map === metromap.url &&
+  //   focusState.mode === FOCUS_MODE.FULL_VIEW
+  //   ? "fullView"
+  //   : focusState.map !== metromap.url &&
+  //     focusState.mode === FOCUS_MODE.FULL_VIEW
+  //   ? "hidden"
+  //   : "entry";
 };
 
 export {

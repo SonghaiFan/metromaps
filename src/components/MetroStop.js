@@ -23,8 +23,9 @@ export default function MetroStop({
   clicked,
   onNeighbouringNodeClick,
   onArticleStackAnimationComplete,
-  onArticleStackLabelClick,
   onNeighbourNodeLabelClick,
+  onNodeNumberLabelClick,
+  onNodeWordsLabelClick,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   const content = data.node_words.length > 0 ? data.node_words[0] : "";
@@ -64,10 +65,7 @@ export default function MetroStop({
           <ArticleStack
             data={data}
             articles={articles}
-            colour={
-              // "white"
-              data.colour
-            }
+            colour={data.colour}
             onClick={onClick}
             clicked={clicked}
             clickedArticleContainerHeight={CLICKED_ARTICLE_CONTAINER_HEIGHT}
@@ -117,7 +115,8 @@ export default function MetroStop({
               height: METROSTOP_CIRCLE_SIZE,
               y: height,
             }}
-            className="absolute rounded-xl text-xs flex justify-center items-center"
+            className="absolute rounded-xl text-xs flex justify-center items-center cursor-pointer"
+            onClick={(event) => onNodeNumberLabelClick(event.target)}
           >
             {data.articles.length}
           </motion.div>
@@ -148,7 +147,7 @@ export default function MetroStop({
             }`}
             animate={clicked ? "clicked" : "default"}
             onClick={(event) =>
-              isMapFocused ? onArticleStackLabelClick(event.target) : undefined
+              isMapFocused ? onNodeWordsLabelClick(event.target) : undefined
             }
           >
             {content}
