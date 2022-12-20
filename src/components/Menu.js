@@ -19,6 +19,7 @@ import monashLogo from "../img/logo_monash_black.png";
 import prfLogo from "../img/Logo-PRF.png";
 import Timer from "./Timer";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
+import mixpanel from "mixpanel-browser";
 
 const METROMAPS_PER_PAGE = 1; //Do not change this value
 const HEADER_HEIGHT = 80;
@@ -138,6 +139,10 @@ export default function Menu({
       payload: { map: mapId, mode: FOCUS_MODE.FULL_VIEW },
     });
     // console.log("focusState", focusState);
+    mixpanel.track("onFucous button clicked", {
+      map: mapId,
+      mode: FOCUS_MODE.FULL_VIEW,
+    });
   };
 
   const articleAnimationDelayRef = useRef();
@@ -162,6 +167,7 @@ export default function Menu({
   };
 
   const onZoomOutButtonClick = () => {
+    mixpanel.track("ZoomOut button clicked");
     setZoomOutButtonClicked(true);
     clearArticleAnimationDelayRef();
     dispatch({ type: ACTION_TYPES.LANDING_PAGE_VIEW });
@@ -250,10 +256,12 @@ export default function Menu({
   // console.log("pageState", pageState);
 
   const onBackToLandingPageButtonClick = () => {
+    mixpanel.track("BackLanding button clicked");
     setStart(false);
   };
 
   const onNavigationButtonClick = (direction) => () => {
+    mixpanel.track("Navigation button clicked");
     if (direction === PAGE_DIRECTION.RIGHT) {
       setPageState(nextPageState(pageState));
     } else {
@@ -274,7 +282,7 @@ export default function Menu({
   };
 
   const pageStateIsValid =
-    pageState.current != pageState.total &&
+    pageState.current !== pageState.total &&
     pageState.current >= Math.max(...pageState.hist);
 
   const handleTimerUp = () => {

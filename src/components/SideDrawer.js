@@ -1,15 +1,13 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { margin } from "../utilities/util";
-import { METROSTOP_BOTTOM_PADDING } from "../utilities/metroMapUtilities";
-import { MAX_ARTICLES } from "../utilities/calculateMetroMapLayout";
-import { TIME_AXIS_PADDING } from "./TimeAxis";
 import { MdClose } from "react-icons/md";
 import { interpolateRgb } from "d3-interpolate";
-
-const colours = ["#585d91", "#48a49e", "#fce554"];
+import mixpanel from "mixpanel-browser";
 
 const cutomerInterpolation = (Weight) => {
+  const colours = ["#585d91", "#48a49e", "#fce554"];
+  if (Weight < 0) return "white";
   const ind = Weight * (colours.length - 1);
   const colour1 = colours[Math.floor(ind)];
   const colour2 = colours[Math.ceil(ind)];
@@ -32,6 +30,38 @@ export const SideDrawer = ({
   const isOnTopHalf = whoOpenSideDrawer
     ? whoOpenSideDrawer.getBoundingClientRect().top < screenHeight / 2
     : false;
+
+  const handleCustomNodesChange = (event) => {
+    // console.log("in the drawer: ", whoOpenSideDrawer);
+    mixpanel.track("Metro label changed", {
+      value: event.target.value,
+    });
+
+    const newColour = cutomerInterpolation(event.target.value);
+
+    const type = whoOpenSideDrawer.dataset.type;
+    // console.log("type", type);
+    const whoId = whoOpenSideDrawer.id;
+    // console.log("whoId", whoId);
+
+    if (type === "metro-line-label") {
+      mixpanel.track("Metro line label colour changed", {
+        lineID: whoId,
+        newColour: newColour,
+      });
+      // console.log(`this is a metro line label at ${whoId}`);
+      handleCustomLines(whoId, newColour);
+    }
+
+    if (type === "node-words-label" || type === "neighbour-node-label") {
+      mixpanel.track("Node word label colour changed", {
+        nodeID: whoId,
+        newColour: newColour,
+      });
+      // console.log(`this is a node word label at ${whoId}`);
+      handleCustomNodes(whoId, newColour);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -69,42 +99,18 @@ export const SideDrawer = ({
             <motion.div className="text-2xl">
               {/* range slider with five step, label is very high, high, moderate, weak, very weak */}
               <motion.div className="text-2xl">
-                Please rate the degree of relevance
+                Please rate the degree of connection
               </motion.div>
               <motion.input
+                id="range-slider"
                 type="range"
-                className="w-full h-3 bg-gray-70 rounded-lg appearance-none cursor-pointer range-lg bg-gradient-to-r from-[#585d91] via-[#48a49e] to-[#fce554]"
-                min="0"
+                className="w-full h-3 bg-gray-70 rounded-lg appearance-none cursor-pointer range-lg"
+                min="-0.25"
                 max="1"
                 step="0.25"
+                defaultValue="-0.25"
                 list="tickmarks"
-                onChange={(event) => {
-                  // console.log("in the drawer: ", whoOpenSideDrawer);
-
-                  const newColour = cutomerInterpolation(event.target.value);
-
-                  const type = whoOpenSideDrawer.dataset.type;
-                  // console.log("type", type);
-                  const whoId = whoOpenSideDrawer.id;
-                  // console.log("whoId", whoId);
-
-                  if (type === "metro-line-label") {
-                    // console.log(`this is a metro line label at ${whoId}`);
-                    handleCustomLines(whoId, newColour);
-                  }
-
-                  if (
-                    type === "node-words-label" ||
-                    type === "neighbour-node-label"
-                  ) {
-                    // console.log(`this is a node word label at ${whoId}`);
-                    handleCustomNodes(whoId, newColour);
-                  }
-
-                  // setLinesShown(event.target.value);
-                  // updateMetroMapLineShown(event.target.value);
-                  // handleLineFiltering(event.target.value);
-                }}
+                onChange={handleCustomNodesChange}
               />
               <motion.datalist id="tickmarks" className="felex flex-col ">
                 <option>Very high</option>
@@ -112,6 +118,7 @@ export const SideDrawer = ({
                 <option>Moderate</option>
                 <option>Weak</option>
                 <option>Very weak</option>
+                <option>No</option>
               </motion.datalist>
               <motion.div className="w-full flex justify-between text-xs px-2">
                 <span>|</span>
@@ -119,8 +126,10 @@ export const SideDrawer = ({
                 <span>|</span>
                 <span>|</span>
                 <span>|</span>
+                <span>|</span>
               </motion.div>
               <motion.div className="w-full flex justify-between text-xs px-2">
+                <span>No</span>
                 <span>Very weak</span>
                 <span>Weak</span>
                 <span>Moderate</span>

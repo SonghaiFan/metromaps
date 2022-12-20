@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const TOTAL_TIME = 20;
-
 export default function Timer({ pageState, isValid, onTimeUp }) {
   const timeToCount = pageState.time;
   const [timeLeft, setTimeLeft] = useState(timeToCount);
@@ -23,7 +21,6 @@ export default function Timer({ pageState, isValid, onTimeUp }) {
 
   useEffect(() => {
     setTimeLeft(pageState.time);
-    return () => {};
   }, [pageState]);
 
   const timeLeftPercent = timeLeft / pageState.time;

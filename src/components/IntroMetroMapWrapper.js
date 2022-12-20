@@ -12,6 +12,7 @@ import {
   MetroLinesPage,
   FinalPage,
 } from "./IntroPages";
+import mixpanel from "mixpanel-browser";
 
 // sample images
 import mappng from "../img/map1.png";
@@ -46,6 +47,7 @@ export default function IntroMetroMapWrapper({ setStart }) {
   }, []);
 
   const onSelectorButtonClick = (n) => {
+    mixpanel.track("Selector button clicked", { selectorID: n });
     setSelectedButton(n);
     setPaginationState((previousPageState) => {
       return {
@@ -62,7 +64,9 @@ export default function IntroMetroMapWrapper({ setStart }) {
       <SelectorButton
         key={n}
         selectorID={n}
-        onClick={() => onSelectorButtonClick(n)}
+        onClick={() => {
+          onSelectorButtonClick(n);
+        }}
         isActive={s}
       />
     );

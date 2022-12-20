@@ -93,3 +93,13 @@ input[type="range"]::-webkit-slider-thumb {
   border: none;
   transform: translateY(-20%);
 }
+
+input[type="range"] {
+  background: linear-gradient(
+    to right,
+    white 0%,
+    #585d91 4%,
+    #585d91 46%,
+    #fce554
+  );
+}
