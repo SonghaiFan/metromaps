@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/metromaps/static/css/main.2b6f9cfc.css",
-    "main.js": "/metromaps/static/js/main.7825bb5e.js",
+    "main.css": "/metromaps/static/css/main.161fa1cc.css",
+    "main.js": "/metromaps/static/js/main.5d0eeaf1.js",
     "static/media/cover3.png": "/metromaps/static/media/cover3.d6829163747e2da26288.png",
     "static/media/cover4.png": "/metromaps/static/media/cover4.8bee6a7c6a0d81d1775f.png",
     "static/media/cover1.png": "/metromaps/static/media/cover1.9e82026e159565eb7e08.png",
@@ -20,13 +20,12 @@
     "static/media/ABCMarfa-Thin.woff": "/metromaps/static/media/ABCMarfa-Thin.d8d510304fefe147815d.woff",
     "static/media/legend.png": "/metromaps/static/media/legend.d8e1c2152f3f8f9c428f.png",
     "static/media/connection.png": "/metromaps/static/media/connection.a861c91744a058c8d25d.png",
-    "static/media/NeighbourArrow.svg": "/metromaps/static/media/NeighbourArrow.fe3da2ebf7eb6b27b41fb76680bf6bda.svg",
     "index.html": "/metromaps/index.html",
-    "main.2b6f9cfc.css.map": "/metromaps/static/css/main.2b6f9cfc.css.map",
-    "main.7825bb5e.js.map": "/metromaps/static/js/main.7825bb5e.js.map"
+    "main.161fa1cc.css.map": "/metromaps/static/css/main.161fa1cc.css.map",
+    "main.5d0eeaf1.js.map": "/metromaps/static/js/main.5d0eeaf1.js.map"
   },
   "entrypoints": [
-    "static/css/main.2b6f9cfc.css",
-    "static/js/main.7825bb5e.js"
+    "static/css/main.161fa1cc.css",
+    "static/js/main.5d0eeaf1.js"
   ]
 }
