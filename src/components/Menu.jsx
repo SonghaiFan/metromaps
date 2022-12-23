@@ -10,13 +10,8 @@ import {
 import { METROMAPS_LENGTH, METROMAPS_TIME } from "../utilities/metromaps";
 import { AnimatePresence, motion } from "framer-motion";
 import NavigationButton from "./NavigationButton";
-// import MetroMapLegend from "./MetroMapLegend";
-// import SelectorButton from "./SelectorButton";
-// import { AiOutlineFullscreenExit } from "react-icons/ai";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 import { margin } from "../utilities/util";
-// import monashLogo from "../img/logo_monash_black.png";
-// import prfLogo from "../img/Logo-PRF.png";
 import Timer from "./Timer";
 import mixpanel from "mixpanel-browser";
 
@@ -47,16 +42,8 @@ export default function Menu({
   );
   const flexMetroMapHeight = screenHeight / 2;
 
-  // const legendWidth = screenWidth / 3;
-
   const metroMapsX = (screenWidth - flexMetroMapWidth * METROMAPS_PER_PAGE) / 2;
   const metroMapsY = (screenHeight - HEADER_HEIGHT * 2.5 - metroMapHeight) / 2;
-
-  // const fullViewLegendX = (screenWidth - legendWidth) / 2;
-  // const fullViewLegendY = 8;
-
-  // const noFullViewLegendX = (screenWidth - legendWidth) / 2;
-  // const noFullViewLegendY = metroMapsY - 15;
 
   const metromapsDetails = useMemo(() => {
     return metromaps.reduce((accumulatedDimensions, metromap, index) => {
@@ -90,29 +77,6 @@ export default function Menu({
     direction: PAGE_DIRECTION.RIGHT,
     time: METROMAPS_TIME[0],
   });
-
-  // const renderSelectors = () => {
-  //   let numbersToRender = Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
-
-  //   return (
-  //     <div className="absolute bottom-10 w-screen ">
-  //       <div className="flex w-[100%] justify-center items-center">
-  //         <div className="m-[1%] flex">
-  //           {numbersToRender.map((pageNumber) => {
-  //             return (
-  //               <SelectorButton
-  //                 key={pageNumber}
-  //                 isActive={pageNumber === pageState.current}
-  //                 isDead={true}
-  //                 isSmall={true}
-  //               />
-  //             );
-  //           })}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
 
   const initialFocusState = {
     map: null,
@@ -172,17 +136,6 @@ export default function Menu({
     dispatch({ type: ACTION_TYPES.LANDING_PAGE_VIEW });
   };
 
-  // const [metroMapLineShown, setMetroMapLineShown] = useState({});
-
-  // const updateMetroMapLineShown = (metroMapId) => (lineShown) => {
-  //   setMetroMapLineShown((previousMetroMapLineShown) => {
-  //     return {
-  //       ...previousMetroMapLineShown,
-  //       [metroMapId]: lineShown,
-  //     };
-  //   });
-  // };
-
   const nextPageState = (oldPageState) => {
     return {
       ...oldPageState,
@@ -225,12 +178,7 @@ export default function Menu({
           {...metromapsDetails[metromap.url]}
           width={metromapsDetails[metromap.url].width}
           height={metromapsDetails[metromap.url].height}
-          onFocusButtonClick={
-            onFocusButtonClick(metromap.url)
-            // pageState.current >= Math.max(...pageState.hist)
-            //   ? onFocusButtonClick(metromap.url)
-            //   : null
-          }
+          onFocusButtonClick={onFocusButtonClick(metromap.url)}
           isMapFocused={
             true
             // focusState.map === metromap.url &&
@@ -243,17 +191,11 @@ export default function Menu({
           hint={metromap.hint}
           updateArticleAnimationDelayRef={updateArticleAnimationDelayRef}
           clearArticleAnimationDelayRef={clearArticleAnimationDelayRef}
-          // metroLineShown={metroMapLineShown[metromap.url]}
-          // updateMetroMapLineShown={updateMetroMapLineShown(metromap.url)}
           zoomOutButtonClicked={zoomOutButtonClicked}
         />
       </motion.div>
     );
   };
-
-  // const [showQRCode, setShowQRCode] = useState(false);
-
-  // console.log("pageState", pageState);
 
   const onBackToLandingPageButtonClick = () => {
     mixpanel.track("BackLanding button clicked");
@@ -305,43 +247,6 @@ export default function Menu({
       </motion.div>
 
       <motion.div>
-        {/* {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
-          <motion.div className="header">
-            <motion.div
-              className="absolute top-0 left-0 mx-8 my-5 "
-              style={{ height: HEADER_HEIGHT }}
-            >
-              <motion.div
-                className="font-bold text-4xl"
-                style={{ color: "#48a49e" }}
-              >
-                Australia's Discourse Explorer - User Study
-              </motion.div>
-              <motion.div
-                className="italic text-xl line-clamp-1 font-medium"
-                style={{ width: screenWidth / 2 }}
-              >
-                Discourse of equity, opportunity, and disadvantage in 2022
-              </motion.div>
-            </motion.div>
-            <motion.div
-              className="absolute top-0 right-0 flex justify-end items-center my-5"
-              style={{ width: screenWidth / 2, height: HEADER_HEIGHT }}
-            >
-              <motion.img
-                src={monashLogo}
-                alt="Monash University Logo"
-                style={{ height: HEADER_HEIGHT, paddingTop: 10 }}
-              />
-              <motion.img
-                src={prfLogo}
-                alt="PRF Logo"
-                style={{ height: HEADER_HEIGHT }}
-                className="mx-5"
-              />
-            </motion.div>
-          </motion.div>
-        )} */}
         <AnimatePresence>
           {metromaps
             .filter(
@@ -361,34 +266,6 @@ export default function Menu({
       </motion.div>
 
       <motion.div className="metro-interface">
-        {/* <MetroMapLegend
-          isDisplayed={!(focusState.mode === FOCUS_MODE.FULL_VIEW)}
-          initial={{
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
-          }}
-          animate={{
-            x:
-              focusState.mode === FOCUS_MODE.FULL_VIEW
-                ? fullViewLegendX
-                : noFullViewLegendX,
-            y:
-              focusState.mode === FOCUS_MODE.FULL_VIEW
-                ? fullViewLegendY
-                : noFullViewLegendY,
-            width: legendWidth,
-            height: 30,
-          }}
-        /> */}
-        {/* <NavigationButton
-          onClick={onZoomOutButtonClick}
-          className={`right-[1%] top-[3%]`}
-          isVisible={focusState.mode === FOCUS_MODE.FULL_VIEW}
-        >
-          <AiOutlineFullscreenExit size={40} />
-        </NavigationButton> */}
         <NavigationButton
           onClick={onBackToLandingPageButtonClick}
           className={`left-[2%] top-[50%]`}
@@ -413,17 +290,8 @@ export default function Menu({
           Next Map
           <FaArrowAltCircleRight size={40} color={"#b1babf"} />
         </NavigationButton>
-        <NavigationButton
-          onClick={onNavigationButtonClick(PAGE_DIRECTION.LEFT)}
-          className={`left-[2%] top-[50%] `}
-          isVisible={pageState.current !== 1}
-        >
-          Prev Map
-          <FaArrowAltCircleLeft size={40} color={"#556170"} />
-        </NavigationButton>
       </motion.div>
 
-      {/* {!(focusState.mode === FOCUS_MODE.FULL_VIEW) && renderSelectors()} */}
       {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
         <motion.div className="metro-footer">
           <motion.div

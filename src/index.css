@@ -95,11 +95,5 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"] {
-  background: linear-gradient(
-    to right,
-    white 20%,
-    #585d91 20%,
-    #48a49e 50%,
-    #fce554 100%
-  );
+  background: linear-gradient(to right, #585d91 0%, #48a49e 50%, #fce554 100%);
 }

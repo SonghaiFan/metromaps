@@ -27,7 +27,6 @@ export default function MetroMap({
   description,
   updateArticleAnimationDelayRef,
   clearArticleAnimationDelayRef,
-  metroLineShown,
   hint,
   subtitle,
   zoomOutButtonClicked,
@@ -35,72 +34,6 @@ export default function MetroMap({
   // console.log(data);
 
   const [filteredData, setFilteredData] = useState(data);
-
-  const topics = useMemo(
-    () =>
-      data.nodes.reduce((accumulator, node) => {
-        const topicNumber = node.id.split("_")[1];
-        return accumulator.includes(topicNumber)
-          ? accumulator
-          : accumulator.concat(topicNumber);
-      }, []),
-    [data]
-  );
-
-  const [linesShown, setLinesShown] = useState(metroLineShown || topics.length);
-
-  const handleLineFiltering = (number) => {
-    setFilteredData(() => {
-      const filteredTopics = topics.slice(0, number);
-      const filteredNodes = data.nodes.filter((node) => {
-        const topicNumber = node.id.split("_")[1];
-        return filteredTopics.includes(topicNumber);
-      });
-      const filteredLines = data.lines.filter((line) => {
-        const topicNumbers = line.links.reduce(
-          (accumulator, { source, target }) =>
-            accumulator.concat(source.split("_")[1], target.split("_")[1]),
-          []
-        );
-        return topicNumbers.reduce(
-          (accumulator, topicNumber) =>
-            accumulator &&
-            filteredTopics.find((topic) => topic === topicNumber),
-          true
-        );
-      });
-
-      const filteredLinks = data.links.filter(({ source, target }) => {
-        // after the first filtering, the data format changes
-        // (previously source was an object, the next iteration, source only contains the node id)
-        return (
-          filteredTopics.includes(
-            (source.id ? source.id : source).split("_")[1]
-          ) &&
-          filteredTopics.includes(
-            (target.id ? target.id : target).split("_")[1]
-          )
-        );
-      });
-
-      return {
-        ...data,
-        nodes: filteredNodes,
-        lines: filteredLines,
-        links: filteredLinks,
-      };
-    });
-  };
-
-  useEffect(() => {
-    if (metroLineShown) {
-      handleLineFiltering(metroLineShown);
-    }
-    // disabled warning since we know we only need to run the code once
-    // lineShown will be handled locally by each metromap
-    // metroLineShown is only needed when the component is unmounted and mounted again
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
 
@@ -122,15 +55,9 @@ export default function MetroMap({
   const LANDING_HEIGHT = screenHeight / 28;
   const LANDING_WIDTH = screenWidth / 23;
 
-  const landingPageYPadding = margin.y * height;
-  const landingPageXPadding = 0;
-  const [landingNodes, landingLines] = useMemo(
-    () => calculateMetroMapLayout(width, height, filteredData, margin),
-    [width, height, filteredData]
-  );
-
   const fullPageYPadding = margin.y * screenHeight + TOP_FULL_PAGE_PADDING;
   const fullPageXPadding = margin.x * screenWidth;
+
   const [nodes, lines, columns] = useMemo(
     () =>
       calculateMetroMapLayout(screenWidth, screenHeight, filteredData, margin),
@@ -155,12 +82,8 @@ export default function MetroMap({
     });
   };
 
-  const paddingX = isMapFocused
-    ? fullPageXPadding - NODE_WIDTH / 2
-    : landingPageXPadding;
-  const paddingY = isMapFocused
-    ? fullPageYPadding - NODE_HEIGHT
-    : landingPageYPadding;
+  const paddingX = fullPageXPadding - NODE_WIDTH / 2;
+  const paddingY = fullPageYPadding - NODE_HEIGHT;
 
   const generatePaths = (line) => {
     const pathCoordinates = line.pathCoords;
@@ -207,14 +130,11 @@ export default function MetroMap({
   };
 
   const [customLines, setCustomLines] = useState(lines);
-  // const [customLandingLines, setCustomLandingLines] = useState(landingLines);
 
   const metroLineData = useMemo(
     () =>
       Object.keys(customLines).map((lineId) => {
-        const activeLines = customLines;
-
-        const [paths, labels] = generatePaths(activeLines[lineId]);
+        const [paths, labels] = generatePaths(customLines[lineId]);
 
         const lineData = { [lineId]: { paths, labels } };
 
@@ -459,7 +379,7 @@ export default function MetroMap({
 
         <motion.div>
           {Object.keys(customNodes).map((nodeId) => {
-            const { x: landingX, y: landingY } = landingNodes[nodeId];
+            const { x: landingX, y: landingY } = nodes[nodeId];
 
             const articles = customNodes[nodeId].articles.map((articleId) => {
               return filteredData.articles[articleId];
@@ -546,7 +466,7 @@ export default function MetroMap({
                 </motion.svg>
               )}
               {[previousClickedNode, clickedNodeBuffer].map((nodeId) => {
-                const { x: landingX, y: landingY } = landingNodes[nodeId];
+                const { x: landingX, y: landingY } = nodes[nodeId];
 
                 const articles = customNodes[nodeId].articles.map(
                   (articleId) => {
