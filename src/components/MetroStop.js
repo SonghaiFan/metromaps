@@ -115,7 +115,7 @@ export default function MetroStop({
               height: METROSTOP_CIRCLE_SIZE,
               y: height,
             }}
-            className="absolute rounded-xl text-xs flex justify-center items-center cursor-pointer"
+            className="absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer"
             onClick={(event) => onNodeNumberLabelClick(event.target)}
           >
             {data.articles.length}
@@ -138,7 +138,7 @@ export default function MetroStop({
                 // "white",
                 data.colour,
             }}
-            className={`truncate text-black hover:font-bold cursor-pointer  ${
+            className={`truncate text-black cursor-pointer  ${
               isMapFocused
                 ? `absolute rounded-md px-2  ${
                     clicked ? "text-4xl" : "text-sm"

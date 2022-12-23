@@ -13,12 +13,11 @@ import NavigationButton from "./NavigationButton";
 // import MetroMapLegend from "./MetroMapLegend";
 // import SelectorButton from "./SelectorButton";
 // import { AiOutlineFullscreenExit } from "react-icons/ai";
-import { FaArrowAltCircleRight } from "react-icons/fa";
+import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 import { margin } from "../utilities/util";
 // import monashLogo from "../img/logo_monash_black.png";
 // import prfLogo from "../img/Logo-PRF.png";
 import Timer from "./Timer";
-import { FaArrowAltCircleLeft } from "react-icons/fa";
 import mixpanel from "mixpanel-browser";
 
 const METROMAPS_PER_PAGE = 1; //Do not change this value
@@ -414,13 +413,14 @@ export default function Menu({
           Next Map
           <FaArrowAltCircleRight size={40} color={"#b1babf"} />
         </NavigationButton>
-        {/* <NavigationButton
-        onClick={onNavigationButtonClick(PAGE_DIRECTION.LEFT)}
-        className={`left-[25%] bottom-10 `}
-        isVisible={focusState.mode === null}
-      >
-        <AiOutlineCaretLeft size={60} color={"#556170"} />
-      </NavigationButton> */}
+        <NavigationButton
+          onClick={onNavigationButtonClick(PAGE_DIRECTION.LEFT)}
+          className={`left-[2%] top-[50%] `}
+          isVisible={pageState.current !== 1}
+        >
+          Prev Map
+          <FaArrowAltCircleLeft size={40} color={"#556170"} />
+        </NavigationButton>
       </motion.div>
 
       {/* {!(focusState.mode === FOCUS_MODE.FULL_VIEW) && renderSelectors()} */}

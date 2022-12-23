@@ -55,7 +55,7 @@ export default function MetroLine({
           <motion.g key={index}>
             <motion.path
               data-type="metro-line-path"
-              className={"hover: cursor-pointer"}
+              className={"hover:cursor-pointer"}
               id={path.id}
               fill="transparent"
               d={drawPath(path.path)}
