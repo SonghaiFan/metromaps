@@ -34,6 +34,8 @@ export default function MetroMap({
 }) {
   // console.log(data);
 
+  const [filteredData, setFilteredData] = useState(data);
+
   const topics = useMemo(
     () =>
       data.nodes.reduce((accumulator, node) => {
@@ -45,49 +47,54 @@ export default function MetroMap({
     [data]
   );
 
+  const [linesShown, setLinesShown] = useState(metroLineShown || topics.length);
+
   const handleLineFiltering = (number) => {
-    const filteredTopics = topics.slice(0, number);
-    const filteredNodes = data.nodes.filter((node) => {
-      const topicNumber = node.id.split("_")[1];
-      return filteredTopics.includes(topicNumber);
-    });
-    const filteredLines = data.lines.filter((line) => {
-      const topicNumbers = line.links.reduce(
-        (accumulator, { source, target }) =>
-          accumulator.concat(source.split("_")[1], target.split("_")[1]),
-        []
-      );
-      return topicNumbers.reduce(
-        (accumulator, topicNumber) =>
-          accumulator && filteredTopics.find((topic) => topic === topicNumber),
-        true
-      );
-    });
+    setFilteredData(() => {
+      const filteredTopics = topics.slice(0, number);
+      const filteredNodes = data.nodes.filter((node) => {
+        const topicNumber = node.id.split("_")[1];
+        return filteredTopics.includes(topicNumber);
+      });
+      const filteredLines = data.lines.filter((line) => {
+        const topicNumbers = line.links.reduce(
+          (accumulator, { source, target }) =>
+            accumulator.concat(source.split("_")[1], target.split("_")[1]),
+          []
+        );
+        return topicNumbers.reduce(
+          (accumulator, topicNumber) =>
+            accumulator &&
+            filteredTopics.find((topic) => topic === topicNumber),
+          true
+        );
+      });
 
-    const filteredLinks = data.links.filter(({ source, target }) => {
-      // after the first filtering, the data format changes
-      // (previously source was an object, the next iteration, source only contains the node id)
-      return (
-        filteredTopics.includes(
-          (source.id ? source.id : source).split("_")[1]
-        ) &&
-        filteredTopics.includes((target.id ? target.id : target).split("_")[1])
-      );
-    });
+      const filteredLinks = data.links.filter(({ source, target }) => {
+        // after the first filtering, the data format changes
+        // (previously source was an object, the next iteration, source only contains the node id)
+        return (
+          filteredTopics.includes(
+            (source.id ? source.id : source).split("_")[1]
+          ) &&
+          filteredTopics.includes(
+            (target.id ? target.id : target).split("_")[1]
+          )
+        );
+      });
 
-    return {
-      ...data,
-      nodes: filteredNodes,
-      lines: filteredLines,
-      links: filteredLinks,
-    };
+      return {
+        ...data,
+        nodes: filteredNodes,
+        lines: filteredLines,
+        links: filteredLinks,
+      };
+    });
   };
-
-  const [filteredData, setFilteredData] = useState(data);
 
   useEffect(() => {
     if (metroLineShown) {
-      handleLineFiltering(3);
+      handleLineFiltering(metroLineShown);
     }
     // disabled warning since we know we only need to run the code once
     // lineShown will be handled locally by each metromap
@@ -134,18 +141,17 @@ export default function MetroMap({
 
   const handleCustomNodes = (nodeId, newColour) => {
     setCustomeNodes(() => {
-      const updatedNodes = Object.assign({}, nodes);
-      updatedNodes[nodeId] && (updatedNodes[nodeId].colour = newColour);
+      nodes[nodeId] && (nodes[nodeId].colour = newColour);
 
-      for (let eachNode in updatedNodes) {
-        const conNodes = updatedNodes[eachNode].connectedNodes;
+      for (let eachNode in nodes) {
+        const conNodes = nodes[eachNode].connectedNodes;
         // console.log(conNodes);
 
         conNodes.forEach((node) => {
           node.id === nodeId && (node.colour = newColour);
         });
       }
-      return updatedNodes;
+      return nodes;
     });
   };
 
@@ -201,12 +207,12 @@ export default function MetroMap({
   };
 
   const [customLines, setCustomLines] = useState(lines);
-  const [customLandingLines, setCustomLandingLines] = useState(landingLines);
+  // const [customLandingLines, setCustomLandingLines] = useState(landingLines);
 
   const metroLineData = useMemo(
     () =>
       Object.keys(customLines).map((lineId) => {
-        const activeLines = isMapFocused ? customLines : customLandingLines;
+        const activeLines = customLines;
 
         const [paths, labels] = generatePaths(activeLines[lineId]);
 
@@ -214,20 +220,18 @@ export default function MetroMap({
 
         return lineData;
       }),
-    [customLines, customLandingLines, isMapFocused]
+    [customLines]
   );
 
-  const customMetroLineData = metroLineData;
-
   const addCutomLineColor = (data, pathId, newColour) => {
-    const updatedData = Object.assign({}, data);
+    // const updatedData = Object.assign({}, data);
 
     const [pathStartId, pathEndId] = pathId.split("-");
 
     // console.log(pathStartId);
 
-    for (let lineId in updatedData) {
-      const linePathCoords = updatedData[lineId].pathCoords;
+    for (let lineId in data) {
+      const linePathCoords = data[lineId].pathCoords;
 
       linePathCoords.forEach((coords) => {
         coords.source === pathStartId &&
@@ -235,13 +239,11 @@ export default function MetroMap({
           (coords.edgeColour = newColour);
       });
     }
-    return updatedData;
+    return data;
   };
 
   const handleCustomLines = (pathId, newColour) => {
     setCustomLines(addCutomLineColor(lines, pathId, newColour));
-
-    setCustomLandingLines(addCutomLineColor(landingLines, pathId, newColour));
   };
 
   const titleRef = useRef();
@@ -288,7 +290,7 @@ export default function MetroMap({
         );
       });
 
-      const { paths } = customMetroLineData.find(
+      const { paths } = metroLineData.find(
         (line) => Object.keys(line)[0] === foundLineId
       )[foundLineId];
 
@@ -312,7 +314,7 @@ export default function MetroMap({
         reversed: foundLinkDataReversed.length > 0,
       });
     }
-  }, [previousClickedNode, clickedNodeBuffer, customMetroLineData, lines]);
+  }, [previousClickedNode, clickedNodeBuffer, metroLineData, lines]);
 
   // console.log(metroLineData);
 
@@ -371,37 +373,6 @@ export default function MetroMap({
         }`}
         onClick={onFocusButtonClick}
       >
-        {/* landing page lines */}
-        {!isMapFocused && (
-          <motion.svg
-            className="absolute"
-            x="0"
-            y="0"
-            width={isMapFocused ? screenWidth : width}
-            height={isMapFocused ? screenHeight : height}
-          >
-            {customMetroLineData.map((data) => {
-              const [lineId, { paths }] = Object.entries(data)[0];
-
-              return (
-                <motion.g
-                  animate={{
-                    x:
-                      paddingX +
-                      (isMapFocused ? NODE_WIDTH / 2 : LANDING_WIDTH / 2),
-                    y:
-                      paddingY +
-                      (isMapFocused ? NODE_HEIGHT : LANDING_HEIGHT / 2),
-                  }}
-                  key={lineId}
-                >
-                  <MetroLine strokeWidth={7.5} data={paths} />
-                </motion.g>
-              );
-            })}
-          </motion.svg>
-        )}
-
         {isMapFocused && (
           <motion.div
             style={{ width: screenWidth, height: screenHeight }}
@@ -427,7 +398,7 @@ export default function MetroMap({
               width={isMapFocused ? screenWidth : width}
               height={isMapFocused ? screenHeight : height}
             >
-              {customMetroLineData.map((data) => {
+              {metroLineData.map((data) => {
                 const [lineId, { paths }] = Object.entries(data)[0];
 
                 return (
@@ -455,7 +426,7 @@ export default function MetroMap({
 
             {/* link labels */}
             <motion.div className="absolute">
-              {customMetroLineData.map((data) => {
+              {metroLineData.map((data) => {
                 // console.log("Object.entries(data)", Object.entries(data));
                 // console.log("Object.entries(data)[0]", Object.entries(data)[0]);
                 const [lineId, { labels }] = Object.entries(data)[0];
