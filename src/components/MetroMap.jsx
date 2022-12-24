@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { calculateMetroMapLayout } from "../utilities/calculateMetroMapLayout";
 import MetroStop from "./MetroStop";
-import { margin } from "../utilities/util";
+import { margin, TOP_FULL_PAGE_PADDING } from "../utilities/util";
 import { motion } from "framer-motion";
-import { metroStopVariantsFactory } from "../utilities/metroMapUtilities";
+import { metroStopVariantsFactory } from "../utilities/metroStopUtilities";
+import { generatePaths } from "../utilities/metroMapUtilities";
 import NavigationButton from "./NavigationButton";
 import { AiOutlineFullscreenExit } from "react-icons/ai";
 import MetroMapDescription from "./MetroMapDescription";
@@ -12,8 +13,6 @@ import MetroLineLabel from "./MetroLineLabel";
 import TimeAxis from "./TimeAxis";
 import { SideDrawer } from "./SideDrawer";
 import mixpanel from "mixpanel-browser";
-
-const TOP_FULL_PAGE_PADDING = 20;
 
 export default function MetroMap({
   width,
@@ -31,25 +30,6 @@ export default function MetroMap({
   subtitle,
   zoomOutButtonClicked,
 }) {
-  // console.log(data);
-
-  const [filteredData, setFilteredData] = useState(data);
-
-  const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
-
-  const [whoOpenSideDrawer, setWhoOpenSideDrawer] = useState();
-
-  const openSideDrawer = (who) => {
-    // console.log("whoOpenSideDrawer", whoOpenSideDrawer);
-    // console.log("who", who);
-    setWhoOpenSideDrawer(who);
-    setSideDrawerOpen(true);
-  };
-
-  const closeSideDrawer = () => {
-    setSideDrawerOpen(false);
-  };
-
   const NODE_HEIGHT = (screenHeight / 18) * 1.25;
   const NODE_WIDTH = (screenWidth / 13) * 1.25;
   const LANDING_HEIGHT = screenHeight / 28;
@@ -58,100 +38,39 @@ export default function MetroMap({
   const fullPageYPadding = margin.y * screenHeight + TOP_FULL_PAGE_PADDING;
   const fullPageXPadding = margin.x * screenWidth;
 
-  const [nodes, lines, columns] = useMemo(
-    () =>
-      calculateMetroMapLayout(screenWidth, screenHeight, filteredData, margin),
-    [screenWidth, screenHeight, filteredData]
-  );
-
-  const [customNodes, setCustomeNodes] = useState(nodes);
-
-  const handleCustomNodes = (nodeId, newColour) => {
-    setCustomeNodes(() => {
-      nodes[nodeId] && (nodes[nodeId].colour = newColour);
-
-      for (let eachNode in nodes) {
-        const conNodes = nodes[eachNode].connectedNodes;
-        // console.log(conNodes);
-
-        conNodes.forEach((node) => {
-          node.id === nodeId && (node.colour = newColour);
-        });
-      }
-      return nodes;
-    });
-  };
-
   const paddingX = fullPageXPadding - NODE_WIDTH / 2;
   const paddingY = fullPageYPadding - NODE_HEIGHT;
 
-  const generatePaths = (line) => {
-    const pathCoordinates = line.pathCoords;
-
-    const endPointToEndPointCoordinates = [];
-    for (let i = 0; i < pathCoordinates.length - 1; i++) {
-      if (pathCoordinates[i].endPoint) {
-        // add starting end point
-        const coordinates = [pathCoordinates[i]];
-        // add anything in between the two end points
-        let j = i + 1;
-        while (!pathCoordinates[j].endPoint) {
-          coordinates.push(pathCoordinates[j]);
-          j++;
-        }
-        // add ending end point
-        coordinates.push(pathCoordinates[j]);
-        endPointToEndPointCoordinates.push(coordinates);
-      }
-    }
-
-    const labels = endPointToEndPointCoordinates.map((coordinates) => {
-      const endingEndPoint = coordinates[coordinates.length - 1];
-      return {
-        id: endingEndPoint.source + "-" + endingEndPoint.target,
-        label: endingEndPoint.edgeLabel || null,
-        colour: endingEndPoint.edgeLabel
-          ? endingEndPoint.edgeColour || line.colour
-          : null,
-        points: [coordinates[1], coordinates[coordinates.length - 2]],
-      };
-    });
-
-    const paths = endPointToEndPointCoordinates.map((coordinates) => {
-      const endingEndPoint = coordinates[coordinates.length - 1];
-      return {
-        id: endingEndPoint.source + "-" + endingEndPoint.target,
-        path: coordinates,
-        colour: endingEndPoint.edgeColour || line.colour,
-      };
-    });
-
-    return [paths, labels];
-  };
-
-  const [customLines, setCustomLines] = useState(lines);
-
-  const metroLineData = useMemo(
-    () =>
-      Object.keys(customLines).map((lineId) => {
-        const [paths, labels] = generatePaths(customLines[lineId]);
-
-        const lineData = { [lineId]: { paths, labels } };
-
-        return lineData;
-      }),
-    [customLines]
+  const [nodes, lines, columns] = useMemo(
+    () => calculateMetroMapLayout(screenWidth, screenHeight, data, margin),
+    // data and margin are not changing
+    // eslint-disable-next-line react-hooks/exhaustive-deps,
+    [screenWidth, screenHeight]
   );
 
-  const addCutomLineColor = (data, pathId, newColour) => {
-    // const updatedData = Object.assign({}, data);
+  const [customNodes, setCustomeNodes] = useState(nodes);
+  const [customLines, setCustomLines] = useState(lines);
+
+  const addCutomNodeColor = (nodes, nodeId, newColour) => {
+    const updatedNodes = Object.assign({}, nodes);
+    updatedNodes[nodeId] && (updatedNodes[nodeId].colour = newColour);
+    for (let eachNode in updatedNodes) {
+      const conNodes = updatedNodes[eachNode].connectedNodes;
+
+      conNodes.forEach((node) => {
+        node.id === nodeId && (node.colour = newColour);
+      });
+    }
+    return updatedNodes;
+  };
+
+  const addCutomLineColor = (lines, pathId, newColour) => {
+    const updatedLines = Object.assign({}, lines);
 
     const [pathStartId, pathEndId] = pathId.split("-");
 
-    // console.log(pathStartId);
-
-    for (let lineId in data) {
-      const linePathCoords = data[lineId].pathCoords;
+    for (let lineId in updatedLines) {
+      const linePathCoords = updatedLines[lineId].pathCoords;
 
       linePathCoords.forEach((coords) => {
         coords.source === pathStartId &&
@@ -159,15 +78,20 @@ export default function MetroMap({
           (coords.edgeColour = newColour);
       });
     }
-    return data;
+    return updatedLines;
   };
 
   const handleCustomLines = (pathId, newColour) => {
-    setCustomLines(addCutomLineColor(lines, pathId, newColour));
+    setCustomLines(addCutomLineColor(customLines, pathId, newColour));
+  };
+
+  const handleCustomNodes = (nodeId, newColour) => {
+    setCustomeNodes(addCutomNodeColor(customNodes, nodeId, newColour));
   };
 
   const titleRef = useRef();
   const [titleAnimation, setTitleAnimation] = useState({});
+
   useEffect(() => {
     const titleElement = titleRef.current;
     if (titleElement.offsetWidth < titleElement.scrollWidth) {
@@ -189,6 +113,18 @@ export default function MetroMap({
     // disabled warning since we know title will never change after being set once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screenWidth, screenHeight]);
+
+  const metroLineData = useMemo(
+    () =>
+      Object.keys(customLines).map((lineId) => {
+        const [paths, labels] = generatePaths(customLines[lineId]);
+
+        const lineData = { [lineId]: { paths, labels } };
+
+        return lineData;
+      }),
+    [customLines]
+  );
 
   const [clickedNode, setClickedNode] = useState(null);
   const [clickedNodeBuffer, setClickedNodeBuffer] = useState(null);
@@ -236,8 +172,6 @@ export default function MetroMap({
     }
   }, [previousClickedNode, clickedNodeBuffer, metroLineData, lines]);
 
-  // console.log(metroLineData);
-
   useEffect(() => {
     if (zoomOutButtonClicked) {
       onZoomOutButtonClick();
@@ -283,6 +217,19 @@ export default function MetroMap({
     setClickedNodeBuffer(null);
     setClickedNode(null);
     setPreviousClickedNode(null);
+  };
+
+  const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+
+  const [whoOpenSideDrawer, setWhoOpenSideDrawer] = useState();
+
+  const openSideDrawer = (who) => {
+    setWhoOpenSideDrawer(who);
+    setSideDrawerOpen(true);
+  };
+
+  const closeSideDrawer = () => {
+    setSideDrawerOpen(false);
   };
 
   return (
@@ -382,7 +329,7 @@ export default function MetroMap({
             const { x: landingX, y: landingY } = nodes[nodeId];
 
             const articles = customNodes[nodeId].articles.map((articleId) => {
-              return filteredData.articles[articleId];
+              return data.articles[articleId];
             });
 
             return (
@@ -470,7 +417,7 @@ export default function MetroMap({
 
                 const articles = customNodes[nodeId].articles.map(
                   (articleId) => {
-                    return filteredData.articles[articleId];
+                    return data.articles[articleId];
                   }
                 );
                 console.log("articles", articles);

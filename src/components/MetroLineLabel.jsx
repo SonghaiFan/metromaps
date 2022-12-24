@@ -1,11 +1,17 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { METROLINE_WIDTH, METROLINE_ANIMATION_DURATION } from "./MetroLine";
+import {
+  METROLINE_WIDTH,
+  METROLINE_ANIMATION_DURATION,
+  LINK_LABEL_HEIGHT,
+} from "../utilities/util";
 import { useFirstMountState } from "react-use";
 
-const LINK_LABEL_HEIGHT = 20;
-
-export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
+export default function MetroLineLabel({
+  data,
+  onMetroLineLabelClick,
+  isChanged,
+}) {
   const isFirstMount = useFirstMountState();
 
   const { id, label, colour, points } = data;
@@ -59,8 +65,9 @@ export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
         style={{
           backgroundColor: colour, // "white"
           height: LINK_LABEL_HEIGHT, // 20 from line height of text-sm
+          opacity: isChanged ? 0.5 : 1,
         }}
-        className="text-black text-sm rounded-md px-1 cursor-pointer pointer-events-auto"
+        className="text-black text-sm rounded-md px-2 z-50 cursor-pointer pointer-events-auto"
         onClick={onMetroLineLabelClick}
       >
         {label}

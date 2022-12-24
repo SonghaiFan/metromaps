@@ -1,39 +1,45 @@
-const METROSTOP_BOTTOM_PADDING = 10;
+const generatePaths = (line) => {
+  const pathCoordinates = line.pathCoords;
 
-const metroStopVariantsFactory = (
-  screenWidth,
-  screenHeight,
-  isMapFocused,
-  node,
-  landingX,
-  landingY,
-  landingWidth,
-  landingHeight,
-  paddingX,
-  paddingY,
-  nodeWidth,
-  nodeHeight
-) => {
-  return {
-    clicked: {
-      x: 0,
-      y: 0,
-      width: screenWidth,
-      height: screenHeight,
-      zIndex: 50,
-      transition: { ease: "easeOut" },
-    },
-    default: {
-      x: (isMapFocused ? node.x : landingX) + paddingX,
-      y:
-        (isMapFocused ? node.y - METROSTOP_BOTTOM_PADDING : landingY) +
-        paddingY,
-      width: isMapFocused ? nodeWidth : landingWidth,
-      height: isMapFocused ? nodeHeight : landingHeight,
-      zIndex: 0,
-      transition: { ease: "easeOut", when: "afterChildren" },
-    },
-  };
+  const endPointToEndPointCoordinates = [];
+  for (let i = 0; i < pathCoordinates.length - 1; i++) {
+    if (pathCoordinates[i].endPoint) {
+      // add starting end point
+      const coordinates = [pathCoordinates[i]];
+      // add anything in between the two end points
+      let j = i + 1;
+      while (!pathCoordinates[j].endPoint) {
+        coordinates.push(pathCoordinates[j]);
+        j++;
+      }
+      // add ending end point
+      coordinates.push(pathCoordinates[j]);
+      endPointToEndPointCoordinates.push(coordinates);
+    }
+  }
+
+  const labels = endPointToEndPointCoordinates.map((coordinates) => {
+    const endingEndPoint = coordinates[coordinates.length - 1];
+    return {
+      id: endingEndPoint.source + "-" + endingEndPoint.target,
+      label: endingEndPoint.edgeLabel || null,
+      colour: endingEndPoint.edgeLabel
+        ? endingEndPoint.edgeColour || line.colour
+        : null,
+      points: [coordinates[1], coordinates[coordinates.length - 2]],
+    };
+  });
+
+  const paths = endPointToEndPointCoordinates.map((coordinates) => {
+    const endingEndPoint = coordinates[coordinates.length - 1];
+    return {
+      id: endingEndPoint.source + "-" + endingEndPoint.target,
+      path: coordinates,
+      colour: endingEndPoint.edgeColour || line.colour,
+    };
+  });
+
+  return [paths, labels];
 };
 
-export { metroStopVariantsFactory, METROSTOP_BOTTOM_PADDING };
+export { generatePaths };

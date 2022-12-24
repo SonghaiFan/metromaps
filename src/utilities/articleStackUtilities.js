@@ -1,7 +1,7 @@
-const TOP_PADDING = 50;
-const INNER_PADDING = 20;
-
-export { TOP_PADDING, INNER_PADDING };
+import {
+  ARTICALSTACK_TOP_PADDING,
+  ARTICALSTACK_INNER_PADDING,
+} from "../utilities/util";
 
 const articleVariantsFactory = (
   totalArticles,
@@ -19,7 +19,7 @@ const articleVariantsFactory = (
       height: zoomedInArticleHeight,
       x: 0,
       y:
-        (INNER_PADDING + zoomedInArticleHeight) *
+        (ARTICALSTACK_INNER_PADDING + zoomedInArticleHeight) *
         (totalArticles - articleIndex - 1),
       transition: {
         delay: (totalArticles - articleIndex + 1) / 500,

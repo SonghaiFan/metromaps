@@ -2,10 +2,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import * as utils from "svg-path-reverse";
 
-const METROLINE_WIDTH = 10;
-const METROLINE_ANIMATION_DURATION = 2;
-
-export { METROLINE_WIDTH, METROLINE_ANIMATION_DURATION };
+import {
+  METROLINE_WIDTH,
+  METROLINE_ANIMATION_DURATION,
+} from "../utilities/util";
 
 const metroLineVariantFactory = {
   hidden: {
@@ -23,6 +23,7 @@ export default function MetroLine({
   strokeWidth,
   reversed,
   onClickToOpenDrawer,
+  isChanged,
 }) {
   const drawPath = (coords) => {
     let res = "";
@@ -57,10 +58,13 @@ export default function MetroLine({
               data-type="metro-line-path"
               className={"hover:cursor-pointer"}
               id={path.id}
-              fill="transparent"
               d={drawPath(path.path)}
               stroke={path.colour}
-              strokeWidth={strokeWidth || METROLINE_WIDTH}
+              style={{
+                opacity: isChanged ? 0.5 : 1,
+                fill: "transparent",
+                strokeWidth: strokeWidth || METROLINE_WIDTH,
+              }}
               variants={metroLineVariantFactory}
               initial="hidden"
               animate="default"

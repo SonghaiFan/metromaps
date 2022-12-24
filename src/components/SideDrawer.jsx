@@ -1,17 +1,8 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { margin } from "../utilities/util";
+import { margin, cutomerInterpolation } from "../utilities/util";
 import { MdClose } from "react-icons/md";
-import { interpolateRgb } from "d3-interpolate";
 import mixpanel from "mixpanel-browser";
-
-const cutomerInterpolation = (Weight) => {
-  const colours = ["#585d91", "#48a49e", "#fce554"];
-  const ind = Weight * (colours.length - 1);
-  const colour1 = colours[Math.floor(ind)];
-  const colour2 = colours[Math.ceil(ind)];
-  return interpolateRgb(colour1, colour2)(ind - Math.floor(ind));
-};
 
 export const SideDrawer = ({
   isVisible,
@@ -40,7 +31,7 @@ export const SideDrawer = ({
     const type = whoOpenSideDrawer.dataset.type;
     // console.log("type", type);
     const whoId = whoOpenSideDrawer.id;
-    // console.log("whoId", whoId);
+    console.log("whoId", whoId);
 
     if (type === "metro-line-label" || type === "metro-line-path") {
       mixpanel.track("Metro line label colour changed", {

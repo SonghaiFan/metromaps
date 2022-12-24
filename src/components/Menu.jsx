@@ -5,27 +5,16 @@ import {
   ACTION_TYPES,
   FOCUS_MODE,
   metroMapContainerVariantsFactory,
-  getAnimateState,
 } from "../utilities/menuUtilities";
 import { METROMAPS_LENGTH, METROMAPS_TIME } from "../utilities/metromaps";
 import { AnimatePresence, motion } from "framer-motion";
 import NavigationButton from "./NavigationButton";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
-import { margin } from "../utilities/util";
+import { METROMAPS_PER_PAGE, PAGE_DIRECTION, margin } from "../utilities/util";
 import Timer from "./Timer";
 import mixpanel from "mixpanel-browser";
 
-const METROMAPS_PER_PAGE = 1; //Do not change this value
-const HEADER_HEIGHT = 80;
-
-const PAGE_DIRECTION = {
-  RIGHT: 1,
-  LEFT: -1,
-};
-
 const TOTAL_PAGES = Math.ceil(METROMAPS_LENGTH / METROMAPS_PER_PAGE);
-
-export { PAGE_DIRECTION };
 
 export default function Menu({
   metromaps,
@@ -33,28 +22,15 @@ export default function Menu({
   height: screenHeight,
   setStart,
 }) {
-  const metroMapWidth = (screenWidth / 2) * (1 - margin.x);
-  const metroMapHeight = (screenHeight / 2) * (1 - margin.y);
-
-  const flexMetroMapWidth = Math.min(
-    (screenWidth / METROMAPS_PER_PAGE) * (1 - margin.x),
-    metroMapWidth
-  );
-  const flexMetroMapHeight = screenHeight / 2;
-
-  const metroMapsX = (screenWidth - flexMetroMapWidth * METROMAPS_PER_PAGE) / 2;
-  const metroMapsY = (screenHeight - HEADER_HEIGHT * 2.5 - metroMapHeight) / 2;
-
   const metromapsDetails = useMemo(() => {
     return metromaps.reduce((accumulatedDimensions, metromap, index) => {
       return {
         ...accumulatedDimensions,
         [metromap.url]: {
-          width: flexMetroMapWidth,
-          height: flexMetroMapHeight,
-          xPosition:
-            (index % METROMAPS_PER_PAGE) * flexMetroMapWidth + metroMapsX,
-          yPosition: metroMapsY,
+          width: screenWidth / 3,
+          height: screenHeight / 3,
+          xPosition: (index % METROMAPS_PER_PAGE) * (screenWidth / 3),
+          yPosition: screenHeight / 5,
           /* copy data so that d3sankey does not mutate original data*/
           data: loadData(JSON.parse(JSON.stringify(metromap.data))),
           title: metromap.title,
@@ -62,13 +38,7 @@ export default function Menu({
         },
       };
     }, {});
-  }, [
-    metromaps,
-    flexMetroMapWidth,
-    flexMetroMapHeight,
-    metroMapsX,
-    metroMapsY,
-  ]);
+  }, [metromaps, screenWidth, screenHeight]);
 
   const [pageState, setPageState] = useState({
     current: 1,
@@ -170,7 +140,7 @@ export default function Menu({
           pageState.direction
         )}
         initial="hidden"
-        animate={getAnimateState(focusState, metromap)}
+        animate="fullView"
         key={metromap.url}
         exit="hidden"
       >
@@ -254,13 +224,6 @@ export default function Menu({
                 index / METROMAPS_PER_PAGE < pageState.current &&
                 index / METROMAPS_PER_PAGE >= pageState.current - 1
             )
-            .filter(
-              // should only render the currently focused metromap OR if no map is on focus, render all metromaps on that page
-              (metromap) =>
-                (focusState.mode === FOCUS_MODE.FULL_VIEW &&
-                  focusState.map === metromap.url) ||
-                focusState.mode !== FOCUS_MODE.FULL_VIEW
-            )
             .map((metromap) => renderMetroMap(metromap))}
         </AnimatePresence>
       </motion.div>
@@ -291,27 +254,6 @@ export default function Menu({
           <FaArrowAltCircleRight size={40} color={"#b1babf"} />
         </NavigationButton>
       </motion.div>
-
-      {focusState.mode !== FOCUS_MODE.FULL_VIEW && (
-        <motion.div className="metro-footer">
-          <motion.div
-            className="absolute left-0 bottom-0 mx-8 my-3 text-[9px]"
-            style={{ maxWidth: flexMetroMapWidth, maxHeight: 56 }}
-          >
-            <motion.div className="underline">Data sources</motion.div>
-            <motion.ul className="list-disc pl-5">
-              <motion.li>
-                Newspaper OpEd stories from all print media in Australia -
-                Source from Factiva/Dow Jones
-              </motion.li>
-              <motion.li>
-                Newspaper OpEd stories from most print media and online sources
-                in Australia – Source NewsAPI (updated every few months)
-              </motion.li>
-            </motion.ul>
-          </motion.div>
-        </motion.div>
-      )}
     </div>
   );
 }

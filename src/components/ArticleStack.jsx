@@ -3,7 +3,10 @@ import { motion } from "framer-motion";
 import Article from "./Article";
 import { articleVariantsFactory } from "../utilities/articleStackUtilities";
 import { useWindowSize } from "react-use";
-import { TOP_PADDING, INNER_PADDING } from "../utilities/articleStackUtilities";
+import {
+  ARTICALSTACK_TOP_PADDING,
+  ARTICALSTACK_INNER_PADDING,
+} from "../utilities/util";
 
 export default function ArticleStack({
   data,
@@ -18,6 +21,7 @@ export default function ArticleStack({
   articleHeight,
   articleLimit,
   onAnimationComplete,
+  isChanged,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   // console.log(data);
@@ -36,8 +40,8 @@ export default function ArticleStack({
       }}
       animate={{
         x: clicked ? screenWidth / 2 - zoomedInArticleWidth / 2 : 0,
-        y: clicked ? TOP_PADDING : 0,
-        width: zoomedInArticleWidth + INNER_PADDING * 2,
+        y: clicked ? ARTICALSTACK_TOP_PADDING : 0,
+        width: zoomedInArticleWidth + ARTICALSTACK_INNER_PADDING * 2,
       }}
     >
       {
@@ -57,6 +61,7 @@ export default function ArticleStack({
                     : (array.length - articleIndex) % 2 === 0
                     ? "grey"
                     : colour,
+                  opacity: isChanged ? 0.5 : 1,
                 }}
                 variants={articleVariantsFactory(
                   array.length,
