@@ -200,7 +200,7 @@ export default function IntroMetroMapWrapper({ setStart }) {
           {selectedButton === TOTAL_SLIDES && (
             <NavigationButton
               onClick={() => setStart(true)}
-              className={`right-[5%] top-[50%]`}
+              className={`right-[2%] top-[50%]`}
               isVisible={true}
             >
               Start

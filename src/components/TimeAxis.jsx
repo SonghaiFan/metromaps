@@ -1,14 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { MAX_ARTICLES } from "../utilities/calculateMetroMapLayout";
-import { METROSTOP_BOTTOM_PADDING } from "../utilities/metroMapUtilities";
-import { METROSTOP_CIRCLE_SIZE } from "./MetroStop";
-import { timeFormat } from "../utilities/util";
+import {
+  timeFormat,
+  METROSTOP_CIRCLE_SIZE,
+  TIME_AXIS_PADDING,
+  MAX_ARTICLES,
+  METROSTOP_BOTTOM_PADDING,
+} from "../utilities/util";
 import { useFirstMountState } from "react-use";
-
-const TIME_AXIS_PADDING = 10;
-
-export { TIME_AXIS_PADDING };
 
 export default function TimeAxis({
   data,

@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { calculateMetroMapLayout } from "../utilities/calculateMetroMapLayout";
 import MetroStop from "./MetroStop";
-import { margin } from "../utilities/util";
+import { margin, TOP_FULL_PAGE_PADDING } from "../utilities/util";
 import { motion } from "framer-motion";
-import { metroStopVariantsFactory } from "../utilities/metroMapUtilities";
+import { metroStopVariantsFactory } from "../utilities/metroStopUtilities";
+import { generatePaths } from "../utilities/metroMapUtilities";
 import NavigationButton from "./NavigationButton";
 import { AiOutlineFullscreenExit } from "react-icons/ai";
 import MetroMapDescription from "./MetroMapDescription";
@@ -11,8 +12,7 @@ import MetroLine from "./MetroLine";
 import MetroLineLabel from "./MetroLineLabel";
 import TimeAxis from "./TimeAxis";
 import { SideDrawer } from "./SideDrawer";
-
-const TOP_FULL_PAGE_PADDING = 20;
+import mixpanel from "mixpanel-browser";
 
 export default function MetroMap({
   width,
@@ -26,214 +26,51 @@ export default function MetroMap({
   description,
   updateArticleAnimationDelayRef,
   clearArticleAnimationDelayRef,
-  metroLineShown,
-  updateMetroMapLineShown,
   hint,
   subtitle,
   zoomOutButtonClicked,
 }) {
-  // console.log(data);
-  const [filteredData, setFilteredData] = useState(data);
-
-  const topics = useMemo(
-    () =>
-      data.nodes.reduce((accumulator, node) => {
-        const topicNumber = node.id.split("_")[1];
-        return accumulator.includes(topicNumber)
-          ? accumulator
-          : accumulator.concat(topicNumber);
-      }, []),
-    [data]
-  );
-
-  const [linesShown, setLinesShown] = useState(metroLineShown || topics.length);
-
-  const handleLineFiltering = (number) => {
-    setFilteredData(() => {
-      const filteredTopics = topics.slice(0, number);
-      const filteredNodes = data.nodes.filter((node) => {
-        const topicNumber = node.id.split("_")[1];
-        return filteredTopics.includes(topicNumber);
-      });
-      const filteredLines = data.lines.filter((line) => {
-        const topicNumbers = line.links.reduce(
-          (accumulator, { source, target }) =>
-            accumulator.concat(source.split("_")[1], target.split("_")[1]),
-          []
-        );
-        return topicNumbers.reduce(
-          (accumulator, topicNumber) =>
-            accumulator &&
-            filteredTopics.find((topic) => topic === topicNumber),
-          true
-        );
-      });
-
-      const filteredLinks = data.links.filter(({ source, target }) => {
-        // after the first filtering, the data format changes
-        // (previously source was an object, the next iteration, source only contains the node id)
-        return (
-          filteredTopics.includes(
-            (source.id ? source.id : source).split("_")[1]
-          ) &&
-          filteredTopics.includes(
-            (target.id ? target.id : target).split("_")[1]
-          )
-        );
-      });
-
-      return {
-        ...data,
-        nodes: filteredNodes,
-        lines: filteredLines,
-        links: filteredLinks,
-      };
-    });
-  };
-
-  useEffect(() => {
-    if (metroLineShown) {
-      handleLineFiltering(metroLineShown);
-    }
-    // disabled warning since we know we only need to run the code once
-    // lineShown will be handled locally by each metromap
-    // metroLineShown is only needed when the component is unmounted and mounted again
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
-
-  const [whoOpenSideDrawer, setWhoOpenSideDrawer] = useState();
-
-  const openSideDrawer = (who) => {
-    // console.log("whoOpenSideDrawer", whoOpenSideDrawer);
-    // console.log("who", who);
-    setWhoOpenSideDrawer(who);
-    setSideDrawerOpen(true);
-  };
-
-  const closeSideDrawer = () => {
-    setSideDrawerOpen(false);
-  };
-
   const NODE_HEIGHT = (screenHeight / 18) * 1.25;
   const NODE_WIDTH = (screenWidth / 13) * 1.25;
   const LANDING_HEIGHT = screenHeight / 28;
   const LANDING_WIDTH = screenWidth / 23;
 
-  const landingPageYPadding = margin.y * height;
-  const landingPageXPadding = 0;
-  const [landingNodes, landingLines] = useMemo(
-    () => calculateMetroMapLayout(width, height, filteredData, margin),
-    [width, height, filteredData]
-  );
-
   const fullPageYPadding = margin.y * screenHeight + TOP_FULL_PAGE_PADDING;
   const fullPageXPadding = margin.x * screenWidth;
+
+  const paddingX = fullPageXPadding - NODE_WIDTH / 2;
+  const paddingY = fullPageYPadding - NODE_HEIGHT;
+
   const [nodes, lines, columns] = useMemo(
-    () =>
-      calculateMetroMapLayout(screenWidth, screenHeight, filteredData, margin),
-    [screenWidth, screenHeight, filteredData]
+    () => calculateMetroMapLayout(screenWidth, screenHeight, data, margin),
+    // data and margin are not changing
+    // eslint-disable-next-line react-hooks/exhaustive-deps,
+    [screenWidth, screenHeight]
   );
 
   const [customNodes, setCustomeNodes] = useState(nodes);
-
-  const handleCustomNodes = (nodeId, newColour) => {
-    setCustomeNodes(() => {
-      const updatedNodes = Object.assign({}, nodes);
-      updatedNodes[nodeId] && (updatedNodes[nodeId].colour = newColour);
-
-      for (let eachNode in updatedNodes) {
-        const conNodes = updatedNodes[eachNode].connectedNodes;
-        // console.log(conNodes);
-
-        conNodes.forEach((node) => {
-          node.id === nodeId && (node.colour = newColour);
-        });
-      }
-      return updatedNodes;
-    });
-  };
-
-  const paddingX = isMapFocused
-    ? fullPageXPadding - NODE_WIDTH / 2
-    : landingPageXPadding;
-  const paddingY = isMapFocused
-    ? fullPageYPadding - NODE_HEIGHT
-    : landingPageYPadding;
-
-  const generatePaths = (line) => {
-    const pathCoordinates = line.pathCoords;
-
-    const endPointToEndPointCoordinates = [];
-    for (let i = 0; i < pathCoordinates.length - 1; i++) {
-      if (pathCoordinates[i].endPoint) {
-        // add starting end point
-        const coordinates = [pathCoordinates[i]];
-        // add anything in between the two end points
-        let j = i + 1;
-        while (!pathCoordinates[j].endPoint) {
-          coordinates.push(pathCoordinates[j]);
-          j++;
-        }
-        // add ending end point
-        coordinates.push(pathCoordinates[j]);
-        endPointToEndPointCoordinates.push(coordinates);
-      }
-    }
-
-    const labels = endPointToEndPointCoordinates.map((coordinates) => {
-      const endingEndPoint = coordinates[coordinates.length - 1];
-      return {
-        id: endingEndPoint.source + "-" + endingEndPoint.target,
-        label: endingEndPoint.edgeLabel || null,
-        colour: endingEndPoint.edgeLabel
-          ? endingEndPoint.edgeColour || line.colour
-          : null,
-        points: [coordinates[1], coordinates[coordinates.length - 2]],
-      };
-    });
-
-    const paths = endPointToEndPointCoordinates.map((coordinates) => {
-      const endingEndPoint = coordinates[coordinates.length - 1];
-      return {
-        id: endingEndPoint.source + "-" + endingEndPoint.target,
-        path: coordinates,
-        colour: endingEndPoint.edgeColour || line.colour,
-      };
-    });
-
-    return [paths, labels];
-  };
-
   const [customLines, setCustomLines] = useState(lines);
-  const [customLandingLines, setCustomLandingLines] = useState(landingLines);
 
-  const metroLineData = useMemo(
-    () =>
-      Object.keys(customLines).map((lineId) => {
-        const activeLines = isMapFocused ? customLines : customLandingLines;
+  const addCutomNodeColor = (nodes, nodeId, newColour) => {
+    const updatedNodes = Object.assign({}, nodes);
+    updatedNodes[nodeId] && (updatedNodes[nodeId].colour = newColour);
+    for (let eachNode in updatedNodes) {
+      const conNodes = updatedNodes[eachNode].connectedNodes;
 
-        const [paths, labels] = generatePaths(activeLines[lineId]);
+      conNodes.forEach((node) => {
+        node.id === nodeId && (node.colour = newColour);
+      });
+    }
+    return updatedNodes;
+  };
 
-        const lineData = { [lineId]: { paths, labels } };
-
-        return lineData;
-      }),
-    [customLines, customLandingLines, isMapFocused]
-  );
-
-  const customMetroLineData = metroLineData;
-
-  const addCutomLineColor = (data, pathId, newColour) => {
-    const updatedData = Object.assign({}, data);
+  const addCutomLineColor = (lines, pathId, newColour) => {
+    const updatedLines = Object.assign({}, lines);
 
     const [pathStartId, pathEndId] = pathId.split("-");
 
-    // console.log(pathStartId);
-
-    for (let lineId in updatedData) {
-      const linePathCoords = updatedData[lineId].pathCoords;
+    for (let lineId in updatedLines) {
+      const linePathCoords = updatedLines[lineId].pathCoords;
 
       linePathCoords.forEach((coords) => {
         coords.source === pathStartId &&
@@ -241,17 +78,20 @@ export default function MetroMap({
           (coords.edgeColour = newColour);
       });
     }
-    return updatedData;
+    return updatedLines;
   };
 
   const handleCustomLines = (pathId, newColour) => {
-    setCustomLines(addCutomLineColor(lines, pathId, newColour));
+    setCustomLines(addCutomLineColor(customLines, pathId, newColour));
+  };
 
-    setCustomLandingLines(addCutomLineColor(landingLines, pathId, newColour));
+  const handleCustomNodes = (nodeId, newColour) => {
+    setCustomeNodes(addCutomNodeColor(customNodes, nodeId, newColour));
   };
 
   const titleRef = useRef();
   const [titleAnimation, setTitleAnimation] = useState({});
+
   useEffect(() => {
     const titleElement = titleRef.current;
     if (titleElement.offsetWidth < titleElement.scrollWidth) {
@@ -274,6 +114,18 @@ export default function MetroMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screenWidth, screenHeight]);
 
+  const metroLineData = useMemo(
+    () =>
+      Object.keys(customLines).map((lineId) => {
+        const [paths, labels] = generatePaths(customLines[lineId]);
+
+        const lineData = { [lineId]: { paths, labels } };
+
+        return lineData;
+      }),
+    [customLines]
+  );
+
   const [clickedNode, setClickedNode] = useState(null);
   const [clickedNodeBuffer, setClickedNodeBuffer] = useState(null);
   const [previousClickedNode, setPreviousClickedNode] = useState(null);
@@ -294,7 +146,7 @@ export default function MetroMap({
         );
       });
 
-      const { paths } = customMetroLineData.find(
+      const { paths } = metroLineData.find(
         (line) => Object.keys(line)[0] === foundLineId
       )[foundLineId];
 
@@ -318,14 +170,12 @@ export default function MetroMap({
         reversed: foundLinkDataReversed.length > 0,
       });
     }
-  }, [previousClickedNode, clickedNodeBuffer, customMetroLineData, lines]);
-
-  // console.log(metroLineData);
+  }, [previousClickedNode, clickedNodeBuffer, metroLineData, lines]);
 
   useEffect(() => {
     if (zoomOutButtonClicked) {
       onZoomOutButtonClick();
-      // console.log("zoom out button clicked");
+      // console.log("zoom out button clicked")
     }
     // onZoomOutButtonClick will never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -343,6 +193,9 @@ export default function MetroMap({
   };
 
   const handleMetroStopClick = (nodeId) => () => {
+    mixpanel.track("MetroStopClick on neighbouring node button", {
+      nodeId: nodeId,
+    });
     // if the user clicks on next/previous neighbouring node button
     if (clickedNode) {
       setClickedNodeBuffer(nodeId);
@@ -353,14 +206,30 @@ export default function MetroMap({
 
     // if the user clicks the node directly (not the neighbouring node button)
     setClickedNode(nodeId);
-    // console.log("clicked node directly", nodeId);
+    mixpanel.track("MetroStopClick on node button directly", {
+      nodeId: nodeId,
+    });
   };
 
   const onZoomOutButtonClick = () => {
+    mixpanel.track("MetroStop ZoomOut button clicked");
     clearArticleAnimationDelayRef();
     setClickedNodeBuffer(null);
     setClickedNode(null);
     setPreviousClickedNode(null);
+  };
+
+  const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+
+  const [whoOpenSideDrawer, setWhoOpenSideDrawer] = useState();
+
+  const openSideDrawer = (who) => {
+    setWhoOpenSideDrawer(who);
+    setSideDrawerOpen(true);
+  };
+
+  const closeSideDrawer = () => {
+    setSideDrawerOpen(false);
   };
 
   return (
@@ -371,37 +240,6 @@ export default function MetroMap({
         }`}
         onClick={onFocusButtonClick}
       >
-        {/* landing page lines */}
-        {!isMapFocused && (
-          <motion.svg
-            className="absolute"
-            x="0"
-            y="0"
-            width={isMapFocused ? screenWidth : width}
-            height={isMapFocused ? screenHeight : height}
-          >
-            {customMetroLineData.map((data) => {
-              const [lineId, { paths }] = Object.entries(data)[0];
-
-              return (
-                <motion.g
-                  animate={{
-                    x:
-                      paddingX +
-                      (isMapFocused ? NODE_WIDTH / 2 : LANDING_WIDTH / 2),
-                    y:
-                      paddingY +
-                      (isMapFocused ? NODE_HEIGHT : LANDING_HEIGHT / 2),
-                  }}
-                  key={lineId}
-                >
-                  <MetroLine strokeWidth={7.5} data={paths} />
-                </motion.g>
-              );
-            })}
-          </motion.svg>
-        )}
-
         {isMapFocused && (
           <motion.div
             style={{ width: screenWidth, height: screenHeight }}
@@ -427,7 +265,7 @@ export default function MetroMap({
               width={isMapFocused ? screenWidth : width}
               height={isMapFocused ? screenHeight : height}
             >
-              {customMetroLineData.map((data) => {
+              {metroLineData.map((data) => {
                 const [lineId, { paths }] = Object.entries(data)[0];
 
                 return (
@@ -442,7 +280,12 @@ export default function MetroMap({
                     }}
                     key={lineId}
                   >
-                    <MetroLine data={paths} />
+                    <MetroLine
+                      data={paths}
+                      onClickToOpenDrawer={(event) => {
+                        openSideDrawer(event.target);
+                      }}
+                    />
                   </motion.g>
                 );
               })}
@@ -450,7 +293,7 @@ export default function MetroMap({
 
             {/* link labels */}
             <motion.div className="absolute">
-              {customMetroLineData.map((data) => {
+              {metroLineData.map((data) => {
                 // console.log("Object.entries(data)", Object.entries(data));
                 // console.log("Object.entries(data)[0]", Object.entries(data)[0]);
                 const [lineId, { labels }] = Object.entries(data)[0];
@@ -469,9 +312,6 @@ export default function MetroMap({
                           key={`${lineId}-${index}`}
                           data={label}
                           onMetroLineLabelClick={(event) => {
-                            console.log(
-                              `metro line: ${lineId}-${index} label: ${label.label} clicked`
-                            );
                             openSideDrawer(event.target);
                           }}
                         />
@@ -486,15 +326,17 @@ export default function MetroMap({
 
         <motion.div>
           {Object.keys(customNodes).map((nodeId) => {
-            const { x: landingX, y: landingY } = landingNodes[nodeId];
+            const { x: landingX, y: landingY } = nodes[nodeId];
 
             const articles = customNodes[nodeId].articles.map((articleId) => {
-              return filteredData.articles[articleId];
+              return data.articles[articleId];
             });
 
             return (
               <motion.div
-                className="absolute"
+                className={`metro-stop-wrapper absolute ${
+                  clickedNode === nodeId ? "cursor-default" : "cursor-zoom-in"
+                }`}
                 variants={metroStopVariantsFactory(
                   screenWidth,
                   screenHeight,
@@ -530,8 +372,9 @@ export default function MetroMap({
                   onArticleStackAnimationComplete={
                     onArticleStackAnimationComplete
                   }
-                  onArticleStackLabelClick={openSideDrawer}
                   onNeighbourNodeLabelClick={openSideDrawer}
+                  onNodeNumberLabelClick={openSideDrawer}
+                  onNodeWordsLabelClick={openSideDrawer}
                 />
               </motion.div>
             );
@@ -570,11 +413,11 @@ export default function MetroMap({
                 </motion.svg>
               )}
               {[previousClickedNode, clickedNodeBuffer].map((nodeId) => {
-                const { x: landingX, y: landingY } = landingNodes[nodeId];
+                const { x: landingX, y: landingY } = nodes[nodeId];
 
                 const articles = customNodes[nodeId].articles.map(
                   (articleId) => {
-                    return filteredData.articles[articleId];
+                    return data.articles[articleId];
                   }
                 );
                 console.log("articles", articles);
@@ -647,7 +490,7 @@ export default function MetroMap({
                 animate={isMapFocused ? {} : titleAnimation}
                 ref={titleRef}
               >
-                {title}
+                {/* {title} */}
               </motion.h2>
             </motion.div>
             <MetroMapDescription
@@ -660,7 +503,6 @@ export default function MetroMap({
           </motion.div>
         </motion.div>
       </motion.div>
-
       <NavigationButton
         onClick={onZoomOutButtonClick}
         className={`right-[1%] top-[3%] z-50`}

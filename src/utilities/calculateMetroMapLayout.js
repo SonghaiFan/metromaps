@@ -1,10 +1,6 @@
 import * as d3 from "d3";
 import { sankey } from "d3-sankey";
-import { NODEWIDTH, flatMap } from "./util";
-
-const colours = ["#585d91", "#48a49e", "#fce554"];
-
-const MAX_ARTICLES = 20;
+import { NODEWIDTH, flatMap, MAX_ARTICLES, cutomerInterpolation } from "./util";
 
 const preprocessData = (metroMapData) => {
   metroMapData.nodes.forEach((node) => {
@@ -132,14 +128,6 @@ const getAverageNodesYPosition = (newNodes, metroMapData) => (lineId) => {
   );
 };
 
-const addColour = (lineWeight) => {
-  // const ind = lineWeight * (colours.length - 1);
-  // const colour1 = colours[Math.floor(ind)];
-  // const colour2 = colours[Math.ceil(ind)];
-  // return d3.interpolateRgb(colour1, colour2)(ind - Math.floor(ind));
-  return "white";
-};
-
 const colourNodes = (nodes, lines, edges, useEdgeWeight) => {
   const processNodeColours = (nodeColours) => {
     // since some nodes may have multiple lines passing through them, nodeColours may contain multiple colours for a single node
@@ -192,12 +180,12 @@ const colourNodes = (nodes, lines, edges, useEdgeWeight) => {
       return accumulated.concat(
         {
           nodeId: edge.source.id,
-          colour: addColour(edge.edge_weight),
+          colour: cutomerInterpolation(edge.edge_weight),
           weight: edge.edge_weight,
         },
         {
           nodeId: edge.target.id,
-          colour: addColour(edge.edge_weight),
+          colour: cutomerInterpolation(edge.edge_weight),
           weight: edge.edge_weight,
         }
       );
@@ -348,7 +336,9 @@ const calculateMetroMapLayout = (
         end: null,
         endPoint: true,
         edgeColour:
-          link.edge_weight !== undefined ? addColour(link.edge_weight) : null, // do not use link.edge_weight ? ... since 0 is a falsey value
+          link.edge_weight !== undefined
+            ? cutomerInterpolation(link.edge_weight)
+            : null, // do not use link.edge_weight ? ... since 0 is a falsey value
         edgeLabel: link.edge_label || null,
       };
     };
@@ -478,7 +468,7 @@ const calculateMetroMapLayout = (
           : null,
       nodeIDs: getNodesConnectedByOneLine(line.links),
       pathCoords: generatePath(newNodes, line),
-      colour: addColour(line.weight),
+      colour: cutomerInterpolation(line.weight),
     };
   });
 
@@ -496,4 +486,4 @@ const calculateMetroMapLayout = (
   return [newNodes, newLines, columns];
 };
 
-export { calculateMetroMapLayout, colours, MAX_ARTICLES };
+export { calculateMetroMapLayout };

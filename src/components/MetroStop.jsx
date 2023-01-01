@@ -3,14 +3,11 @@ import { motion } from "framer-motion";
 import ArticleStack from "./ArticleStack";
 import { nodeWordsVariantsFactory } from "../utilities/metroStopUtilities";
 import { useWindowSize } from "react-use";
-import { INNER_PADDING } from "../utilities/articleStackUtilities";
-import { METROLINE_WIDTH } from "./MetroLine";
+import { ARTICALSTACK_INNER_PADDING } from "../utilities/util";
 import NeighbouringNodes from "./NeighbouringNodes";
+import { METROSTOP_CIRCLE_SIZE } from "../utilities/util";
 
-const METROSTOP_CIRCLE_SIZE = METROLINE_WIDTH * 2;
 const EXCLUDED_TITLES = ["herald sun", "opinion"];
-
-export { METROSTOP_CIRCLE_SIZE };
 
 export default function MetroStop({
   data,
@@ -23,23 +20,24 @@ export default function MetroStop({
   clicked,
   onNeighbouringNodeClick,
   onArticleStackAnimationComplete,
-  onArticleStackLabelClick,
   onNeighbourNodeLabelClick,
+  onNodeNumberLabelClick,
+  onNodeWordsLabelClick,
+  isChanged,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   const content = data.node_words.length > 0 ? data.node_words[0] : "";
 
   const ARTICLE_SIZE_MULTIPLIER = 1.25;
-  const ARTICLE_HEIGHT =
-    (screenHeight / 18) * (clicked ? 1 : ARTICLE_SIZE_MULTIPLIER);
-  const ARTICLE_WIDTH =
-    (screenWidth / 13) * (clicked ? 1 : ARTICLE_SIZE_MULTIPLIER);
-  const ZOOMED_IN_ARTICLE_HEIGHT = 3 * ARTICLE_HEIGHT;
-  const ZOOMED_IN_ARTICLE_WIDTH = 8 * ARTICLE_WIDTH;
+  const ARTICLE_HEIGHT = (screenHeight / 18) * ARTICLE_SIZE_MULTIPLIER;
+  const ARTICLE_WIDTH = (screenWidth / 13) * ARTICLE_SIZE_MULTIPLIER;
+  const ZOOMED_IN_ARTICLE_HEIGHT =
+    (3 * ARTICLE_HEIGHT) / ARTICLE_SIZE_MULTIPLIER;
+  const ZOOMED_IN_ARTICLE_WIDTH = (8 * ARTICLE_WIDTH) / ARTICLE_SIZE_MULTIPLIER;
   const ARTICLE_LIMIT = 4;
   const CLICKED_ARTICLE_CONTAINER_HEIGHT =
     ZOOMED_IN_ARTICLE_HEIGHT * ARTICLE_LIMIT +
-    INNER_PADDING * (ARTICLE_LIMIT - 1);
+    ARTICALSTACK_INNER_PADDING * (ARTICLE_LIMIT - 1);
 
   // filter out title such as Herald Sun
   const { title } = articles.find(
@@ -64,10 +62,7 @@ export default function MetroStop({
           <ArticleStack
             data={data}
             articles={articles}
-            colour={
-              // "white"
-              data.colour
-            }
+            colour={data.colour}
             onClick={onClick}
             clicked={clicked}
             clickedArticleContainerHeight={CLICKED_ARTICLE_CONTAINER_HEIGHT}
@@ -111,13 +106,16 @@ export default function MetroStop({
             id={data.id}
             style={{
               backgroundColor: data.colour, //"white"
+              opacity: isChanged ? 0.5 : 1,
             }}
             animate={{
               width: METROSTOP_CIRCLE_SIZE,
               height: METROSTOP_CIRCLE_SIZE,
               y: height,
+              x: -METROSTOP_CIRCLE_SIZE / 2,
             }}
-            className="absolute rounded-xl text-xs flex justify-center items-center"
+            className="absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer"
+            onClick={(event) => onNodeNumberLabelClick(event.target)}
           >
             {data.articles.length}
           </motion.div>
@@ -138,17 +136,16 @@ export default function MetroStop({
               backgroundColor:
                 // "white",
                 data.colour,
+              opacity: isChanged ? 0.5 : 1,
             }}
-            className={`truncate text-black hover:font-bold cursor-pointer  ${
+            className={`truncate text-black cursor-pointer  ${
               isMapFocused
-                ? `absolute rounded-md px-2  ${
-                    clicked ? "text-4xl" : "text-sm"
-                  }`
+                ? `absolute rounded-md px-2 ${clicked ? "text-4xl" : "text-sm"}`
                 : ""
             }`}
             animate={clicked ? "clicked" : "default"}
             onClick={(event) =>
-              isMapFocused ? onArticleStackLabelClick(event.target) : undefined
+              isMapFocused ? onNodeWordsLabelClick(event.target) : undefined
             }
           >
             {content}

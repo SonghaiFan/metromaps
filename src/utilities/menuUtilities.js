@@ -1,4 +1,4 @@
-import { PAGE_DIRECTION } from "../components/Menu";
+import { PAGE_DIRECTION } from "../utilities/util";
 
 const ACTION_TYPES = {
   FULL_MAP_VIEW: "full_map_view",
@@ -44,19 +44,4 @@ const metroMapContainerVariantsFactory = (
   };
 };
 
-const getAnimateState = (focusState, metromap) => {
-  return focusState.map === metromap.url &&
-    focusState.mode === FOCUS_MODE.FULL_VIEW
-    ? "fullView"
-    : focusState.map !== metromap.url &&
-      focusState.mode === FOCUS_MODE.FULL_VIEW
-    ? "hidden"
-    : "entry";
-};
-
-export {
-  ACTION_TYPES,
-  FOCUS_MODE,
-  metroMapContainerVariantsFactory,
-  getAnimateState,
-};
+export { ACTION_TYPES, FOCUS_MODE, metroMapContainerVariantsFactory };

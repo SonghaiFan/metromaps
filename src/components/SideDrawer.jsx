@@ -1,25 +1,14 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { margin } from "../utilities/util";
+import { margin, cutomerInterpolation } from "../utilities/util";
 import { MdClose } from "react-icons/md";
-import { interpolateRgb } from "d3-interpolate";
 import mixpanel from "mixpanel-browser";
-
-const cutomerInterpolation = (Weight) => {
-  const colours = ["#585d91", "#48a49e", "#fce554"];
-  if (Weight < 0) return "white";
-  const ind = Weight * (colours.length - 1);
-  const colour1 = colours[Math.floor(ind)];
-  const colour2 = colours[Math.ceil(ind)];
-  return interpolateRgb(colour1, colour2)(ind - Math.floor(ind));
-};
 
 export const SideDrawer = ({
   isVisible,
   close,
   screenWidth,
   screenHeight,
-  paddingY,
   whoOpenSideDrawer,
   handleCustomNodes,
   handleCustomLines,
@@ -42,9 +31,9 @@ export const SideDrawer = ({
     const type = whoOpenSideDrawer.dataset.type;
     // console.log("type", type);
     const whoId = whoOpenSideDrawer.id;
-    // console.log("whoId", whoId);
+    console.log("whoId", whoId);
 
-    if (type === "metro-line-label") {
+    if (type === "metro-line-label" || type === "metro-line-path") {
       mixpanel.track("Metro line label colour changed", {
         lineID: whoId,
         newColour: newColour,
@@ -53,7 +42,11 @@ export const SideDrawer = ({
       handleCustomLines(whoId, newColour);
     }
 
-    if (type === "node-words-label" || type === "neighbour-node-label") {
+    if (
+      type === "node-words-label" ||
+      type === "node-number-label" ||
+      type === "neighbour-node-label"
+    ) {
       mixpanel.track("Node word label colour changed", {
         nodeID: whoId,
         newColour: newColour,
@@ -105,10 +98,10 @@ export const SideDrawer = ({
                 id="range-slider"
                 type="range"
                 className="w-full h-3 bg-gray-70 rounded-lg appearance-none cursor-pointer range-lg"
-                min="-0.25"
+                min="0"
                 max="1"
                 step="0.25"
-                defaultValue="-0.25"
+                defaultValue="0"
                 list="tickmarks"
                 onChange={handleCustomNodesChange}
               />
@@ -118,7 +111,6 @@ export const SideDrawer = ({
                 <option>Moderate</option>
                 <option>Weak</option>
                 <option>Very weak</option>
-                <option>No</option>
               </motion.datalist>
               <motion.div className="w-full flex justify-between text-xs px-2">
                 <span>|</span>
@@ -126,10 +118,8 @@ export const SideDrawer = ({
                 <span>|</span>
                 <span>|</span>
                 <span>|</span>
-                <span>|</span>
               </motion.div>
               <motion.div className="w-full flex justify-between text-xs px-2">
-                <span>No</span>
                 <span>Very weak</span>
                 <span>Weak</span>
                 <span>Moderate</span>
