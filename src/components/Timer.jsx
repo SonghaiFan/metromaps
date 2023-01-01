@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Timer({ pageState, isValid, onTimeUp }) {
   const timeToCount = pageState.time;
   const [timeLeft, setTimeLeft] = useState(timeToCount);
+  // console.log(`timeLeft: ${timeLeft}`);
 
   useEffect(() => {
     if (timeLeft === 0) {
