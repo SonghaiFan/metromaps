@@ -1,7 +1,11 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { calculateMetroMapLayout } from "../utilities/calculateMetroMapLayout";
 import MetroStop from "./MetroStop";
-import { margin, TOP_FULL_PAGE_PADDING } from "../utilities/util";
+import {
+  margin,
+  TOP_FULL_PAGE_PADDING,
+  METROLINE_ANIMATION_DURATION,
+} from "../utilities/util";
 import { motion } from "framer-motion";
 import { metroStopVariantsFactory } from "../utilities/metroStopUtilities";
 import { generatePaths } from "../utilities/metroMapUtilities";
@@ -28,6 +32,7 @@ export default function MetroMap({
   clearArticleAnimationDelayRef,
   hint,
   subtitle,
+  time,
   zoomOutButtonClicked,
 }) {
   const NODE_HEIGHT = (screenHeight / 18) * 1.25;
@@ -58,6 +63,7 @@ export default function MetroMap({
       const conNodes = updatedNodes[eachNode].connectedNodes;
 
       conNodes.forEach((node) => {
+        // console.log(node);
         node.id === nodeId && (node.colour = newColour);
       });
     }
@@ -187,7 +193,7 @@ export default function MetroMap({
         setTimeout(() => {
           setClickedNode(clickedNodeBuffer);
           setClickedNodeBuffer(null);
-        }, 2000)
+        }, METROLINE_ANIMATION_DURATION * 1000)
       );
     }
   };
@@ -469,28 +475,30 @@ export default function MetroMap({
 
           {/* metromap title */}
           <motion.div
-            className={`w-full absolute ${
+            className={`absolute ${
               isMapFocused
                 ? "text-2xl"
-                : `flex flex-col justify-start pt-14 content-center `
+                : `bg-black flex flex-col justify-start mt-5 pt-14 content-center `
             }`}
             animate={{
-              x: isMapFocused ? 0 : margin.x * width,
-              y: isMapFocused ? 0 : height - height * margin.y - 10,
+              x: 0, //isMapFocused ? 0 : margin.x * width,
+              y: 0, //isMapFocused ? 0 : height - height * margin.y - 10,
               width: isMapFocused
-                ? (2 * screenWidth) / 3
-                : width - margin.x * width,
+                ? screenWidth //(2 * screenWidth) / 3
+                : screenWidth, //width - margin.x * width,
+              height: isMapFocused ? 0 : screenHeight,
             }}
           >
+            {/* metromap title */}
             <motion.div
               style={{ width: isMapFocused ? width * 3 : width - 64 }}
-              className="px-8 py-1 m-0 whitespace-nowrap overflow-x-auto scrollbar-none text-xl"
+              className=" px-8 py-1 mx-auto text-center whitespace-nowrap overflow-x-auto scrollbar-none text-xl"
             >
               <motion.h2
                 animate={isMapFocused ? {} : titleAnimation}
                 ref={titleRef}
               >
-                {/* {title} */}
+                {title}
               </motion.h2>
             </motion.div>
             <MetroMapDescription
@@ -499,10 +507,12 @@ export default function MetroMap({
               subtitle={subtitle}
               hint={hint}
               height={screenHeight / 3}
+              time={time}
             />
           </motion.div>
         </motion.div>
       </motion.div>
+
       <NavigationButton
         onClick={onZoomOutButtonClick}
         className={`right-[1%] top-[3%] z-50`}

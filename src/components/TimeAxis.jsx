@@ -6,6 +6,7 @@ import {
   TIME_AXIS_PADDING,
   MAX_ARTICLES,
   METROSTOP_BOTTOM_PADDING,
+  METROLINE_ANIMATION_DURATION,
 } from "../utilities/util";
 import { useFirstMountState } from "react-use";
 
@@ -71,7 +72,7 @@ export default function TimeAxis({
                 width: (nodeWidth + MAX_ARTICLES) * 1.5,
                 height: timeAxisHeight,
                 transition: {
-                  duration: isFirstMount ? 2 : 0,
+                  duration: isFirstMount ? METROLINE_ANIMATION_DURATION : 0,
                 },
               }}
             />

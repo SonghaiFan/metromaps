@@ -182,11 +182,13 @@ const colourNodes = (nodes, lines, edges, useEdgeWeight) => {
           nodeId: edge.source.id,
           colour: cutomerInterpolation(edge.edge_weight),
           weight: edge.edge_weight,
+          isChanged: false,
         },
         {
           nodeId: edge.target.id,
           colour: cutomerInterpolation(edge.edge_weight),
           weight: edge.edge_weight,
+          isChanged: false,
         }
       );
     }, []);

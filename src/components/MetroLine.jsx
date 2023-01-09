@@ -55,13 +55,24 @@ export default function MetroLine({
         return (
           <motion.g key={index}>
             <motion.path
+              className={`edge-shadow-${path.id}`}
+              d={drawPath(path.path)}
+              style={{
+                fill: "transparent",
+                strokeWidth: strokeWidth + 4 || METROLINE_WIDTH + 4,
+                stroke: "white",
+              }}
+              variants={metroLineVariantFactory}
+              initial="hidden"
+              animate="default"
+            />
+            <motion.path
               data-type="metro-line-path"
-              className={"hover:cursor-pointer"}
+              className={`edge-${path.id} hover:cursor-pointer`}
               id={path.id}
               d={drawPath(path.path)}
               stroke={path.colour}
               style={{
-                opacity: isChanged ? 0.5 : 1,
                 fill: "transparent",
                 strokeWidth: strokeWidth || METROLINE_WIDTH,
               }}

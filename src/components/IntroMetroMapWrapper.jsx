@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import NavigationButton from "./NavigationButton";
 import { FaArrowAltCircleRight } from "react-icons/fa";
-import SelectorButton from "./SelectorButton";
+import NavigationBar from "./NavigationBar";
 import {
   TOTAL_SLIDES,
   PAGES,
+  ExplanatoryPage,
   WelcomePage,
   FirstPage,
   ArticlePage,
@@ -32,77 +33,34 @@ const randomIndex = Math.floor(Math.random() * images.length);
 const randomImage = images[randomIndex];
 
 export default function IntroMetroMapWrapper({ setStart }) {
-  const [paginationState, setPaginationState] = useState({
-    current: 1,
-    total: TOTAL_SLIDES,
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
-    setPaginationState((previousPaginationState) => {
-      return {
-        ...previousPaginationState,
-        current: 1,
-      };
-    });
+    setCurrentPage(1);
   }, []);
 
-  const onSelectorButtonClick = (n) => {
-    mixpanel.track("Selector button clicked", { selectorID: n });
-    setSelectedButton(n);
-    setPaginationState((previousPageState) => {
-      return {
-        ...previousPageState,
-        current: n,
-      };
-    });
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
   };
 
-  const [selectedButton, setSelectedButton] = useState(1);
-
-  const selectorButton = (n, s) => {
-    return (
-      <SelectorButton
-        key={n}
-        selectorID={n}
-        onClick={() => {
-          onSelectorButtonClick(n);
-        }}
-        isActive={s}
-      />
-    );
-  };
-
-  const renderSelectors = () => {
-    let res = [];
-
-    for (let i = 1; i <= TOTAL_SLIDES; i++) {
-      res.push(selectorButton(i, i === selectedButton));
-    }
-
-    return (
-      <div className="absolute bottom-10 w-full">
-        <div className="text-white text-base mt-[3%] ">
-          Tap here to progress through the user guide
-        </div>
-        <div className="flex">
-          <div className="mt-[1%] flex">{res}</div>
-        </div>
-      </div>
-    );
+  const handlePrev = () => {
+    setCurrentPage(currentPage - 1);
   };
 
   const selectPage = () => {
-    switch (paginationState.current) {
+    switch (currentPage) {
       case PAGES.WELCOME:
         return {
           left: (
-            <img
-              className="absolute left-[28%] max-w-[45%] translate-x-[-50%] top-[47%] translate-y-[-50%]"
-              src={randomImage}
-              alt={randomImage}
+            <WelcomePage
+              setIsFormSubmitted={setIsFormSubmitted}
+              isConfirmed={isConfirmed}
+              setIsConfirmed={setIsConfirmed}
             />
           ),
-          right: <WelcomePage />,
+          right: <ExplanatoryPage />,
         };
       case PAGES.FIRST:
         return {
@@ -193,21 +151,37 @@ export default function IntroMetroMapWrapper({ setStart }) {
   return (
     <>
       <div className="h-[100vh] w-[100vw] flex overflow-hidden absolute top-0 left-0">
-        <div className="w-1/2 m-[3%]">{page.left}</div>
-        <div className="w-2/5 m-[3%] pr-[10%]">
-          <div>{page.right}</div>
-          <div>{renderSelectors()}</div>
-          {selectedButton === TOTAL_SLIDES && (
-            <NavigationButton
-              onClick={() => setStart(true)}
-              className={`right-[2%] top-[50%]`}
-              isVisible={true}
-            >
-              Start
-              <FaArrowAltCircleRight size={40} />
-            </NavigationButton>
-          )}
+        <div className="w-1/2 m-[3%] ">{page.left}</div>
+        <div
+          className="overflow-y-auto scrollbar w-1/2 m-[3%] px-[2%] pb-[25px]"
+          style={{ direction: "rtl" }}
+        >
+          <div className="" style={{ direction: "ltr" }}>
+            {page.right}
+          </div>
         </div>
+        <div className="absolute w-full px-[5%] bottom-[3%]">
+          {/* <div className="text-white text-base mt-[3%] ">
+              Tap here to progress through the user guide
+            </div> */}
+          <NavigationBar
+            currentPage={currentPage}
+            totalPages={TOTAL_SLIDES}
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+            isConfirmed={isConfirmed}
+          />
+        </div>
+        {currentPage === TOTAL_SLIDES && isConfirmed && (
+          <NavigationButton
+            onClick={() => setStart(true)}
+            className={`right-[2%] top-[50%]`}
+            isVisible={true}
+          >
+            Start
+            <FaArrowAltCircleRight size={40} />
+          </NavigationButton>
+        )}
       </div>
     </>
   );

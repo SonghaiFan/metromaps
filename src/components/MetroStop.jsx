@@ -95,7 +95,7 @@ export default function MetroStop({
               : "rgba(0, 0, 0, 0)"
             : data.colour, //"white"
         }}
-        className={`w-fll ml-5 h-full text-black truncate flex justify-center -z-40 ${
+        className={`w-fll ml-5 mt-5 h-full text-black truncate flex justify-center -z-40 ${
           clicked || isMapFocused ? "" : "items-center"
         } rounded-md`}
       >
@@ -106,15 +106,15 @@ export default function MetroStop({
             id={data.id}
             style={{
               backgroundColor: data.colour, //"white"
-              opacity: isChanged ? 0.5 : 1,
+              border: "2px solid white",
             }}
             animate={{
               width: METROSTOP_CIRCLE_SIZE,
               height: METROSTOP_CIRCLE_SIZE,
-              y: height,
+              y: height - METROSTOP_CIRCLE_SIZE,
               x: -METROSTOP_CIRCLE_SIZE / 2,
             }}
-            className="absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer"
+            className={`node-${data.id} absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer`}
             onClick={(event) => onNodeNumberLabelClick(event.target)}
           >
             {data.articles.length}
@@ -128,7 +128,7 @@ export default function MetroStop({
             id={data.id}
             variants={nodeWordsVariantsFactory(
               isMapFocused,
-              height,
+              height - METROSTOP_CIRCLE_SIZE,
               screenHeight,
               CLICKED_ARTICLE_CONTAINER_HEIGHT
             )}
@@ -136,9 +136,9 @@ export default function MetroStop({
               backgroundColor:
                 // "white",
                 data.colour,
-              opacity: isChanged ? 0.5 : 1,
+              border: "2px solid white",
             }}
-            className={`truncate text-black cursor-pointer  ${
+            className={`node-${data.id} truncate text-black cursor-pointer  ${
               isMapFocused
                 ? `absolute rounded-md px-2 ${clicked ? "text-4xl" : "text-sm"}`
                 : ""

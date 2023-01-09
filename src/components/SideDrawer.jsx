@@ -31,7 +31,6 @@ export const SideDrawer = ({
     const type = whoOpenSideDrawer.dataset.type;
     // console.log("type", type);
     const whoId = whoOpenSideDrawer.id;
-    console.log("whoId", whoId);
 
     if (type === "metro-line-label" || type === "metro-line-path") {
       mixpanel.track("Metro line label colour changed", {
@@ -40,6 +39,17 @@ export const SideDrawer = ({
       });
       // console.log(`this is a metro line label at ${whoId}`);
       handleCustomLines(whoId, newColour);
+
+      const changedEdges = document.querySelectorAll(`.edge-${whoId}`);
+      // loop through the changedNodes and add border
+      // if selected dom is path, increase the stroke width
+      for (let i = 0; i < changedEdges.length; i++) {
+        changedEdges[i].style.border = null;
+      }
+
+      const changedEdgeShadow = document.querySelector(`.edge-shadow-${whoId}`);
+
+      changedEdgeShadow.style.strokeWidth = null;
     }
 
     if (
@@ -53,6 +63,18 @@ export const SideDrawer = ({
       });
       // console.log(`this is a node word label at ${whoId}`);
       handleCustomNodes(whoId, newColour);
+      // query all dom has the same class name based on whoId and add border
+      const changedNodes = document.querySelectorAll(`.node-${whoId}`);
+      // loop through the changedNodes and add border
+      for (let i = 0; i < changedNodes.length; i++) {
+        changedNodes[i].style.border = null;
+      }
+
+      const changedArticles = document.querySelectorAll(`.article-${whoId}`);
+
+      for (let i = 0; i < changedArticles.length; i++) {
+        changedArticles[i].style.border = null;
+      }
     }
   };
 
@@ -101,7 +123,7 @@ export const SideDrawer = ({
                 min="0"
                 max="1"
                 step="0.25"
-                defaultValue="0"
+                defaultValue="0.5"
                 list="tickmarks"
                 onChange={handleCustomNodesChange}
               />

@@ -53,15 +53,14 @@ export default function ArticleStack({
             return (
               <motion.div
                 key={article.id}
-                className={`article-${data.id} absolute rounded-md`}
+                className={`article-${data.id} absolute rounded-md `}
                 style={{
-                  // border: "1px solid white",
+                  border: "2px solid white",
                   backgroundColor: clicked
                     ? "white"
                     : (array.length - articleIndex) % 2 === 0
-                    ? "grey"
+                    ? "white"
                     : colour,
-                  opacity: isChanged ? 0.5 : 1,
                 }}
                 variants={articleVariantsFactory(
                   array.length,

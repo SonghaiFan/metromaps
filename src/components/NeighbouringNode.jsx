@@ -35,7 +35,7 @@ export default function NeighbouringNode({
         style={{
           backgroundColor: data.colour, //"white"
         }}
-        className="text-black rounded-md px-2 m-5 text-2xl pointer-events-auto"
+        className={`node-${data.id} text-black rounded-md px-2 m-5 text-2xl pointer-events-auto`}
         onClick={(event) => onNeighbourNodeLabelClick(event.target)}
       >
         {content}

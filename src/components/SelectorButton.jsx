@@ -7,15 +7,14 @@ export default function SelectorButton({
   isSmall,
   isDead,
 }) {
-  const className = `${
-    isSmall ? "w-2 h-2" : "w-10 h-10"
-  } flex items-center justify-center rounded-full border-2 border-white-500 ml-2 select-none ${
-    !isDead ? "hover:bg-white hover:text-black" : ""
-  } ${
-    isActive
-      ? "bg-white text-black font-bold  "
-      : "bg-black text-white font-normal "
-  }`;
+  const className = `w-2 h-2
+   flex items-center justify-center rounded-full border-2 border-white-500 ml-2 select-none 
+   hover:bg-white hover:text-black
+   ${
+     isActive
+       ? "bg-white text-black font-bold"
+       : "bg-black text-white font-normal "
+   }`;
 
   return (
     <>

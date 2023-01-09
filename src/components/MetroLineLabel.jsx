@@ -65,9 +65,10 @@ export default function MetroLineLabel({
         style={{
           backgroundColor: colour, // "white"
           height: LINK_LABEL_HEIGHT, // 20 from line height of text-sm
-          opacity: isChanged ? 0.5 : 1,
+          border: label ? "2px solid white" : null,
+          borderBottom: "none",
         }}
-        className="text-black text-sm rounded-md px-2 z-50 cursor-pointer pointer-events-auto"
+        className={`edge-${id} text-black text-sm rounded-md px-2 z-50 cursor-pointer pointer-events-auto`}
         onClick={onMetroLineLabelClick}
       >
         {label}

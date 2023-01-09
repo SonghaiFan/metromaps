@@ -150,15 +150,16 @@ export default function Menu({
           height={metromapsDetails[metromap.url].height}
           onFocusButtonClick={onFocusButtonClick(metromap.url)}
           isMapFocused={
-            true
-            // focusState.map === metromap.url &&
-            // focusState.mode === FOCUS_MODE.FULL_VIEW
+            // true
+            focusState.map === metromap.url &&
+            focusState.mode === FOCUS_MODE.FULL_VIEW
           }
           screenHeight={screenHeight}
           screenWidth={screenWidth}
           description={metromap.description}
           subtitle={metromap.subtitle}
           hint={metromap.hint}
+          time={metromap.time}
           updateArticleAnimationDelayRef={updateArticleAnimationDelayRef}
           clearArticleAnimationDelayRef={clearArticleAnimationDelayRef}
           zoomOutButtonClicked={zoomOutButtonClicked}
@@ -196,7 +197,7 @@ export default function Menu({
   };
 
   const pageStateIsValid =
-    pageState.current !== pageState.total &&
+    pageState.current <= pageState.total &&
     pageState.current >= Math.max(...pageState.hist);
 
   const handleTimerUp = () => {
@@ -212,6 +213,7 @@ export default function Menu({
         <Timer
           pageState={pageState}
           isValid={pageStateIsValid}
+          isStop={focusState.mode === null}
           onTimeUp={handleTimerUp}
         />
       </motion.div>
@@ -253,6 +255,21 @@ export default function Menu({
           Next Map
           <FaArrowAltCircleRight size={40} color={"#b1babf"} />
         </NavigationButton>
+
+        <NavigationButton
+          onClick={onNavigationButtonClick(PAGE_DIRECTION.LEFT)}
+          className={`left-[2%] top-[50%] `}
+          isVisible={
+            // focusState.mode === null &&
+            pageState.current !== 1
+          }
+        >
+          Prev Map
+          <FaArrowAltCircleLeft size={40} color={"#b1babf"} />
+        </NavigationButton>
+      </motion.div>
+      <motion.div className="absolute left-[50%] bottom-0">
+        {pageState.current}/{pageState.total}
       </motion.div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import ConsentForm from "./ConsentForm";
 
 const PAGESTITLE = [
   "WELCOME",
@@ -18,18 +19,272 @@ const PAGES = PAGESTITLE.reduce((acc, curr, i) => {
 
 export { TOTAL_SLIDES, PAGES };
 
-export function WelcomePage() {
+export function ExplanatoryPage() {
   return (
     <>
-      <div className="text-8xl uppercase font-bold leading-tight max-w-xs text-left ">
-        "Stay informed, stay fair"
+      <div className="text-2xl text-yellow-400 font-bold">
+        EXPLANATORY STATEMENT
       </div>
-      <div className="text-yellow-400 text-2xl text-left ">
-        - Beware of media bias in public narratives
+      <div className=" text-left">
+        Project ID: 36056
+        <br></br>
+        Project Title: Visually Communicating Narratives
       </div>
-      <div className="text-left ">
-        A user study to evaluate the faithness of narrative maps in information
-        visualization.
+      <br></br>
+      <br></br>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="col-span-1">
+          <strong>Chief Investigator: Dr. Sarah Goodwin </strong>
+          <br></br>
+          Department of Human Centred Computing, Monash University <br></br>
+          Email:{" "}
+          <a
+            href="mailto:sarah.goodwin@monash.edu"
+            target="_blank"
+            className="url"
+            rel="noreferrer"
+          >
+            sarah.goodwin@monash.edu
+          </a>{" "}
+          <br></br>
+          ...
+        </div>
+        <div className="col-span-1">
+          <strong>Chief Investigator: Dr. Sarah Goodwin </strong>
+          <br></br>
+          Department of Human Centred Computing, Monash University <br></br>
+          Email:{" "}
+          <a
+            href="mailto:sarah.goodwin@monash.edu"
+            target="_blank"
+            className="url"
+            rel="noreferrer"
+          >
+            sarah.goodwin@monash.edu
+          </a>{" "}
+          <br></br>
+          ...
+        </div>
+      </div>
+      <br></br>
+      <div className="text-yellow-400">
+        <strong>What does the research involve?</strong>
+      </div>
+      <div>
+        This study aims to investigate narrative visualisations about text data.
+        In particular, this research explores and analyses text data, and
+        produces visualisations to communicate the narratives from the data.
+        This research will assess how well these visualisations reveal the
+        narratives, and users's understanding of the visualisations and their
+        interpretation of the narratives from the visualisations.
+      </div>
+      <div>
+        If you choose to participate in this research, you will be asked to
+        complete a user study by using a computer. This user study will be
+        conducted online.
+      </div>
+      <div className="mt-[3%]">You will go through the following steps:</div>
+      <div>
+        <li>
+          be given a copy of the electronic Consent Form, and be asked to sign
+          the form if you wish to proceed;
+        </li>
+        <li> be asked to provide a Prolific ID;</li>
+        <li>be given instructions on narrative visualisations;</li>
+        <li>
+          be asked to use a series of visualisations and answer questions based
+          on the visualisations;
+        </li>
+        <li>be asked to complete a survey on demographics.</li>
+      </div>
+      <br></br>
+      <div>
+        Throughout the session, the time you take to complete each task and your
+        answers will be recorded with coded identification. No name or contact
+        details will be recorded in any electronic data during the experiment.
+      </div>
+      <div className="text-yellow-400 mt-[3%]">
+        <strong>Why were you chosen for this research?</strong>
+      </div>
+      <div>
+        You have been invited to participate in this research, as we believe
+        that your experience and opinions will be valuable to our research. This
+        Explanatory Statement has been presented to you as you expressed your
+        interests in participation and were redirected to this study via
+        Prolific.co.
+      </div>
+      <div className="text-yellow-400 mt-[3%]">
+        <strong>
+          Consenting to participate in the project and withdrawing from the
+          research
+        </strong>
+      </div>
+      <div>
+        Should you wish to participate in the study, your consent will be
+        required to proceed. Your consent is voluntary and can be given by
+        signing and dating a Consent Form before the beginning of the study. You
+        may choose not to participate in this study without any implication. If
+        you do proceed, you may also choose to withdraw at any stage during the
+        study without any implication.
+      </div>
+      <div>
+        The Consent Form and this Explanatory Statement has been presented to
+        you for your review before the study. Once you have read the documents,
+        you will be asked to sign and date the Consent Form before proceeding.
+        If you wish to withdraw, simply exit from the online website and any
+        recorded information up until that time will be deleted.
+      </div>
+      <div>
+        Once you have completed the study, the final step of your participation
+        is completing a questionnaire with demographic questions. This
+        questionnaire does not require any identifiable information and is
+        submitted anonymously. Therefore, if you request to withdraw after this
+        step, all information will be deleted except the questionnaire.
+      </div>
+      <div className="text-yellow-400 mt-[3%]">
+        <strong>Possible benefits and risks to participants</strong>
+      </div>
+      <div>
+        Should you choose to participate, you will gain exposure to state-of-art
+        narrative visualisations and gain insights into these kinds of
+        visualisations. Information collected from this research will lead to
+        the development of useful tools for narrative visualisations.
+      </div>
+      <div>
+        We do not foresee any risks to you should you choose to participate.
+        However, should you experience discomfort you will be free to end your
+        participation in the research at any time. Breaks may be taken at any
+        between tasks.
+      </div>
+      <div className="text-yellow-400 mt-[3%]">
+        <strong>Payment</strong>
+      </div>
+      <div>
+        As an appreciation for your time, we provide a payment of $5 with a rate
+        of $7.5/hour to you after the study is completed. The payment is made
+        automatically to your Prolific.co paypal account. No user name or
+        contact details are recorded for processing the payment.
+      </div>
+      <div className="text-yellow-400 mt-[3%]">
+        <strong>Confidentiality</strong>
+      </div>
+      <div>
+        The confidentiality of your data is a priority throughout the course of
+        the project. Any personally identifiable information will not be shared
+        with anyone not involved in this project. Access will be limited to the
+        researchers as listed at the top of this Explanatory Statement.
+      </div>
+      <div>
+        After analysis, the collected information will be discussed as part of a
+        report to the funding body, Paul Ramsay Foundation, and publications. If
+        any answers you have given as part of your questionnaire are to be
+        quoted, you will be contacted directly for permission to use this within
+        the publications. You will be kept anonymous in the final work and you
+        will not be identifiable from any responses that you give.
+      </div>
+      <div className="text-yellow-400 mt-[3%]">
+        <strong>Storage of data</strong>
+      </div>
+      <div>
+        Data collected will be stored within a Monash University Google Drive
+        account. No physical copies of the data will be made. Access is limited
+        to the owner user account by default, but limited access (view only) may
+        be given to the members of the research team. This data will be retained
+        for five years after the completion of the study.
+      </div>
+      <div className="text-yellow-400 mt-[3%]">
+        <strong>Results</strong>
+      </div>
+      <div>
+        The analysis of this data will be published in a report to Paul Ramsay
+        Foundation and a publication. If you would like to be notified when the
+        results are available, please send a request to the Chief Investigator,
+        using the contact details at the beginning of the document.
+      </div>
+      <div className="text-yellow-400 mt-[3%]">
+        <strong>Complaints</strong>
+      </div>
+      <div>
+        Should you have any concerns or complaints about the conduct of the
+        project, you are welcome to contact the Executive Officer, Monash
+        University Human Research Ethics (MUHREC):
+      </div>
+      <div>
+        Executive Officer Monash University Human Research Ethics Committee
+        (MUHREC) Room 111, Building 3e Research Office Monash University VIC
+        3800
+      </div>
+      <div>Tel: +61 3 9905 2052 </div>
+      <div>
+        Email:{" "}
+        <a
+          href="mailto:muhrec@monash.edu"
+          target="_blank"
+          className="url"
+          rel="noreferrer"
+        >
+          muhrec@monash.edu
+        </a>{" "}
+      </div>
+      <div>Fax: +61 3 9905 3831</div>
+    </>
+  );
+}
+
+export function WelcomePage({
+  setIsFormSubmitted,
+  isConfirmed,
+  setIsConfirmed,
+}) {
+  return (
+    <>
+      {/* <div className="mt-[20%]"></div> */}
+      <div className="text-[2.5rem] font-bold">
+        A user study to explore the narrative map of disadvantage in Australia
+      </div>
+      <br></br>
+      <div className="text-yellow-400 text-left">
+        Project ID: 36056 <br></br>Project Title: Visually Communicating
+        Narratives
+      </div>
+      <br></br>
+      <br></br>
+      <div className="text-left">
+        You are invited to take part in this study.
+        <br></br>
+        Please read the{" "}
+        <span className="text-2xl text-yellow-400 font-bold">
+          explanatory statemant
+        </span>{" "}
+        left first in full before deciding whether or not to participate in this
+        research. If you would like further information regarding any aspect of
+        this project, you are encouraged to contact the researchers via the
+        phone numbers or email addresses listed in the explanatory statement.
+        <br></br>
+        <br></br>
+        If you decided to continue the user study, please tick the box below to
+        confirm that you have read and understood the information provided
+        above, and that you agree to participate in this study.
+        <br></br>
+        <br></br>
+        <ConsentForm
+          isConfirmed={isConfirmed}
+          setIsConfirmed={setIsConfirmed}
+        />
+        <br></br>
+        {/* <div className="text-center">
+          <a
+            href="https://forms.gle/3kSmPTe5fkN6aGgE9"
+            className="text-2xl text-yellow-400 font-bold hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              setIsFormSubmitted(true);
+            }}
+          >
+            Consent Form
+          </a>{" "}
+        </div> */}
       </div>
     </>
   );
@@ -242,11 +497,6 @@ export function FinalPage() {
           <li>Vulnerable, Negative Emotions</li>
           <li>Health, Food & Nutrition</li>
         </ol>
-        <br></br>
-        Click the <span className="text-yellow-400">back arrow</span> in the
-        bottom right to go back to the landing page and browse through all the
-        available representations of equity, opportunity and disadvantage in
-        recent news.
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 {
   "homepage": "https://SonghaiFan.github.io/metro_maps",
-  "name": "metromaps",
+  "name": "metro_maps",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
