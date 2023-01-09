@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
   const timeToCount = pageState.time;
   const [timeLeft, setTimeLeft] = useState(timeToCount);
+  const [hasAlerted, setHasAlerted] = useState(false);
 
   const timeLeftPercent = timeLeft / pageState.time;
   const timeLeftPercentString = (timeLeftPercent * 100).toFixed(0) + "%";
@@ -22,7 +23,8 @@ export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
       return onTimeUp();
     }
 
-    if (isValid && timeLeftPercent === 0.2) {
+    if (!hasAlerted && isValid && timeLeftPercent === 0.2) {
+      setHasAlerted(true);
       alert("Time is closing!");
     }
 

@@ -1,8 +1,3 @@
-import {
-  ARTICALSTACK_TOP_PADDING,
-  ARTICALSTACK_INNER_PADDING,
-} from "../utilities/util";
-
 const articleVariantsFactory = (
   totalArticles,
   articleIndex,
@@ -11,19 +6,17 @@ const articleVariantsFactory = (
   articleWidth,
   articleHeight,
   zoomedInArticleWidth,
-  zoomedInArticleHeight
+  zoomedInArticleHeight,
+  clickedArticleYPosition
 ) => {
   return {
     clicked: {
       width: zoomedInArticleWidth,
       height: zoomedInArticleHeight,
       x: 0,
-      y:
-        (ARTICALSTACK_INNER_PADDING + zoomedInArticleHeight) *
-        (totalArticles - articleIndex - 1),
-      duration: 0.1,
+      y: clickedArticleYPosition,
       // transition: {
-      //   delay: (totalArticles - articleIndex + 1) / 500,
+      //   delay: (totalArticles - articleIndex + 1) / 25,
       //   ease: "easeOut",
       // },
     },
@@ -32,9 +25,8 @@ const articleVariantsFactory = (
       height: articleHeight,
       x: totalArticles - articleIndex - 1,
       y: articleIndex - totalArticles + 1,
-      duration: 0.1,
       // transition: {
-      //   delay: (totalArticles - articleIndex + 1) / 500,
+      //   delay: (totalArticles - articleIndex + 1) / 25,
       //   ease: "easeOut",
       // },
     },

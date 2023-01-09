@@ -163,6 +163,7 @@ export default function Menu({
           updateArticleAnimationDelayRef={updateArticleAnimationDelayRef}
           clearArticleAnimationDelayRef={clearArticleAnimationDelayRef}
           zoomOutButtonClicked={zoomOutButtonClicked}
+          mapId={metromap.url}
         />
       </motion.div>
     );

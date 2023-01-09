@@ -23,6 +23,7 @@ export default function MetroStop({
   onNeighbourNodeLabelClick,
   onNodeNumberLabelClick,
   onNodeWordsLabelClick,
+  mapId,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   const content = data.node_words.length > 0 ? data.node_words[0] : "";
@@ -33,7 +34,7 @@ export default function MetroStop({
   const ZOOMED_IN_ARTICLE_HEIGHT =
     (3 * ARTICLE_HEIGHT) / ARTICLE_SIZE_MULTIPLIER;
   const ZOOMED_IN_ARTICLE_WIDTH = (8 * ARTICLE_WIDTH) / ARTICLE_SIZE_MULTIPLIER;
-  const ARTICLE_LIMIT = 4;
+  const ARTICLE_LIMIT = 4.5;
   const CLICKED_ARTICLE_CONTAINER_HEIGHT =
     ZOOMED_IN_ARTICLE_HEIGHT * ARTICLE_LIMIT +
     ARTICALSTACK_INNER_PADDING * (ARTICLE_LIMIT - 1);
@@ -71,6 +72,7 @@ export default function MetroStop({
             articleHeight={ARTICLE_HEIGHT}
             articleLimit={ARTICLE_LIMIT}
             onAnimationComplete={onArticleStackAnimationComplete}
+            mapId={mapId}
           />
           {!clicked && (
             <motion.div
@@ -94,7 +96,7 @@ export default function MetroStop({
               : "rgba(0, 0, 0, 0)"
             : data.colour, //"white"
         }}
-        className={`w-fll ml-5 mt-5 h-full text-black truncate flex justify-center -z-40 ${
+        className={`w-fll ml-5 mt-10 h-full text-black truncate flex justify-center -z-40 ${
           clicked || isMapFocused ? "" : "items-center"
         } rounded-md`}
       >

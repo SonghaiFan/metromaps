@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Article from "./Article";
 import { articleVariantsFactory } from "../utilities/articleStackUtilities";
@@ -7,6 +7,7 @@ import {
   ARTICALSTACK_TOP_PADDING,
   ARTICALSTACK_INNER_PADDING,
 } from "../utilities/util";
+import _ from "lodash";
 
 export default function ArticleStack({
   data,
@@ -21,10 +22,47 @@ export default function ArticleStack({
   articleHeight,
   articleLimit,
   onAnimationComplete,
-  time,
+  mapId,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   // console.log(data);
+
+  const articlesInitialHeight = _.range(articles.length).map(
+    () => zoomedInArticleHeight
+  );
+
+  const [articlesHeight, setArticlesHeight] = useState(articlesInitialHeight);
+  const [articlesClicked, setArticlesClicked] = useState(
+    _.range(articles.length).map(() => false)
+  );
+  const [mostRecentClickedArticle, setMostRecentClickedArticle] =
+    useState(null);
+
+  const handleArticleClick = (id, articleIndex) => () => {
+    console.log("clicked");
+    setMostRecentClickedArticle({ id, articleIndex });
+    setArticlesClicked((previousArticlesClicked) =>
+      previousArticlesClicked.map((value, index) =>
+        index === articleIndex ? !value : value
+      )
+    );
+  };
+
+  useLayoutEffect(() => {
+    if (mostRecentClickedArticle) {
+      const { id, articleIndex } = mostRecentClickedArticle;
+      const { height } = document.getElementById(id).getBoundingClientRect();
+      setArticlesHeight((previousArticlesHeight) => {
+        return previousArticlesHeight.map((articleHeight, index) =>
+          index === articleIndex
+            ? height < zoomedInArticleHeight
+              ? zoomedInArticleHeight
+              : height + ARTICALSTACK_INNER_PADDING
+            : articleHeight
+        );
+      });
+    }
+  }, [mostRecentClickedArticle, zoomedInArticleHeight]);
 
   return (
     <motion.div
@@ -50,6 +88,17 @@ export default function ArticleStack({
           .concat(articles)
           .reverse()
           .map((article, articleIndex, array) => {
+            const clickedArticleYPosition = articlesHeight
+              // the first article (in reverse order) = articles.length - 0 - 1 = articles.lenght - 1 (get all articles)
+              .slice(0, articles.length - articleIndex - 1)
+              .reduce((total, articleHeight) => {
+                return total + ARTICALSTACK_INNER_PADDING + articleHeight;
+              }, 0);
+
+            // do not use articleIndex here, instead use articles.length - articleIndex - 1 cause the articles are reversed
+            const zoomedArticleHeight = articlesHeight.find(
+              (_, index) => index === articles.length - articleIndex - 1
+            );
             return (
               <motion.div
                 key={article.id}
@@ -70,7 +119,8 @@ export default function ArticleStack({
                   articleWidth,
                   articleHeight,
                   zoomedInArticleWidth,
-                  zoomedInArticleHeight
+                  zoomedArticleHeight,
+                  clickedArticleYPosition
                 )}
                 animate={clicked ? "clicked" : "default"}
                 onAnimationComplete={() => {
@@ -79,7 +129,16 @@ export default function ArticleStack({
                   }
                 }}
               >
-                <Article article={article} metroStopClicked={clicked} />
+                <Article
+                  article={article}
+                  metroStopClicked={clicked}
+                  onClick={handleArticleClick(
+                    `${mapId}-${article.id}`,
+                    articles.length - articleIndex - 1
+                  )}
+                  clicked={articlesClicked[articles.length - articleIndex - 1]}
+                  id={`${mapId}-${article.id}`}
+                />
 
                 {/* helper onClick layer */}
                 {!clicked && (
