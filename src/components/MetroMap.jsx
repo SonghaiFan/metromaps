@@ -16,7 +16,7 @@ import MetroLine from "./MetroLine";
 import MetroLineLabel from "./MetroLineLabel";
 import TimeAxis from "./TimeAxis";
 import { SideDrawer } from "./SideDrawer";
-import mixpanel from "mixpanel-browser";
+// import mixpanel from "mixpanel-browser";
 
 export default function MetroMap({
   width,
@@ -199,9 +199,9 @@ export default function MetroMap({
   };
 
   const handleMetroStopClick = (nodeId) => () => {
-    mixpanel.track("MetroStopClick on neighbouring node button", {
-      nodeId: nodeId,
-    });
+    // mixpanel.track("MetroStopClick on neighbouring node button", {
+    //   nodeId: nodeId,
+    // });
     // if the user clicks on next/previous neighbouring node button
     if (clickedNode) {
       setClickedNodeBuffer(nodeId);
@@ -212,13 +212,13 @@ export default function MetroMap({
 
     // if the user clicks the node directly (not the neighbouring node button)
     setClickedNode(nodeId);
-    mixpanel.track("MetroStopClick on node button directly", {
-      nodeId: nodeId,
-    });
+    // mixpanel.track("MetroStopClick on node button directly", {
+    //   nodeId: nodeId,
+    // });
   };
 
   const onZoomOutButtonClick = () => {
-    mixpanel.track("MetroStop ZoomOut button clicked");
+    // mixpanel.track("MetroStop ZoomOut button clicked");
     clearArticleAnimationDelayRef();
     setClickedNodeBuffer(null);
     setClickedNode(null);
@@ -521,18 +521,18 @@ export default function MetroMap({
         <AiOutlineFullscreenExit size={40} />
       </NavigationButton>
 
-      {isMapFocused && (
-        <SideDrawer
-          isVisible={sideDrawerOpen}
-          close={closeSideDrawer}
-          screenWidth={screenWidth}
-          screenHeight={screenHeight}
-          paddingY={paddingY}
-          whoOpenSideDrawer={whoOpenSideDrawer}
-          handleCustomNodes={handleCustomNodes}
-          handleCustomLines={handleCustomLines}
-        ></SideDrawer>
-      )}
+      {/* {isMapFocused && ( */}
+      <SideDrawer
+        isVisible={sideDrawerOpen}
+        close={closeSideDrawer}
+        screenWidth={screenWidth}
+        screenHeight={screenHeight}
+        paddingY={paddingY}
+        whoOpenSideDrawer={whoOpenSideDrawer}
+        handleCustomNodes={handleCustomNodes}
+        handleCustomLines={handleCustomLines}
+      ></SideDrawer>
+      {/* )} */}
     </motion.div>
   );
 }

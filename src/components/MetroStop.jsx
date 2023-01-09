@@ -23,7 +23,6 @@ export default function MetroStop({
   onNeighbourNodeLabelClick,
   onNodeNumberLabelClick,
   onNodeWordsLabelClick,
-  isChanged,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   const content = data.node_words.length > 0 ? data.node_words[0] : "";
@@ -114,7 +113,7 @@ export default function MetroStop({
               y: height - METROSTOP_CIRCLE_SIZE,
               x: -METROSTOP_CIRCLE_SIZE / 2,
             }}
-            className={`node-${data.id} absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer`}
+            className={`node-${data.id} untouched absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer`}
             onClick={(event) => onNodeNumberLabelClick(event.target)}
           >
             {data.articles.length}
@@ -138,7 +137,9 @@ export default function MetroStop({
                 data.colour,
               border: "2px solid white",
             }}
-            className={`node-${data.id} truncate text-black cursor-pointer  ${
+            className={`node-${
+              data.id
+            } untouched truncate text-black cursor-pointer  ${
               isMapFocused
                 ? `absolute rounded-md px-2 ${clicked ? "text-4xl" : "text-sm"}`
                 : ""

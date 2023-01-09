@@ -97,3 +97,13 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"] {
   background: linear-gradient(to right, #585d91 0%, #48a49e 50%, #fce554 100%);
 }
+
+.alerts-border {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% {
+    border-color: #ff0000;
+  }
+}

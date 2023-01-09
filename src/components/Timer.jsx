@@ -1,15 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
+export default function Timer({
+  pageState,
+  isValid,
+  isStop,
+  onTimeUp,
+  onTimeClose,
+}) {
   const timeToCount = pageState.time;
   const [timeLeft, setTimeLeft] = useState(timeToCount);
+
+  const timeLeftPercent = timeLeft / pageState.time;
+  const timeLeftPercentString = (timeLeftPercent * 100).toFixed(0) + "%";
+  // const timeUsedPercentString = ((1 - timeLeftPercent) * 100).toFixed(0) + "%";
+
+  // function ease(x) {
+  //   return x * x * x;
+  // }
+
+  // console.log(ease(1 - timeLeftPercent));
 
   // console.log(`timeLeft: ${timeLeft}`);
 
   useEffect(() => {
     if (timeLeft === 0) {
       return onTimeUp();
+    }
+
+    if (timeLeftPercent === 0.2) {
+      alert("Time is closing!");
     }
 
     if (isStop) {
@@ -23,21 +43,11 @@ export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
     return () => {
       clearInterval(interval);
     }; // clear the interval when the component unmounts
-  }, [isStop, onTimeUp, timeLeft]); // only re-run the effect if timeLeft changes
+  }, [isStop, onTimeUp, timeLeft, timeLeftPercent]); // only re-run the effect if timeLeft changes
 
   useEffect(() => {
     setTimeLeft(pageState.time);
   }, [pageState]);
-
-  const timeLeftPercent = timeLeft / pageState.time;
-  const timeLeftPercentString = (timeLeftPercent * 100).toFixed(0) + "%";
-  const timeUsedPercentString = ((1 - timeLeftPercent) * 100).toFixed(0) + "%";
-
-  function ease(x) {
-    return x * x * x;
-  }
-
-  // console.log(ease(1 - timeLeftPercent));
 
   return (
     <AnimatePresence>

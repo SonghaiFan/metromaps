@@ -23,7 +23,6 @@ export default function MetroLine({
   strokeWidth,
   reversed,
   onClickToOpenDrawer,
-  isChanged,
 }) {
   const drawPath = (coords) => {
     let res = "";
@@ -55,7 +54,7 @@ export default function MetroLine({
         return (
           <motion.g key={index}>
             <motion.path
-              className={`edge-shadow-${path.id}`}
+              className={`edge-shadow-${path.id} untouched`}
               d={drawPath(path.path)}
               style={{
                 fill: "transparent",

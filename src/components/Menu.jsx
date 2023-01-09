@@ -12,7 +12,7 @@ import NavigationButton from "./NavigationButton";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 import { METROMAPS_PER_PAGE, PAGE_DIRECTION, margin } from "../utilities/util";
 import Timer from "./Timer";
-import mixpanel from "mixpanel-browser";
+// import mixpanel from "mixpanel-browser";
 
 const TOTAL_PAGES = Math.ceil(METROMAPS_LENGTH / METROMAPS_PER_PAGE);
 
@@ -72,10 +72,10 @@ export default function Menu({
       payload: { map: mapId, mode: FOCUS_MODE.FULL_VIEW },
     });
     // console.log("focusState", focusState);
-    mixpanel.track("onFucous button clicked", {
-      map: mapId,
-      mode: FOCUS_MODE.FULL_VIEW,
-    });
+    // mixpanel.track("onFucous button clicked", {
+    //   map: mapId,
+    //   mode: FOCUS_MODE.FULL_VIEW,
+    // });
   };
 
   const articleAnimationDelayRef = useRef();
@@ -100,7 +100,7 @@ export default function Menu({
   };
 
   const onZoomOutButtonClick = () => {
-    mixpanel.track("ZoomOut button clicked");
+    // mixpanel.track("ZoomOut button clicked");
     setZoomOutButtonClicked(true);
     clearArticleAnimationDelayRef();
     dispatch({ type: ACTION_TYPES.LANDING_PAGE_VIEW });
@@ -169,14 +169,14 @@ export default function Menu({
   };
 
   const onBackToLandingPageButtonClick = () => {
-    mixpanel.track("BackLanding button clicked");
+    // mixpanel.track("BackLanding button clicked");
     setStart(false);
   };
 
   const onNavigationButtonClick = (direction) => () => {
     // Fake zoomout click to exit the full view
     onZoomOutButtonClick();
-    mixpanel.track("Navigation button clicked");
+    // mixpanel.track("Navigation button clicked");
     if (direction === PAGE_DIRECTION.RIGHT) {
       setPageState(nextPageState(pageState));
     } else {

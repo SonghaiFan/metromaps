@@ -21,7 +21,7 @@ export default function ArticleStack({
   articleHeight,
   articleLimit,
   onAnimationComplete,
-  isChanged,
+  time,
 }) {
   const { width: screenWidth, height: screenHeight } = useWindowSize();
   // console.log(data);
@@ -53,7 +53,7 @@ export default function ArticleStack({
             return (
               <motion.div
                 key={article.id}
-                className={`article-${data.id} absolute rounded-md `}
+                className={`article-${data.id} untouched absolute rounded-md`}
                 style={{
                   border: "2px solid white",
                   backgroundColor: clicked

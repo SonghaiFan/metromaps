@@ -7,11 +7,7 @@ import {
 } from "../utilities/util";
 import { useFirstMountState } from "react-use";
 
-export default function MetroLineLabel({
-  data,
-  onMetroLineLabelClick,
-  isChanged,
-}) {
+export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
   const isFirstMount = useFirstMountState();
 
   const { id, label, colour, points } = data;
@@ -68,7 +64,7 @@ export default function MetroLineLabel({
           border: label ? "2px solid white" : null,
           borderBottom: "none",
         }}
-        className={`edge-${id} text-black text-sm rounded-md px-2 z-50 cursor-pointer pointer-events-auto`}
+        className={`edge-${id} untouched text-black text-sm rounded-md px-2 z-50 cursor-pointer pointer-events-auto`}
         onClick={onMetroLineLabelClick}
       >
         {label}

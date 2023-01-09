@@ -1,8 +1,12 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { margin, cutomerInterpolation } from "../utilities/util";
+import {
+  margin,
+  cutomerInterpolation,
+  invertCustomerInterpolation,
+} from "../utilities/util";
 import { MdClose } from "react-icons/md";
-import mixpanel from "mixpanel-browser";
+// import mixpanel from "mixpanel-browser";
 
 export const SideDrawer = ({
   isVisible,
@@ -20,11 +24,28 @@ export const SideDrawer = ({
     ? whoOpenSideDrawer.getBoundingClientRect().top < screenHeight / 2
     : false;
 
+  const getColour = (whoOpenSideDrawer) => {
+    if (whoOpenSideDrawer) {
+      const type = whoOpenSideDrawer.dataset.type;
+      console.log("type", type);
+      if (type === "metro-line-path") {
+        // return path element stroke properties
+
+        return getComputedStyle(whoOpenSideDrawer).stroke;
+      } else {
+        return whoOpenSideDrawer.style.backgroundColor;
+      }
+    }
+  };
+
+  const whoColour = getColour(whoOpenSideDrawer);
+  const whoValue = invertCustomerInterpolation(whoColour);
+
   const handleCustomNodesChange = (event) => {
     // console.log("in the drawer: ", whoOpenSideDrawer);
-    mixpanel.track("Metro label changed", {
-      value: event.target.value,
-    });
+    // mixpanel.track("Metro label changed", {
+    //   value: event.target.value,
+    // });
 
     const newColour = cutomerInterpolation(event.target.value);
 
@@ -33,23 +54,24 @@ export const SideDrawer = ({
     const whoId = whoOpenSideDrawer.id;
 
     if (type === "metro-line-label" || type === "metro-line-path") {
-      mixpanel.track("Metro line label colour changed", {
-        lineID: whoId,
-        newColour: newColour,
-      });
+      // mixpanel.track("Metro line label colour changed", {
+      //   lineID: whoId,
+      //   newColour: newColour,
+      // });
       // console.log(`this is a metro line label at ${whoId}`);
       handleCustomLines(whoId, newColour);
 
       const changedEdges = document.querySelectorAll(`.edge-${whoId}`);
-      // loop through the changedNodes and add border
-      // if selected dom is path, increase the stroke width
       for (let i = 0; i < changedEdges.length; i++) {
         changedEdges[i].style.border = null;
       }
 
-      const changedEdgeShadow = document.querySelector(`.edge-shadow-${whoId}`);
-
-      changedEdgeShadow.style.strokeWidth = null;
+      const changedEdgeShadow = document.querySelectorAll(
+        `.edge-shadow-${whoId}`
+      );
+      for (let i = 0; i < changedEdgeShadow.length; i++) {
+        changedEdgeShadow[i].style.strokeWidth = null;
+      }
     }
 
     if (
@@ -57,10 +79,10 @@ export const SideDrawer = ({
       type === "node-number-label" ||
       type === "neighbour-node-label"
     ) {
-      mixpanel.track("Node word label colour changed", {
-        nodeID: whoId,
-        newColour: newColour,
-      });
+      // mixpanel.track("Node word label colour changed", {
+      //   nodeID: whoId,
+      //   newColour: newColour,
+      // });
       // console.log(`this is a node word label at ${whoId}`);
       handleCustomNodes(whoId, newColour);
       // query all dom has the same class name based on whoId and add border
@@ -123,7 +145,7 @@ export const SideDrawer = ({
                 min="0"
                 max="1"
                 step="0.25"
-                defaultValue="0.5"
+                defaultValue={whoValue}
                 list="tickmarks"
                 onChange={handleCustomNodesChange}
               />
