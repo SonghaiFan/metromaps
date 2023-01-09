@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Timer({
-  pageState,
-  isValid,
-  isStop,
-  onTimeUp,
-  onTimeClose,
-}) {
+export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
   const timeToCount = pageState.time;
   const [timeLeft, setTimeLeft] = useState(timeToCount);
 
@@ -28,7 +22,7 @@ export default function Timer({
       return onTimeUp();
     }
 
-    if (timeLeftPercent === 0.2) {
+    if (isValid && timeLeftPercent === 0.2) {
       alert("Time is closing!");
     }
 
