@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/metro_maps/static/css/main.ee72a5cf.css",
+    "main.js": "/metro_maps/static/js/main.83c557cd.js",
+    "static/media/cover3.png": "/metro_maps/static/media/cover3.d6829163747e2da26288.png",
+    "static/media/cover4.png": "/metro_maps/static/media/cover4.8bee6a7c6a0d81d1775f.png",
+    "static/media/cover1.png": "/metro_maps/static/media/cover1.9e82026e159565eb7e08.png",
+    "static/media/cover2.png": "/metro_maps/static/media/cover2.6db8fb8eea4bf6e11a74.png",
+    "static/media/map1.png": "/metro_maps/static/media/map1.6812be3298f071bbcdd4.png",
+    "static/media/branching.png": "/metro_maps/static/media/branching.0c924232056adf903b0f.png",
+    "static/media/ABCArizonaSerif-Light.woff": "/metro_maps/static/media/ABCArizonaSerif-Light.c69cd3883e7097e898ee.woff",
+    "static/media/ABCArizonaSerif-Thin.woff": "/metro_maps/static/media/ABCArizonaSerif-Thin.143a5a0dc78367e77425.woff",
+    "static/media/ABCMarfa-Semibold.woff": "/metro_maps/static/media/ABCMarfa-Semibold.2f5b602c46b73f60eb4c.woff",
+    "static/media/ABCMarfa-Medium.woff": "/metro_maps/static/media/ABCMarfa-Medium.32d28f907c0fcb23293a.woff",
+    "static/media/ABCMarfa-RegularItalic.woff": "/metro_maps/static/media/ABCMarfa-RegularItalic.6322c654424c17edd630.woff",
+    "static/media/articles.png": "/metro_maps/static/media/articles.849ba438b4adea61a833.png",
+    "static/media/ABCMarfa-Light.woff": "/metro_maps/static/media/ABCMarfa-Light.d8e7732c25ba0aebff90.woff",
+    "static/media/ABCMarfa-Regular.woff": "/metro_maps/static/media/ABCMarfa-Regular.31132af78ebb35b794b7.woff",
+    "static/media/ABCMarfa-Thin.woff": "/metro_maps/static/media/ABCMarfa-Thin.d8d510304fefe147815d.woff",
+    "static/media/legend.png": "/metro_maps/static/media/legend.d8e1c2152f3f8f9c428f.png",
+    "static/media/connection.png": "/metro_maps/static/media/connection.a861c91744a058c8d25d.png",
+    "index.html": "/metro_maps/index.html",
+    "main.ee72a5cf.css.map": "/metro_maps/static/css/main.ee72a5cf.css.map",
+    "main.83c557cd.js.map": "/metro_maps/static/js/main.83c557cd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ee72a5cf.css",
+    "static/js/main.83c557cd.js"
+  ]
+}
