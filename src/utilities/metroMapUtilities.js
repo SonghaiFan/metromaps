@@ -27,7 +27,6 @@ const generatePaths = (line) => {
         ? endingEndPoint.edgeColour || line.colour
         : null,
       points: [coordinates[1], coordinates[coordinates.length - 2]],
-      isChanged: false,
     };
   });
 
@@ -37,7 +36,6 @@ const generatePaths = (line) => {
       id: endingEndPoint.source + "-" + endingEndPoint.target,
       path: coordinates,
       colour: endingEndPoint.edgeColour || line.colour,
-      isChanged: false,
     };
   });
 

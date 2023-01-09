@@ -34,6 +34,7 @@ export default function MetroMap({
   subtitle,
   time,
   zoomOutButtonClicked,
+  mapId,
 }) {
   const NODE_HEIGHT = (screenHeight / 18) * 1.25;
   const NODE_WIDTH = (screenWidth / 13) * 1.25;
@@ -381,6 +382,7 @@ export default function MetroMap({
                   onNeighbourNodeLabelClick={openSideDrawer}
                   onNodeNumberLabelClick={openSideDrawer}
                   onNodeWordsLabelClick={openSideDrawer}
+                  mapId={mapId}
                 />
               </motion.div>
             );

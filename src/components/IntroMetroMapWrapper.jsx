@@ -13,7 +13,7 @@ import {
   MetroLinesPage,
   FinalPage,
 } from "./IntroPages";
-import mixpanel from "mixpanel-browser";
+// import mixpanel from "mixpanel-browser";
 
 // sample images
 import mappng from "../img/map1.png";

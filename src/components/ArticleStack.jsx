@@ -39,7 +39,6 @@ export default function ArticleStack({
     useState(null);
 
   const handleArticleClick = (id, articleIndex) => () => {
-    console.log("clicked");
     setMostRecentClickedArticle({ id, articleIndex });
     setArticlesClicked((previousArticlesClicked) =>
       previousArticlesClicked.map((value, index) =>
