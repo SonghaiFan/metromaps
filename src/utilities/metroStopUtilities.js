@@ -3,8 +3,6 @@ import {
   METROSTOP_BOTTOM_PADDING,
   ARTICALSTACK_INNER_PADDING,
   ARTICALSTACK_TOP_PADDING,
-  LEFT_MARGIN,
-  TOP_MARGIN,
 } from "../utilities/util";
 // TOP_MARGIN
 const nodeWordsVariantsFactory = (
@@ -15,8 +13,8 @@ const nodeWordsVariantsFactory = (
 ) => {
   return {
     default: {
-      y: isMapFocused ? height + METROSTOP_CIRCLE_SIZE - TOP_MARGIN : 0,
-      x: -LEFT_MARGIN / 2,
+      y: isMapFocused ? height + METROSTOP_CIRCLE_SIZE - 40 : 0,
+      x: -5,
     },
     clicked: {
       y:

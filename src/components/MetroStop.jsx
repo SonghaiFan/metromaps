@@ -100,7 +100,7 @@ export default function MetroStop({
               : "rgba(0, 0, 0, 0)"
             : data.colour, //"white"
         }}
-        className={`w-fll ml-[${LEFT_MARGIN}px] mt-[${TOP_MARGIN}px] h-full text-black truncate flex justify-center -z-40 ${
+        className={`w-fll ml-5 mt-10 h-full text-black truncate flex justify-center -z-40 ${
           clicked || isMapFocused ? "" : "items-center"
         } rounded-md`}
       >
@@ -116,8 +116,8 @@ export default function MetroStop({
             animate={{
               width: METROSTOP_CIRCLE_SIZE,
               height: METROSTOP_CIRCLE_SIZE,
-              y: height - TOP_MARGIN,
-              x: -LEFT_MARGIN / 2,
+              y: height - 40,
+              x: -5,
             }}
             className={`node-${data.id} untouched absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer`}
             onClick={(event) => onNodeNumberLabelClick(event.target)}
