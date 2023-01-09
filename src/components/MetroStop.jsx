@@ -117,7 +117,7 @@ export default function MetroStop({
               width: METROSTOP_CIRCLE_SIZE,
               height: METROSTOP_CIRCLE_SIZE,
               y: height - 40,
-              x: -5,
+              x: -10,
             }}
             className={`node-${data.id} untouched absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer`}
             onClick={(event) => onNodeNumberLabelClick(event.target)}

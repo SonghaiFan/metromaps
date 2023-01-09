@@ -14,7 +14,7 @@ const nodeWordsVariantsFactory = (
   return {
     default: {
       y: isMapFocused ? height + METROSTOP_CIRCLE_SIZE - 40 : 0,
-      x: -5,
+      x: -10,
     },
     clicked: {
       y:
