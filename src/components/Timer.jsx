@@ -39,7 +39,8 @@ export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
     return () => {
       clearInterval(interval);
     }; // clear the interval when the component unmounts
-  }, [isStop, onTimeUp, timeLeft, timeLeftPercent]); // only re-run the effect if timeLeft changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft]); // only re-run the effect if timeLeft changes
 
   useEffect(() => {
     setTimeLeft(pageState.time);
