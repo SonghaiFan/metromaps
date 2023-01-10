@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/metro_maps/static/css/main.ee2878ac.css",
-    "main.js": "/metro_maps/static/js/main.764d197b.js",
+    "main.js": "/metro_maps/static/js/main.6b2c736e.js",
     "static/media/cover3.png": "/metro_maps/static/media/cover3.d6829163747e2da26288.png",
     "static/media/cover4.png": "/metro_maps/static/media/cover4.8bee6a7c6a0d81d1775f.png",
     "static/media/cover1.png": "/metro_maps/static/media/cover1.9e82026e159565eb7e08.png",
@@ -21,10 +21,10 @@
     "static/media/connection.png": "/metro_maps/static/media/connection.a861c91744a058c8d25d.png",
     "index.html": "/metro_maps/index.html",
     "main.ee2878ac.css.map": "/metro_maps/static/css/main.ee2878ac.css.map",
-    "main.764d197b.js.map": "/metro_maps/static/js/main.764d197b.js.map"
+    "main.6b2c736e.js.map": "/metro_maps/static/js/main.6b2c736e.js.map"
   },
   "entrypoints": [
     "static/css/main.ee2878ac.css",
-    "static/js/main.764d197b.js"
+    "static/js/main.6b2c736e.js"
   ]
 }
