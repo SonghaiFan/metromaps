@@ -88,9 +88,9 @@ export default function TimeAxis({
                   timeAxisHeight,
                 width: (nodeWidth + MAX_ARTICLES) * 1.5,
                 opacity: 0,
-                transition: {
-                  delay: isFirstMount ? 2 : 0,
-                },
+                // transition: {
+                //   delay: isFirstMount ? 2 : 0,
+                // },
               }}
               animate={{
                 x: column[0].x - (nodeWidth + MAX_ARTICLES) * 0.25,
@@ -102,9 +102,9 @@ export default function TimeAxis({
                   timeAxisHeight,
                 width: (nodeWidth + MAX_ARTICLES) * 1.5,
                 opacity: 1,
-                transition: {
-                  delay: isFirstMount ? 2 : 0,
-                },
+                // transition: {
+                //   delay: isFirstMount ? 2 : 0,
+                // },
               }}
             >
               {startingDate === endingDate ? (

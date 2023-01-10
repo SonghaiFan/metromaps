@@ -40,8 +40,10 @@ export default function MetroMap({
   const NODE_WIDTH = (screenWidth / 13) * 1.25;
   const LANDING_HEIGHT = screenHeight / 28;
   const LANDING_WIDTH = screenWidth / 23;
-
-  const fullPageYPadding = margin.y * screenHeight + TOP_FULL_PAGE_PADDING;
+  const fullPageYPadding = title.startsWith("1")
+    ? 0.5 * screenHeight + TOP_FULL_PAGE_PADDING
+    : margin.y * screenHeight + TOP_FULL_PAGE_PADDING;
+  // const fullPageYPadding = margin.y * screenHeight + TOP_FULL_PAGE_PADDING;
   const fullPageXPadding = margin.x * screenWidth;
 
   const paddingX = fullPageXPadding - NODE_WIDTH / 2;

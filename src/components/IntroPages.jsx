@@ -238,9 +238,9 @@ export function WelcomePage({
 }) {
   return (
     <>
-      {/* <div className="mt-[20%]"></div> */}
+      <div className="mt-[15%]"></div>
       <div className="text-[2.5rem] font-bold">
-        A user study to explore the narrative map of disadvantage in Australia
+        A user study to explore the narrative map
       </div>
       <br></br>
       <div className="text-yellow-400 text-left">
