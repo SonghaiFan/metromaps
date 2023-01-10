@@ -119,7 +119,7 @@ export default function MetroStop({
               y: height - 40,
               x: -10,
             }}
-            className={`node-${data.id} untouched absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer`}
+            className={`node-${data.id}  absolute rounded-xl text-xs flex justify-center items-center hover:border-2 cursor-pointer`}
             onClick={(event) => onNodeNumberLabelClick(event.target)}
           >
             {data.articles.length}
@@ -143,9 +143,7 @@ export default function MetroStop({
                 data.colour,
               border: "2px solid white",
             }}
-            className={`node-${
-              data.id
-            } untouched truncate text-black cursor-pointer  ${
+            className={`node-${data.id}  truncate text-black cursor-pointer  ${
               isMapFocused
                 ? `absolute rounded-md px-2 ${clicked ? "text-4xl" : "text-sm"}`
                 : ""
