@@ -1,11 +1,7 @@
 {
   "files": {
-    "main.css": "/metro_maps/static/css/main.ee2878ac.css",
-    "main.js": "/metro_maps/static/js/main.6b2c736e.js",
-    "static/media/cover3.png": "/metro_maps/static/media/cover3.d6829163747e2da26288.png",
-    "static/media/cover4.png": "/metro_maps/static/media/cover4.8bee6a7c6a0d81d1775f.png",
-    "static/media/cover1.png": "/metro_maps/static/media/cover1.9e82026e159565eb7e08.png",
-    "static/media/cover2.png": "/metro_maps/static/media/cover2.6db8fb8eea4bf6e11a74.png",
+    "main.css": "/metro_maps/static/css/main.ee218f53.css",
+    "main.js": "/metro_maps/static/js/main.39424347.js",
     "static/media/map1.png": "/metro_maps/static/media/map1.6812be3298f071bbcdd4.png",
     "static/media/branching.png": "/metro_maps/static/media/branching.0c924232056adf903b0f.png",
     "static/media/ABCArizonaSerif-Light.woff": "/metro_maps/static/media/ABCArizonaSerif-Light.c69cd3883e7097e898ee.woff",
@@ -20,11 +16,11 @@
     "static/media/legend.png": "/metro_maps/static/media/legend.d8e1c2152f3f8f9c428f.png",
     "static/media/connection.png": "/metro_maps/static/media/connection.a861c91744a058c8d25d.png",
     "index.html": "/metro_maps/index.html",
-    "main.ee2878ac.css.map": "/metro_maps/static/css/main.ee2878ac.css.map",
-    "main.6b2c736e.js.map": "/metro_maps/static/js/main.6b2c736e.js.map"
+    "main.ee218f53.css.map": "/metro_maps/static/css/main.ee218f53.css.map",
+    "main.39424347.js.map": "/metro_maps/static/js/main.39424347.js.map"
   },
   "entrypoints": [
-    "static/css/main.ee2878ac.css",
-    "static/js/main.6b2c736e.js"
+    "static/css/main.ee218f53.css",
+    "static/js/main.39424347.js"
   ]
 }
