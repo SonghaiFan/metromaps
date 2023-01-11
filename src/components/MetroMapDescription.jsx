@@ -13,9 +13,9 @@ function MetroMapDescription({
     <>
       {isDisplayed && (
         <motion.div
-          style={{ maxHeight: height }}
+          // style={{ maxHeight: height }}
           // className="overflow-y-auto scrollbar"
-          className="mx-[25%]"
+          className="mx-[25%] mt-[10%] text-center"
         >
           <motion.div
             className="px-8 py-1 text-lg line-clamp-3 lg:line-clamp-5 xl:line-clamp-none font-bold italic"
@@ -61,7 +61,11 @@ function MetroMapDescription({
             }}
             style={{ color: "#ffb121" }}
           >
-            {`The time for this session is ${time} seconds.`}
+            {hint}
+            <br></br>
+            <br></br>
+            {`The time for this session is ${time} seconds. The timer is paused when you are in this screen. Take a break!
+            When you are ready, click anywhere to enter the edit mode and start the timer.`}
           </motion.div>
         </motion.div>
       )}

@@ -22,15 +22,6 @@ import legend from "../img/legend.png";
 import connection from "../img/connection.png";
 import branching from "../img/branching.png";
 import articles from "../img/articles.png";
-import cover1 from "../img/cover1.png";
-import cover2 from "../img/cover2.png";
-import cover3 from "../img/cover3.png";
-import cover4 from "../img/cover4.png";
-
-const images = [cover1, cover2, cover3, cover4];
-
-const randomIndex = Math.floor(Math.random() * images.length);
-const randomImage = images[randomIndex];
 
 export default function IntroMetroMapWrapper({ setStart }) {
   const [currentPage, setCurrentPage] = useState(1);

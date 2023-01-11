@@ -71,9 +71,9 @@ export default function TimeAxis({
                   TIME_AXIS_PADDING,
                 width: (nodeWidth + MAX_ARTICLES) * 1.5,
                 height: timeAxisHeight,
-                transition: {
-                  duration: isFirstMount ? METROLINE_ANIMATION_DURATION : 0,
-                },
+                // transition: {
+                //   duration: isFirstMount ? METROLINE_ANIMATION_DURATION : 0,
+                // },
               }}
             />
             <motion.div

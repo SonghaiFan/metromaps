@@ -10,9 +10,9 @@ export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
   const timeLeftPercentString = (timeLeftPercent * 100).toFixed(0) + "%";
   // const timeUsedPercentString = ((1 - timeLeftPercent) * 100).toFixed(0) + "%";
 
-  // function ease(x) {
-  //   return x * x * x;
-  // }
+  function ease(x) {
+    return x * x * x;
+  }
 
   // console.log(ease(1 - timeLeftPercent));
 
@@ -39,8 +39,7 @@ export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
     return () => {
       clearInterval(interval);
     }; // clear the interval when the component unmounts
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeLeft]); // only re-run the effect if timeLeft changes
+  }, [hasAlerted, isStop, isValid, onTimeUp, timeLeft, timeLeftPercent]);
 
   useEffect(() => {
     setTimeLeft(pageState.time);
@@ -49,24 +48,26 @@ export default function Timer({ pageState, isValid, isStop, onTimeUp }) {
   return (
     <AnimatePresence>
       {isValid && (
-        <motion.div
-          className="fixed w-full h-2 rounded-full "
-          style={{
-            color: timeLeftPercent < 0.2 ? "red" : "white",
-          }}
-        >
-          <h1>{`Time Remaining: (${timeLeftPercentString})`}</h1>
-        </motion.div>
-        // <motion.div className="fixed w-2 h-full  rounded-full ">
-        //   <motion.div
-        //     className="bg-white break-normal w-2 text-black text-xs font-medium p-0.5 leading-none rounded-b-full"
-        //     animate={{
-        //       height: timeLeftPercentString,
-        //       opacity: ease(1 - timeLeftPercent),
-        //     }}
-        //     transition={{ duration: 1, ease: "linear" }}
-        //   ></motion.div>
-        // </motion.div>
+        <>
+          <motion.div
+            className="fixed w-full h-2 ml-3 rounded-full "
+            style={{
+              color: timeLeftPercent < 0.2 ? "red" : "white",
+            }}
+          >
+            <h1>{`Time Remaining: ${timeLeft}s`}</h1>
+          </motion.div>
+          <motion.div className="fixed w-2 h-full  rounded-full ">
+            <motion.div
+              className="bg-white break-normal w-2 text-black text-xs font-medium p-0.5 leading-none rounded-b-full"
+              animate={{
+                height: timeLeftPercentString,
+                opacity: ease(1 - timeLeftPercent),
+              }}
+              transition={{ duration: 1, ease: "linear" }}
+            ></motion.div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );

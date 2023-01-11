@@ -18,9 +18,10 @@ context.keys().forEach((key) => {
   const data = context(key);
   const url = key.replace("./", "").replace(".json", "");
   const title = url.replace(/-/g, " ");
-  const description = "";
-  const subtitle = "";
-  const hint = "";
+  const description =
+    "This is a dummy description: lorem ipsum dolor sit amet etc.";
+  const subtitle = "This is a dummy subtitle: lorem ipsum dolor sit amet etc.";
+  const hint = "This is a dummy hint: lorem ipsum dolor sit amet etc.";
   const time = 60;
   METROMAPS.push({
     url,
@@ -48,7 +49,6 @@ const findAndModify = (url, { title, time, description, subtitle, hint }) => {
 
 findAndModify("1-dummy-1x4-14_29", {
   time: 10,
-  description: "dumy_trainning",
 });
 
 const METROMAPS_URLS = METROMAPS.map((m) => m.url);

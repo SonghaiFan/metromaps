@@ -12,7 +12,7 @@ import NavigationButton from "./NavigationButton";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 import { METROMAPS_PER_PAGE, PAGE_DIRECTION, margin } from "../utilities/util";
 import Timer from "./Timer";
-// import mixpanel from "mixpanel-browser";
+import mixpanel from "mixpanel-browser";
 
 const TOTAL_PAGES = Math.ceil(METROMAPS_LENGTH / METROMAPS_PER_PAGE);
 
@@ -72,10 +72,10 @@ export default function Menu({
       payload: { map: mapId, mode: FOCUS_MODE.FULL_VIEW },
     });
     // console.log("focusState", focusState);
-    // mixpanel.track("onFucous button clicked", {
-    //   map: mapId,
-    //   mode: FOCUS_MODE.FULL_VIEW,
-    // });
+    mixpanel.track("MetroMap-onFucousButton clicked", {
+      map: mapId,
+      mode: FOCUS_MODE.FULL_VIEW,
+    });
   };
 
   const articleAnimationDelayRef = useRef();
@@ -100,7 +100,7 @@ export default function Menu({
   };
 
   const onZoomOutButtonClick = () => {
-    // mixpanel.track("ZoomOut button clicked");
+    mixpanel.track("onZoomOutButton clicked");
     setZoomOutButtonClicked(true);
     clearArticleAnimationDelayRef();
     dispatch({ type: ACTION_TYPES.LANDING_PAGE_VIEW });
@@ -169,15 +169,18 @@ export default function Menu({
     );
   };
 
-  const onBackToLandingPageButtonClick = () => {
-    // mixpanel.track("BackLanding button clicked");
+  const onBackToIntroPageButtonClick = () => {
+    mixpanel.track("NavigationButton-onBackToIntroPageButton clicked");
     setStart(false);
   };
 
-  const onNavigationButtonClick = (direction) => () => {
+  const onNavigationBtwSessionClick = (direction) => () => {
     // Fake zoomout click to exit the full view
     onZoomOutButtonClick();
-    // mixpanel.track("Navigation button clicked");
+    mixpanel.track("NavigationButton-onNavigationBtwSession clicked", {
+      direction: direction === PAGE_DIRECTION.RIGHT ? "right" : "left",
+      pageState: pageState,
+    });
     if (direction === PAGE_DIRECTION.RIGHT) {
       setPageState(nextPageState(pageState));
     } else {
@@ -233,7 +236,7 @@ export default function Menu({
 
       <motion.div className="metro-interface">
         <NavigationButton
-          onClick={onBackToLandingPageButtonClick}
+          onClick={onBackToIntroPageButtonClick}
           className={`left-[2%] top-[50%]`}
           isVisible={
             // focusState.mode === null &&
@@ -246,7 +249,7 @@ export default function Menu({
 
         {/* Navigation Button between each session */}
         <NavigationButton
-          onClick={onNavigationButtonClick(PAGE_DIRECTION.RIGHT)}
+          onClick={onNavigationBtwSessionClick(PAGE_DIRECTION.RIGHT)}
           className={`right-[2%] top-[50%] `}
           isVisible={
             // focusState.mode === null &&
@@ -258,7 +261,7 @@ export default function Menu({
         </NavigationButton>
 
         <NavigationButton
-          onClick={onNavigationButtonClick(PAGE_DIRECTION.LEFT)}
+          onClick={onNavigationBtwSessionClick(PAGE_DIRECTION.LEFT)}
           className={`left-[2%] top-[50%] `}
           isVisible={
             // focusState.mode === null &&

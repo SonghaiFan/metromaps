@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { link } from "d3";
 import { sankey } from "d3-sankey";
 import { NODEWIDTH, flatMap, MAX_ARTICLES, cutomerInterpolation } from "./util";
 
@@ -327,6 +328,7 @@ const calculateMetroMapLayout = (
 
     // generates basic coordinate object
     const getEndPoint = (link) => (node) => {
+      console.log(link);
       return {
         source: link.source,
         target: link.target,
@@ -339,7 +341,7 @@ const calculateMetroMapLayout = (
           link.edge_weight !== undefined
             ? cutomerInterpolation(link.edge_weight)
             : null, // do not use link.edge_weight ? ... since 0 is a falsey value
-        edgeLabel: link.edge_label || null,
+        edgeLabel: link.edge_label[0] || null,
       };
     };
 

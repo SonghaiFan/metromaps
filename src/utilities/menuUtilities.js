@@ -23,7 +23,7 @@ const metroMapContainerVariantsFactory = (
       width: metromapsDetails[metromapId].width,
       height: metromapsDetails[metromapId].height,
       opacity: 1,
-      transition: { ease: "easeOut" },
+      // transition: { ease: "easeOut" },
     },
     fullView: {
       x: 0,
@@ -31,7 +31,7 @@ const metroMapContainerVariantsFactory = (
       width: screenWidth,
       height: screenHeight,
       opacity: 1,
-      transition: { ease: "easeOut" },
+      // transition: { ease: "easeOut" },
     },
     hidden: {
       x: direction === PAGE_DIRECTION.RIGHT ? screenWidth : -screenWidth,
@@ -39,7 +39,7 @@ const metroMapContainerVariantsFactory = (
       width: metromapsDetails[metromapId].width,
       height: metromapsDetails[metromapId].height,
       opacity: 0,
-      transition: { ease: "easeOut" },
+      // transition: { ease: "easeOut" },
     },
   };
 };

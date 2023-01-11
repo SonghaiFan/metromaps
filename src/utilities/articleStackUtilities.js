@@ -25,10 +25,10 @@ const articleVariantsFactory = (
       height: articleHeight,
       x: totalArticles - articleIndex - 1,
       y: articleIndex - totalArticles + 1,
-      // transition: {
-      //   delay: (totalArticles - articleIndex + 1) / 25,
-      //   ease: "easeOut",
-      // },
+      transition: {
+        delay: (totalArticles - articleIndex + 1) / 250,
+        ease: "easeOut",
+      },
     },
   };
 };

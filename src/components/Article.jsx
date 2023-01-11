@@ -30,7 +30,11 @@ export default function Article({
               {article.title}
             </motion.div>
             <motion.div className="p-2 pt-0 pb-1">
-              by {article.publisher} on {article.timestamp}
+              {/* if article.publisher is defined, show string "by {article.publisher} on {article.timestamp}" */}
+              {article.publisher && (
+                <span className="font-bold">By {article.publisher} </span>
+              )}
+              <span> on {article.timestamp}</span>
             </motion.div>
             <motion.div className={`${clicked ? "" : "line-clamp-2"} m-2 mt-0`}>
               {article.full_text ? article.full_text : article.text}

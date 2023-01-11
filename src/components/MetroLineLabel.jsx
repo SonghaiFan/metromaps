@@ -64,7 +64,7 @@ export default function MetroLineLabel({ data, onMetroLineLabelClick }) {
           border: label ? "2px solid white" : null,
           borderBottom: "none",
         }}
-        className={`edge-${id} text-black text-sm rounded-md px-2 z-50 cursor-pointer pointer-events-auto`}
+        className={`edge-${id} alerts-border text-black text-sm rounded-md px-2 z-50 cursor-pointer pointer-events-auto`}
         onClick={onMetroLineLabelClick}
       >
         {label}
